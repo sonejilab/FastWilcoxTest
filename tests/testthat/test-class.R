@@ -10,3 +10,11 @@ x <- as_RcppTestArea( dat )
 
 expect_equal( class( x )[1], c('RcppTestArea') )
 
+A = 1:6
+B = 2:8
+E = log( mean(A) / mean(B) )
+
+a= log(A)
+b = log(B)
+
+expect_equal( logFC ( A, B ), E)
