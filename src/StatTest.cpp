@@ -46,14 +46,14 @@ std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<i
     for ( int c_=0; c_ < X.cols(); c_++ ){
     	for (unsigned int i = 0; i< itA.size(); i++ ) {
     		if ( itA[i] < 0 || itA[i] >= X.rows() ) {
-    			 throw std::invalid_argument( "test out of bounds" );
+    			throw std::invalid_argument( "test out of bounds" );
     		}
     		A[i] = X.coeff(itA[i],c_);
     	}
     	for (unsigned int i = 0; i< itB.size(); i++ ) {
     		if (itB[i] < 0 || itB[i] >= X.rows() ) {
-    		    			 throw std::invalid_argument( "itB out of bounds" );
-    		    		}
+    			throw std::invalid_argument( "itB out of bounds" );
+    		}
     	    B[i] = X.coeff(itB[i],c_);
     	}
     	logFCpass[c_] = logFC( A, B ) > logFCcut;
@@ -61,6 +61,9 @@ std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<i
     		pass++;
     	}
     }
+
+    /* allocate a result matrix*/
+    res=PROTECT(allocMatrix(REALSXP, m, pass));
 
 	Rcout << "n return values: " << pass <<std::endl;
 	return logFCpass;
