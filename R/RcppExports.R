@@ -5,11 +5,15 @@ logFC <- function(A, B) {
     .Call(`_RcppTestArea_logFC`, A, B)
 }
 
-StatTest <- function(X, test, backgound, logFCcut = 1.0, display_progress = TRUE) {
-    .Call(`_RcppTestArea_StatTest`, X, test, backgound, logFCcut, display_progress)
+StatTest <- function(X, interest, backgound, logFCcut = 1.0, display_progress = TRUE) {
+    .Call(`_RcppTestArea_StatTest`, X, interest, backgound, logFCcut, display_progress)
 }
 
 ZScore <- function(data, display_progress = TRUE) {
     .Call(`_RcppTestArea_ZScore`, data, display_progress)
 }
 
+# Register entry points for exported C++ functions
+methods::setLoadAction(function(ns) {
+    .Call('_RcppTestArea_RcppExport_registerCCallable', PACKAGE = 'RcppTestArea')
+})

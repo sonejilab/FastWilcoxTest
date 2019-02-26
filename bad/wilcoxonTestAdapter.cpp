@@ -2,22 +2,14 @@
 
 #include <gsl/gsl_cdf.h>
 #include <Rcpp.h>
-
 using namespace Rcpp;
-
 #include <iostream>
 #include <exception>
-
-
 #include <WilcoxonTest.h>
+/*using namespace std;*/
 
-using namespace std;
-
-
-RcppExport SEXP wilcoxonTestAdapter(
-  SEXP dataMatrix,
-  SEXP testIndexes,
-  SEXP controlIndexes) {
+// [[Rcpp::export]]
+RcppExport SEXP wilcoxonTestAdapter(  SEXP dataMatrix,  SEXP testIndexes,  SEXP controlIndexes) {
 BEGIN_RCPP
   try{
     Rcpp::NumericMatrix rccpData(dataMatrix);

@@ -1,2 +1,4 @@
 ^RcppTestArea\.Rproj$
 ^\.Rproj\.user$
+/bad
+/scratchbord
