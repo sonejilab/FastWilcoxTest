@@ -62,8 +62,8 @@ std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<i
     	}
     }
 
-    /* allocate a result matrix*/
-    res=PROTECT(allocMatrix(REALSXP, m, pass));
+    /* allocate a result matrix
+    res=PROTECT(allocMatrix(REALSXP, m, pass)); */
 
 	Rcout << "n return values: " << pass <<std::endl;
 	return logFCpass;

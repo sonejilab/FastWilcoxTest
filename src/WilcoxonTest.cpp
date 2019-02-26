@@ -1,5 +1,7 @@
 /* source copied from https://github.com/stenver/wilcoxon-test*/
 
+#include <Rcpp.h>
+
 #include "WilcoxonTest.h"
 
 WilcoxonTest::WilcoxonTest(float * _data, int _dataXsize, int _dataYsize, string _testIndexes, string _controlIndexes)
@@ -59,7 +61,7 @@ vector<int> * WilcoxonTest::parseIntString(string input)
 
 void WilcoxonTest::readApproximatePtable()
 {
-    string fileLocation = "/usr/lib/wilcoxonTest/approximateTable500.txt";
+    string fileLocation = "../extdata/approximateTable500.txt";
     ifstream listFile(fileLocation.c_str());
     if (!listFile.is_open())
     {

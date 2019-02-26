@@ -1,12 +1,15 @@
 /* source copied from https://github.com/stenver/wilcoxon-test*/
 
-#include <WilcoxonTest.h>
-
 #include <gsl/gsl_cdf.h>
 #include <Rcpp.h>
 
+using namespace Rcpp;
+
 #include <iostream>
 #include <exception>
+
+
+#include <WilcoxonTest.h>
 
 using namespace std;
 
@@ -42,7 +45,7 @@ BEGIN_RCPP
 
     return results;
 
-  }catch(exception& e)
+  }catch(std::exception e)
   {
     std::cout << "Error" << std::endl;
     std::cout << e.what() << std::endl;

@@ -3,6 +3,7 @@
 
 #ifndef WILCOXONPARALLELTESTS_H
 #define WILCOXONPARALLELTESTS_H
+
 #include <fstream>
 #include <cmath>
 #include <iostream>
@@ -11,7 +12,6 @@
 #include <vector>
 #include <cstring>
 #include <gsl/gsl_cdf.h>
-
 
 using namespace std;
 
