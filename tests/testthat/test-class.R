@@ -17,4 +17,5 @@ E = log( mean(A) / mean(B) )
 a= log(A)
 b = log(B)
 
-expect_equal( logFC ( A, B ), E)
+expect_equal( logFC ( a, b ), E)
+

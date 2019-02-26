@@ -31,16 +31,16 @@ std::vector<int> minusOne ( std::vector<int>  X ){
 }
 
 // [[Rcpp::export]]
-std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> test,
+std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
 		std::vector<int> backgound, double logFCcut = 1.0, bool display_progress=true ){
 
     Rcout << "Standard looping over a sparse matrix" << std::endl;
 
     std::vector<double> logFCpass(X.rows(), 0.0);
-    std::vector<double> A(test.size(), 0.0);
+    std::vector<double> A(interest.size(), 0.0);
     std::vector<double> B(backgound.size(), 0.0 );
     int pass = 0;
-    std::vector<int> itA = minusOne( test );
+    std::vector<int> itA = minusOne( interest );
     std::vector<int> itB = minusOne( backgound );
 
     for ( int c_=0; c_ < X.cols(); c_++ ){
@@ -56,14 +56,25 @@ std::vector<double> StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<i
     		}
     	    B[i] = X.coeff(itB[i],c_);
     	}
-    	logFCpass[c_] = logFC( A, B ) > logFCcut;
+    	logFCpass[c_] = logFC( A, B );
     	if ( logFCpass[c_] > logFCcut ) {
     		pass++;
     	}
     }
 
-    /* allocate a result matrix
-    res=PROTECT(allocMatrix(REALSXP, m, pass)); */
+    /* allocate a result matrix */
+    /*std::vector<int> res_ID( pass, 0);
+	std::vector<double> res_FC( pass, 0.0);
+	std::vector<double> res_P( pass, 0.0);
+	int id = 0;
+	for ( int c_=0; c_ < X.cols(); c_++ ){
+		if ( logFCpass[c_] > logFCcut ) {
+			res_ID[id] = id;
+			res_FC[id] = logFCpass[c_];
+			res_FC[id] = wmw_test( matrix, ids, 0);
+		}
+	}
+	*/
 
 	Rcout << "n return values: " << pass <<std::endl;
 	return logFCpass;
