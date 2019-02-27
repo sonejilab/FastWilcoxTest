@@ -26,6 +26,8 @@
 
     convertR_S3_To_S4.pl
 
+		-R_source    :the old function based lib file
+   		-outfile     :the new S4isizde lib file
 
        -help           :print this help
        -debug          :verbose output
@@ -50,10 +52,11 @@ my $plugin_path = "$FindBin::Bin";
 my $VERSION = 'v1.0';
 
 
-my ( $help, $debug, $database);
+my ( $help, $debug, $ignore, $ignore2, $database);
 
 Getopt::Long::GetOptions(
-
+	 "-R_source=s" => \$ignore,
+	 "-outfile=s" => \$ignore2,
 	 "-help"             => \$help,
 	 "-debug"            => \$debug
 );
