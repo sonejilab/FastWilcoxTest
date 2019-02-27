@@ -8,7 +8,7 @@
 #endif
 
 #include "stat_rank.h"
-#include "wmw_test.h"
+/*#include "wmw_test.h"*/
 
 #define MIN(x,y) ((x) > (y) ? (y) : (x))
 #define NROW(x) INTEGER(GET_DIM((x)))[0]
@@ -30,6 +30,15 @@ using namespace Rcpp;*/
 	abslog10twoSided=6,
 	Q=7
 */
+
+/*
+ * void pnorm_both(double x, double *cum, double *ccum, int i_tail, int log_p)
+
+ * i_tail in {0,1,2} means: "lower", "upper", or "both" :
+ * if(lower) return  *cum := P[X <= x]
+ * if(upper) return *ccum := P[X >  x] = 1 - P[X <= x]
+ */
+
 
 double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int type) {
   
@@ -57,7 +66,7 @@ zval = (uStat-0.5-mu)/sqrt(sigma2); // z higher tail
 zval = (uStat-mu-(uStat>mu ? 0.5 : -0.5))/sqrt(sigma2);
       pnorm_both(zval, &pgt, &plt, 2, 0);
       res = mu==0.0 ? 1.0 : 2.0*MIN(pgt, plt);
-      if(type == abslog10twoSided) {
+      if(type == 4) {
         res = ABSLOG(res);
       } else if (type == 7) {
         res = pgt<=plt ? ABSLOG(res) : -ABSLOG(res);
@@ -138,10 +147,10 @@ void wmw_test_list(const double *valPtr, int n,
  *
  * This implementation uses normal approximation, which works reasonably well if sample size is large (say N>=20)
  */
-extern SEXP wmw_test(SEXP matrix, SEXP indlist, int rtype) {
+extern SEXP wmw_test(const double vec, SEXP indlist, int rtype) {
 /* const int type=INTEGER(rtype)[0]; */
   const int m=length(indlist);
-  const int n=NROW(matrix);
+  const int n=length(vec);
   
   int i;
   double *matColPtr; // pointer to the current column of the matrix
@@ -151,18 +160,9 @@ extern SEXP wmw_test(SEXP matrix, SEXP indlist, int rtype) {
   res=PROTECT(allocMatrix(REALSXP, m, NCOL(matrix)));
   
   resPtr=REAL(res);
-  matColPtr=REAL(matrix);
   
-#pragma omp parallel for
-  for(i=0; i<NCOL(matrix);++i) {
-    wmw_test_list(matColPtr, n,
-                  indlist,
-                  resPtr, rtype);
-    resPtr+=m;
-    matColPtr+=n;
-  }
+  wmw_test_list(vec, n, indlist, resPtr, rtype);
   
-  UNPROTECT(1);
   return(res);
 }
 
