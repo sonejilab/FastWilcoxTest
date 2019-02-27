@@ -19,3 +19,5 @@ b = log(B)
 
 expect_equal( logFC ( a, b ), E)
 
+system.time({ Cpp = StatTest(Matrix::t(x@dat), 1:20, 30:80, .1) })
+system.time({ R = Rstats(Matrix::t(x@dat), 1:20, 30:80, .1) })
