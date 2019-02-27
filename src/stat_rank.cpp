@@ -17,6 +17,9 @@
  * The rank is initialized with -1, and changed to a positive one (starting from 1) by sortRankDRankList. This is used to check whether that function has been run or not, so please do not change the initial value of rank.
  */
 
+// [[Rcpp::interfaces(r, cpp)]]
+
+
 DRank createDRank(const double* ptr, int index) {
   DRank it=(DRank)malloc(sizeof(DRankStruct)); // TAKE CARE: use sizeof(DRank) here will produce bugs that are very difficult to debug
   it->index=index;

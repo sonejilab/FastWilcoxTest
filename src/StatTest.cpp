@@ -79,12 +79,10 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			zval = (uStat+0.5-mu)/sqrt(sigma2); // z lower tail
 			R::pnorm_both(zval, &pgt, &plt, 0, 0);
 			res = type==0 ? pgt : ABSLOG(pgt);
-			res = res / 2;
 		} else if (type == 1 || type == 5) { /* less */
 			zval = (uStat-0.5-mu)/sqrt(sigma2); // z higher tail
 			R::pnorm_both(zval, &pgt, &plt, 1, 0);
 			res = type==1 ? plt : log10(plt);
-			res = res / 2;
 		} else if (type == 2 || type == 6 || type == 7) { /* two sided*/
 			zval = (uStat-mu-(uStat>mu ? 0.5 : -0.5))/sqrt(sigma2);
 			R::pnorm_both(zval, &pgt, &plt, 2, 0);
@@ -147,7 +145,7 @@ extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> inte
 	/* allocate a result 'matrix' */
 	NumericMatrix res(pass, 4);
 	int n = X.rows();
-	double *total = new double[n];
+	double *total = new double[ itA.size() + itB.size() ];
 	int id = 0;
 	DRankList list;
 	int j;
@@ -159,9 +157,14 @@ extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> inte
 		if ( logFCpass[c_] > logFCcut ) {
 
 			/*Test stats copied from the BioOC package */
-			for (unsigned int i = 0; i< n; i++ ) {
-				total[i] = X.coeff(i,c_);
+			j = 0;
+			for (unsigned int i = 0; i< itA.size(); i++ ) {
+				total[j++] = X.coeff(itA.at(i) ,c_);
 			}
+			for (unsigned int i = 0; i< itB.size(); i++ ) {
+				total[j++] = X.coeff(itB.at(i) ,c_);
+			}
+			n = j;
 			list = createDRankList(total, n);
 			prepareDRankList(list);
 
@@ -169,12 +172,13 @@ extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> inte
 
 			nInd=itA.size();
 
-
 			indRankSum = 0.0;
 			for(j=0; j<nInd; ++j) {
-				/*if(!(A.at(j)>=0 && A.at(j)<=n-1))
-					throw std::invalid_argument("Index out of range: gene set %d, gene %d\n", i+1, j+1);*/
-				indRankSum += list->list[itA.at(j)]->rank;
+				if(!(itA.at(j)>=0 && itA.at(j)<=n-1))
+					::Rf_error("Index out of range: gene set %d, gene %d\n", c_+1, j+1);
+				//if ( total[itA.at(j)] > 0 ){
+					indRankSum += list->list[itA.at(j)]->rank;
+				//}
 			}
 			/* store the results */
 			res(id,0) = c_ + 1;
