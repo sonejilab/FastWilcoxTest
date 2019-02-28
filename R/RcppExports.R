@@ -2,18 +2,18 @@
 # Generator token: 10BE3573-1514-4C36-9D1C-5A225CD40393
 
 logFC <- function(A, B) {
-    .Call(`_RcppTestArea_logFC`, A, B)
+    .Call(`_FastWilcoxTest_logFC`, A, B)
 }
 
-StatTest <- function(X, interest, backgound, logFCcut = 1.0, display_progress = TRUE) {
-    .Call(`_RcppTestArea_StatTest`, X, interest, backgound, logFCcut, display_progress)
+StatTest <- function(X, interest, backgound, logFCcut = 1.0, minPct = 0.1) {
+    .Call(`_FastWilcoxTest_StatTest`, X, interest, backgound, logFCcut, minPct)
 }
 
 ZScore <- function(data, display_progress = TRUE) {
-    .Call(`_RcppTestArea_ZScore`, data, display_progress)
+    .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_RcppTestArea_RcppExport_registerCCallable', PACKAGE = 'RcppTestArea')
+    .Call('_FastWilcoxTest_RcppExport_registerCCallable', PACKAGE = 'FastWilcoxTest')
 })

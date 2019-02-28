@@ -20,17 +20,17 @@ typedef Eigen::MappedSparseMatrix<double> MSpMat;
 #define ABSLOG(x) fabs(log10( (x) ))
 
 
+// [[Rcpp::interfaces(r, cpp)]]
 
 
 // [[Rcpp::export]]
 double logFC ( std::vector<double> A, std::vector<double> B ) {
-	double res = 0.0;
 	double Asum = A[0] * 1.0;
 	double Bsum = B[0] * 1.0;
-	for ( int i=1; i<A.size(); i++ ){
+	for ( unsigned int i=1; i<A.size(); i++ ){
 		Asum = log( exp( Asum - A[i]) + 1.0)  + A[i];
 	}
-	for ( int i=1; i<B.size(); i++ ){
+	for ( unsigned int i=1; i<B.size(); i++ ){
 		Bsum = log( exp( Bsum - B[i]) + 1.0 ) + B[i];
 	}
 	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
@@ -38,14 +38,14 @@ double logFC ( std::vector<double> A, std::vector<double> B ) {
 }
 
 std::vector<int> minusOne ( std::vector<int>  X ){
-	for ( int i = 0; i < X.size(); i ++) {
+	for ( unsigned int i = 0; i < X.size(); i ++) {
 		X[i] --;
 	}
 	return X;
 }
 
 std::vector<int> plusOne ( std::vector<int>  X ){
-	for ( int i = 0; i < X.size(); i ++) {
+	for ( unsigned int i = 0; i < X.size(); i ++) {
 		X[i] ++;
 	}
 	return X;
@@ -101,57 +101,93 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 }
 
 //’ StatTest runs wilcox test on the columns of the sparse matrix
-//’
-//’ @param X the sparse matrix
+//’ @description This test implements the Seurat FindMarkers( test.use == "wilcox" ) function
+//’ in the greatest possible way, but using Rcpp instead of R. So far I could get a ~10x speed improvement.
+//’ @param X the sparse matrix (tests are applied to columns!)
 //’ @param interest row IDs for the group of interest
-//’ @param backgound row IDS for the background
+//’ @param background row IDS for the background
 //’ @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
-//’ @param display_progress unused
+//’ @param minPct only test genes that are detected in a minimum fraction of
+//’ min.pct cells in either of the two populations. Meant to speed up the function
+//’ by not testing genes that are very infrequently expressed. Default is 0.1
 //’ @return a matrix with tested column ids, logFC and p.value
 // [[Rcpp::export]]
 extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
-		std::vector<int> backgound, double logFCcut = 1.0, bool display_progress=true ){
+		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1 ){
 
 	Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
-
+    if ( interest.size() == 0 ){
+    	::Rf_error("No values in interest group" );
+    }
+    if ( backgound.size() == 0 ){
+        ::Rf_error("No values in backgound group" );
+    }
+	// internal measurements
 	std::vector<double> logFCpass(X.cols(), 0.0);
+	std::vector<double> fracInA(X.cols(), 0.0);
+	std::vector<double> fracInB(X.cols(), 0.0);
+	std::vector<double> indRankSum(X.cols(), 0.0);
+    // tmp data storage
 	std::vector<double> A(interest.size(), 0.0);
-	std::vector<double> B(backgound.size(), 0.0 );
+	std::vector<double> B(background.size(), 0.0 );
+	double inA = 0;
+	double inB = 0;
+	double tmp = 0;
+    // how many genes pass all filters
 	int pass = 0;
+	// the corrected (R vs c++) ids
 	std::vector<int> itA = minusOne( interest );
-	std::vector<int> itB = minusOne( backgound );
+	std::vector<int> itB = minusOne( background );
 
-	Rcout << "Standard looping over a sparse matrix calculating logFC" << std::endl;
+	Rcout << "calculating filters logFC and minPct" << std::endl;
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
-		for (int i = 0; i< itA.size(); i++ ) {
+		inA = 0;
+		inB = 0;
+		for ( unsigned int i = 0; i< itA.size(); i++ ) {
 			if ( itA.at(i) < 0 || itA.at(i) >= X.rows() ) {
-				throw std::invalid_argument( "test out of bounds" );
+				::Rf_error( "test out of bounds" );
 			}
-			A[i] = X.coeff(itA.at(i),c_);
+			tmp = X.coeff(itA.at(i),c_);
+			if ( tmp > 0 ){
+				inA ++;
+			}
+			A[i] = tmp;
 		}
-		for ( int i = 0; i< itB.size(); i++ ) {
+		for ( unsigned int i = 0; i< itB.size(); i++ ) {
 			if (itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
-				throw std::invalid_argument( "itB out of bounds" );
+				::Rf_error("itB out of bounds" );
 			}
-			B.at(i) = X.coeff(itB[i],c_);
+			tmp = X.coeff(itB.at(i),c_);
+			if ( tmp > 0 ){
+				inB ++;
+			}
+			B.at(i) = tmp;
 		}
+		fracInA[c_] = inA / interest.size();
+		fracInB[c_] = inB / background.size();
 		logFCpass[c_] = logFC( A, B );
-		if ( logFCpass.at(c_) > logFCcut ) {
+		if ( logFCpass.at(c_) > logFCcut && ( (fracInA[c_] > minPct) +  (fracInB[c_] > minPct) ) > 0 ) {
 			pass++;
 		}
 	}
+	if ( pass == 0 ){
+			::Rf_error("No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" );
+	}
+	else {
+		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
+	}
 
-	Rcout << "Standard looping over a sparse matrix calculating wilcox test" << std::endl;
 	/* allocate a result 'matrix' */
-	NumericMatrix res(pass, 4);
+	NumericMatrix res(pass, 6);
 	int n = X.rows();
 	double *total = new double[ itA.size() + itB.size() ];
 	int id = 0;
-	DRankList list;
 	int j;
 	int nInd;
 	double tie;
-	double indRankSum;
+	//double indRankSum;
+
+	DRankList list;
 
 	for ( int c_=0; c_ < X.cols(); c_++ ){
 		if ( logFCpass[c_] > logFCcut ) {
@@ -172,24 +208,28 @@ extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> inte
 
 			nInd=itA.size();
 
-			indRankSum = 0.0;
+			indRankSum.at(c_) = 0.0;
 			for(j=0; j<nInd; ++j) {
 				if(!(itA.at(j)>=0 && itA.at(j)<=n-1))
 					::Rf_error("Index out of range: gene set %d, gene %d\n", c_+1, j+1);
 				//if ( total[itA.at(j)] > 0 ){
-					indRankSum += list->list[itA.at(j)]->rank;
+					indRankSum.at(c_) += list->list[itA.at(j)]->rank;
 				//}
 			}
+			// never destroy the  DRankList - that kills the R gc() functionality!!
+
 			/* store the results */
 			res(id,0) = c_ + 1;
 			res(id,1) = logFCpass.at(c_);
-			res(id,2) = indRankSum;
+			res(id,2) = fracInA.at(c_);
+			res(id,3) = fracInB.at(c_);
+			res(id,4) = indRankSum.at(c_);
 			/* store the higher p value as we do drop all lower anyhow. */
-			res(id,3) = wmw_test_stat(indRankSum, nInd, n, tie, 0);
+			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 0);
 			id ++;
 		}
 	}
-	colnames(res) = CharacterVector::create("colID", "logFC", "rank.sum", "p.value");
+	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
 	Rcout << "n return values: " << pass <<std::endl;
 	return res;
 }

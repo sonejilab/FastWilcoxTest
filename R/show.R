@@ -1,9 +1,9 @@
 #' @name show
-#' @aliases show,RcppTestArea-method
+#' @aliases show,FastWilcoxTest-method
 #' @rdname print
 #' @docType methods
-#' @description  show the RcppTestArea
-#' @param object the RcppTestArea object
+#' @description  show the FastWilcoxTest
+#' @param object the FastWilcoxTest object
 #' @return nothing
 #' @title description of function show
 #' @export 
@@ -14,7 +14,7 @@ if ( ! isGeneric('show') ){setGeneric('show', ## Name
 ) }
 
 
-setMethod('show', signature = c ('RcppTestArea'),
+setMethod('show', signature = c ('FastWilcoxTest'),
 	definition = function (object) {
 	cat (paste("An object of class", class(object)),"\n" )
 	#cat("named ",object$name,"\n")

@@ -1,3 +1,3 @@
-#' @useDynLib RcppTestArea, .registration = TRUE
+#' @useDynLib FastWilcoxTest, .registration = TRUE
 #' @importFrom Rcpp sourceCpp
 NULL

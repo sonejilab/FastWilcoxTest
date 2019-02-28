@@ -1,9 +1,9 @@
 #' @name Rzscore
-#' @aliases Rzscore,RcppTestArea-method
+#' @aliases Rzscore,FastWilcoxTest-method
 #' @rdname Rzscore-methods
 #' @docType methods
 #' @description calculate the z.score as the cpp function does it
-#' @param obj the RcppTestArea
+#' @param obj the FastWilcoxTest
 #' @title description of function Rzscore
 #' @export 
 if ( ! isGeneric('Rzscore') ){setGeneric('Rzscore', ## Name
@@ -12,7 +12,7 @@ if ( ! isGeneric('Rzscore') ){setGeneric('Rzscore', ## Name
 	}
 ) }
 
-setMethod('Rzscore', signature = c ('RcppTestArea'),
+setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 	definition = function ( obj ) {
 		i = 0
 	obj@dat = Matrix::Matrix(t(

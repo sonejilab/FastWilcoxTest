@@ -14,7 +14,7 @@ if ( ! isGeneric('definition') ){setGeneric('definition', ## Name
 	}
 ) }
 
-setMethod('definition', signature = c ('RcppTestArea'),
+setMethod('definition', signature = c ('FastWilcoxTest'),
 	definition = function (object) {
 	cat (paste("An object of class", class(object)),"\n" )
 	cat("named ",object$name,"\n")

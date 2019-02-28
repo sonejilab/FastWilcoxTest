@@ -1,9 +1,9 @@
 #' @name print
-#' @aliases print,RcppTestArea-method
+#' @aliases print,FastWilcoxTest-method
 #' @rdname print
 #' @docType methods
-#' @description  print the RcppTestArea
-#' @param x the RcppTestArea object
+#' @description  print the FastWilcoxTest
+#' @param x the FastWilcoxTest object
 #' @return nothing
 #' @title description of function print
 #' @export 
@@ -14,7 +14,7 @@ if ( ! isGeneric('print') ){setGeneric('print', ## Name
 ) }
 
 
-setMethod('print', signature = c ('RcppTestArea'),
+setMethod('print', signature = c ('FastWilcoxTest'),
 	definition = function (x) {
 	cat (paste("An object of class", class(x)),"\n" )
 	#cat("named ",object$name,"\n")

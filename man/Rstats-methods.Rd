@@ -3,7 +3,7 @@
 \docType{methods}
 \name{Rstats}
 \alias{Rstats}
-\alias{Rstats,RcppTestArea-method}
+\alias{Rstats,FastWilcoxTest-method}
 \title{description of function Rstats}
 \usage{
 Rstats(X, interest, backgound, logFCcut = 1)

@@ -3,14 +3,14 @@
 \docType{methods}
 \name{print}
 \alias{print}
-\alias{print,RcppTestArea-method}
+\alias{print,FastWilcoxTest-method}
 \alias{show}
-\alias{show,RcppTestArea-method}
+\alias{show,FastWilcoxTest-method}
 \title{description of function print}
 \arguments{
-\item{x}{the RcppTestArea object}
+\item{x}{the FastWilcoxTest object}
 
-\item{object}{the RcppTestArea object}
+\item{object}{the FastWilcoxTest object}
 }
 \value{
 nothing
@@ -18,7 +18,7 @@ nothing
 nothing
 }
 \description{
-print the RcppTestArea
+print the FastWilcoxTest
 
-show the RcppTestArea
+show the FastWilcoxTest
 }
