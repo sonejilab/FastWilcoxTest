@@ -112,7 +112,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 //’ by not testing genes that are very infrequently expressed. Default is 0.1
 //’ @return a matrix with tested column ids, logFC and p.value
 // [[Rcpp::export]]
-extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
+ SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
 		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1 ){
 
 	Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
