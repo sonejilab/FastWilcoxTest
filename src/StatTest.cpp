@@ -119,8 +119,8 @@ extern SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> inte
     if ( interest.size() == 0 ){
     	::Rf_error("No values in interest group" );
     }
-    if ( backgound.size() == 0 ){
-        ::Rf_error("No values in backgound group" );
+    if ( background.size() == 0 ){
+        ::Rf_error("No values in background group" );
     }
 	// internal measurements
 	std::vector<double> logFCpass(X.cols(), 0.0);
