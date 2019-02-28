@@ -6,9 +6,9 @@ dat[which(dat < 1)] = 0
 colnames(dat) <- paste('Sample', 1:100)
 rownames(dat) <- paste( 'gene', 1:90)
 
-x <- as_RcppTestArea( dat )
+x <- as_FastWilcoxTest( dat )
 
-expect_equal( class( x )[1], c('RcppTestArea') )
+expect_equal( class( x )[1], c('FastWilcoxTest') )
 
 A = 1:6
 B = 2:8

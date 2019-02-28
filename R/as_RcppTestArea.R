@@ -1,18 +1,18 @@
-#' @name as_RcppTestArea
-#' @aliases as_RcppTestArea,RcppTestArea-method
-#' @rdname as_RcppTestArea-methods
+#' @name as_FastWilcoxTest
+#' @aliases as_FastWilcoxTest,FastWilcoxTest-method
+#' @rdname as_FastWilcoxTest-methods
 #' @docType methods
-#' @description Creates a RcppTestArea from a matrix.
+#' @description Creates a FastWilcoxTest from a matrix.
 #' @param x a matrix object
-#' @title description of function as_RcppTestArea
+#' @title description of function as_FastWilcoxTest
 #' @export 
-if ( ! isGeneric('as_RcppTestArea') ){setGeneric('as_RcppTestArea', ## Name
+if ( ! isGeneric('as_FastWilcoxTest') ){setGeneric('as_FastWilcoxTest', ## Name
 	function ( x ) { 
-		standardGeneric('as_RcppTestArea')
+		standardGeneric('as_FastWilcoxTest')
 	}
 ) }
 
-setMethod('as_RcppTestArea', signature = c ('matrix'),
+setMethod('as_FastWilcoxTest', signature = c ('matrix'),
 	definition = function ( x ) {
-	new('RcppTestArea', dat=Matrix::Matrix( x, sparse=T) )
+	new('FastWilcoxTest', dat=Matrix::Matrix( x, sparse=T) )
 } )

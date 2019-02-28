@@ -1,5 +1,5 @@
 #' @name Rstats
-#' @aliases Rstats,RcppTestArea-method
+#' @aliases Rstats,FastWilcoxTest-method
 #' @rdname Rstats-methods
 #' @docType methods
 #' @description calculate the wilcox test on a sparse matrix as the C++ function does it.

@@ -1,10 +1,10 @@
 
-#ifndef RCPP_RcppTestArea_H_GEN_
-#define RCPP_RcppTestArea_H_GEN_
+#ifndef RCPP_FastWilcoxTest_H_GEN_
+#define RCPP_FastWilcoxTest_H_GEN_
 
-/*#include "RcppTestArea_RcppExports.h"*/
+/*#include "FastWilcoxTest_RcppExports.h"*/
 
 #include "stat_rank.h"
 #include "Rcpp.h"
 
-#endif // RCPP_RcppTestArea_H_GEN_
+#endif // RCPP_FastWilcoxTest_H_GEN_

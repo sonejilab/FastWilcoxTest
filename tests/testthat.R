@@ -1,4 +1,4 @@
 library(testthat)
-library(RcppTestArea)
+library(FastWilcoxTest)
 
-test_check("RcppTestArea")
+test_check("FastWilcoxTest")

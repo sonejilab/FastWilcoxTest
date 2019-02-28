@@ -1,1 +1,1 @@
-# RcppTestArea
+# FastWilcoxTest

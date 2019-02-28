@@ -3,10 +3,10 @@
 \docType{methods}
 \name{Rzscore}
 \alias{Rzscore}
-\alias{Rzscore,RcppTestArea-method}
+\alias{Rzscore,FastWilcoxTest-method}
 \title{description of function Rzscore}
 \arguments{
-\item{obj}{the RcppTestArea}
+\item{obj}{the FastWilcoxTest}
 }
 \description{
 calculate the z.score as the cpp function does it

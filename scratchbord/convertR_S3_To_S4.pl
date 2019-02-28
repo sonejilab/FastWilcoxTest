@@ -96,7 +96,7 @@ opendir ( my $folder, "$plugin_path" ) or die $!;
 
 my @files = grep !/^\./,  grep '*\.R$/', readdir($folder);
 
-my $className = "RcppTestArea";
+my $className = "FastWilcoxTest";
 my $outpath = $plugin_path."/outpath";
 system( "mkdir -p $outpath") unless ( -d $outpath);
 system( "rm -f $outpath/*" );
