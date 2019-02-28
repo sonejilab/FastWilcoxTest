@@ -24,6 +24,7 @@ public:
     int len; /*!< Length of the array */
     int ulen; /*!< Length of unique elements */
     double tieCoef; /*!< Tie coefficient used by the WMW test */
+
 }
 
 /* This will break initially, but hopefully in the end fix
