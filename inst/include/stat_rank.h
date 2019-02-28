@@ -3,9 +3,39 @@
     
     Details.
 */
+
+class DRank {
+	public:
+		int index; /*!< Input index (starting from 0) */
+	    const double* vPtr; /*!< Pointer to the value (to use with R) */
+	    double rank; /*!< Fractional ranking (starting from 1) */
+};
+
+class DRankList {
+public:
+	/* following this:
+	 * https://stackoverflow.com/questions/20158793/creating-c-vector-of-pointers
+	 * https://de.cppreference.com/w/cpp/memory/unique_ptr
+	 * http://www.cplusplus.com/reference/vector/vector/push_back/
+	 * https://en.cppreference.com/w/cpp/memory/unique_ptr/make_unique
+	 * */
+
+    vector<unique_prt<DRank>> list; /*!< Dynamic array of DRanks */
+    int len; /*!< Length of the array */
+    int ulen; /*!< Length of unique elements */
+    double tieCoef; /*!< Tie coefficient used by the WMW test */
+}
+
+/* This will break initially, but hopefully in the end fix
+ * the memory problems that make this lib fail when used from cellexalvrR
+ */
+
+
 #ifndef _STAT_RANK_H_
 #define _STAT_RANK_H_
 
+
+/* convert this DRank struct to a c++ class and change the vPtr data structure to a
 #ifdef __cplusplus
 extern "C" {
 #endif
