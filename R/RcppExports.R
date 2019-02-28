@@ -5,8 +5,8 @@ logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
 }
 
-StatTest <- function(X, interest, backgound, logFCcut = 1.0, minPct = 0.1) {
-    .Call(`_FastWilcoxTest_StatTest`, X, interest, backgound, logFCcut, minPct)
+StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1) {
+    .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct)
 }
 
 ZScore <- function(data, display_progress = TRUE) {
