@@ -5,6 +5,20 @@ logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
 }
 
+#' @title StatTest runs wilcox test on the columns of the sparse matrix
+#' @aliases StatTest,FastWilcoxTest-method
+#' @rdname StatTest
+#' @description This test implements the Seurat FindMarkers( test.use == "wilcox" ) function
+#' in the greatest possible way, but using Rcpp instead of R. So far I could get a ~10x speed improvement.
+#' @param X the sparse matrix (tests are applied to columns!)
+#' @param interest row IDs for the group of interest
+#' @param background row IDS for the background
+#' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
+#' @param minPct only test genes that are detected in a minimum fraction of
+#' min.pct cells in either of the two populations. Meant to speed up the function
+#' by not testing genes that are very infrequently expressed. Default is 0.1
+#' @return a matrix with tested column ids, logFC and p.value
+#' @export
 StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1) {
     .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct)
 }
