@@ -22,9 +22,9 @@ public:
 		rank =-1;
 	};
 	void setRank( double r ) { if ( r > 0 ) { rank = r; } };
-	void print( void ){
-		Rcout << "C++ DRank entry at index " << index << ", rank " << rank << " with value "<< vPtr << std::endl;
-	};
+//	void print( void ){
+//		Rcout << "C++ DRank entry at index " << index << ", rank " << rank << " with value "<< vPtr << std::endl;
+//	};
 };
 
 /* following this:
@@ -78,12 +78,12 @@ public:
 			list.at(i).fill( i, array.at(i) );
 		}
 	};
-	void print(void){
-		Rcout << "C++ DRankList with " << len << " entries, " << ulen << " unique entries and "<< tieCoef << " ties:" << std::endl;
-		for(int i=0;i<len;++i) {
-			list.at(i).print();
-		}
-	};
+//	void print(void){
+//		Rcout << "C++ DRankList with " << len << " entries, " << ulen << " unique entries and "<< tieCoef << " ties:" << std::endl;
+//		for(int i=0;i<len;++i) {
+//			list.at(i).print();
+//		}
+//	};
 	/*! \brief test whether the DRankList has been ranked
 	 *
 	 * if sortRankDRankList has been run, the value will be 1, otherwise 0.

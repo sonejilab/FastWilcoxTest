@@ -118,7 +118,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
  SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
 		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1 ){
 
-	Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
+	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
     if ( interest.size() == 0 ){
     	::Rf_error("No values in interest group" );
     }
