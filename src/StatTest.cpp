@@ -4,11 +4,11 @@
 /*#include <progress.hpp> */
 #include <math.h>
 #include <stat_rank.h>
+
 using namespace Rcpp;
 #include <vector>
 #include <stdexcept>
 typedef Eigen::MappedSparseMatrix<double> MSpMat;
-#include <Rcpp/Dimension.h>
 
 #include <R.h>
 #include <Rdefines.h>
@@ -183,7 +183,8 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 	/* allocate a result 'matrix' */
 	NumericMatrix res(pass, 6);
 	int n = X.rows();
-	double *total = new double[ itA.size() + itB.size() ];
+	std::vector<double> total( itA.size() + itB.size() , -1.0 );
+
 	int id = 0;
 	int j;
 	int nInd;
@@ -198,29 +199,44 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			/*Test stats copied from the BioOC package */
 			j = 0;
 			for (unsigned int i = 0; i< itA.size(); i++ ) {
-				total[j++] = X.coeff(itA.at(i) ,c_);
+				total.at(j++) = X.coeff(itA.at(i) ,c_);
 			}
 			for (unsigned int i = 0; i< itB.size(); i++ ) {
-				total[j++] = X.coeff(itB.at(i) ,c_);
+				total.at(j++) = X.coeff(itB.at(i) ,c_);
 			}
 			n = j;
-			list = createDRankList(total, n);
-			prepareDRankList(list);
 
-			tie = tieCoef(list);
+			// populate the DRankList object
+
+			list.refill(total, n);
+			//Rcout << "isRanked " << list.isRanked() <<std::endl;
+			//list.sortRankDRankList();
+			//Rcout << "isRanked " << list.isRanked() <<std::endl;
+			// test DRankLint internals
+			//continue;
+
+			list.prepareDRankList();
+
+			//Rcout << "finished with the prepare:" << std::endl;
+			//list.print();
+
+			tie = list.tieCoef;
 
 			nInd=itA.size();
 
 			indRankSum.at(c_) = 0.0;
+			//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
 			for(j=0; j<nInd; ++j) {
 				if(!(itA.at(j)>=0 && itA.at(j)<=n-1))
 					::Rf_error("Index out of range: gene set %d, gene %d\n", c_+1, j+1);
-				//if ( total[itA.at(j)] > 0 ){
-					indRankSum.at(c_) += list->list[itA.at(j)]->rank;
-				//}
+				if ( list.list.size() <= itA.at(j) )
+					::Rf_error("Not enough values in the ranked list; list size %d <= data size", list.list.size(), itA.at(j));
+				//Rcout << "adding to RankSum for gene id " << c_ << " and index == "
+				//		<<  itA.at(j) << " and value " <<  list.list.at(itA.at(j)).rank << std::endl;
+				indRankSum.at(c_) += list.list.at(itA.at(j)).rank;
 			}
 			// never destroy the  DRankList - that kills the R gc() functionality!!
-
+			//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;
 			/* store the results */
 			res(id,0) = c_ + 1;
 			res(id,1) = logFCpass.at(c_);
@@ -229,6 +245,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			res(id,4) = indRankSum.at(c_);
 			/* store the higher p value as we do drop all lower anyhow. */
 			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 0);
+			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
 			id ++;
 		}
 	}
