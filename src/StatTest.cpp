@@ -25,13 +25,13 @@ typedef Eigen::MappedSparseMatrix<double> MSpMat;
 
 // [[Rcpp::export]]
 double logFC ( std::vector<double> A, std::vector<double> B ) {
-	double Asum = A[0] * 1.0;
-	double Bsum = B[0] * 1.0;
+	double Asum = A.at(0) * 1.0;
+	double Bsum = B.at(0) * 1.0;
 	for ( unsigned int i=1; i<A.size(); i++ ){
-		Asum = log( exp( Asum - A[i]) + 1.0)  + A[i];
+		Asum = log( exp( Asum - A.at(i)) + 1.0)  + A.at(i);
 	}
 	for ( unsigned int i=1; i<B.size(); i++ ){
-		Bsum = log( exp( Bsum - B[i]) + 1.0 ) + B[i];
+		Bsum = log( exp( Bsum - B.at(i)) + 1.0 ) + B.at(i);
 	}
 	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
 	return (Asum - log(A.size()))-(Bsum - log(B.size())) ;
@@ -39,14 +39,14 @@ double logFC ( std::vector<double> A, std::vector<double> B ) {
 
 std::vector<int> minusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
-		X[i] --;
+		X.at(i) --;
 	}
 	return X;
 }
 
 std::vector<int> plusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
-		X[i] ++;
+		X.at(i) ++;
 	}
 	return X;
 }
@@ -115,7 +115,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 //' @return a matrix with tested column ids, logFC and p.value
 //' @export
 // [[Rcpp::export]]
- SEXP StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
+NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
 		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1 ){
 
 	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
@@ -138,6 +138,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 	double tmp = 0;
     // how many genes pass all filters
 	int pass = 0;
+	int q = 0;
 	// the corrected (R vs c++) ids
 	std::vector<int> itA = minusOne( interest );
 	std::vector<int> itB = minusOne( background );
@@ -146,6 +147,8 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
 		inA = 0;
 		inB = 0;
+		//Rcout << "processing line "<< c_ << std::endl;
+
 		for ( unsigned int i = 0; i< itA.size(); i++ ) {
 			if ( itA.at(i) < 0 || itA.at(i) >= X.rows() ) {
 				::Rf_error( "test out of bounds" );
@@ -154,7 +157,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			if ( tmp > 0 ){
 				inA ++;
 			}
-			A[i] = tmp;
+			A.at(i) = tmp;
 		}
 		for ( unsigned int i = 0; i< itB.size(); i++ ) {
 			if (itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
@@ -166,13 +169,19 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			}
 			B.at(i) = tmp;
 		}
-		fracInA[c_] = inA / interest.size();
-		fracInB[c_] = inB / background.size();
-		logFCpass[c_] = logFC( A, B );
-		if ( logFCpass.at(c_) > logFCcut && ( (fracInA[c_] > minPct) +  (fracInB[c_] > minPct) ) > 0 ) {
+		//Rcout << "could we have 0's?  "<< c_ <<  " interest.size() " << interest.size() << " background.size() "<< background.size() << std::endl;
+		fracInA.at(c_) = inA / interest.size();
+		fracInB.at(c_) = inB / background.size();
+
+		logFCpass.at(c_) = logFC( A, B );
+		q = (fracInA.at(c_) > minPct) +  (fracInB.at(c_) > minPct);
+		if ( logFCpass.at(c_) > logFCcut && q > 0 ) {
 			pass++;
+		}else {
+			logFCpass.at(c_) = 0; // get the check easier later!
 		}
 	}
+	//Rcout << "test variables calculated" << std::endl;
 	if ( pass == 0 ){
 			::Rf_error("No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" );
 	}
@@ -180,21 +189,27 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
 	}
 
+	//Rcout << "allocate NumericMatrix with " << pass << " rows and " << 6 << "cols" << std::endl;
 	/* allocate a result 'matrix' */
 	NumericMatrix res(pass, 6);
-	int n = X.rows();
-	std::vector<double> total( itA.size() + itB.size() , -1.0 );
 
+	//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
+	std::vector<double> total( itA.size() + itB.size() , -1.0 );
+	int n = total.size();
 	int id = 0;
 	int j;
 	int nInd;
 	double tie;
 	//double indRankSum;
 
-	DRankList list;
+	//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
+	DRankList list( n );
+	//Rcout << "living 2" << std::endl;
+	//list.print();
 
 	for ( int c_=0; c_ < X.cols(); c_++ ){
-		if ( logFCpass[c_] > logFCcut ) {
+		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;
+		if ( logFCpass.at(c_) > logFCcut ) {
 
 			/*Test stats copied from the BioOC package */
 			j = 0;
@@ -207,19 +222,19 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			n = j;
 
 			// populate the DRankList object
-
+			//Rcout << "living 3" << std::endl;
 			list.refill(total, n);
 			//Rcout << "isRanked " << list.isRanked() <<std::endl;
 			//list.sortRankDRankList();
 			//Rcout << "isRanked " << list.isRanked() <<std::endl;
 			// test DRankLint internals
 			//continue;
-
+			//Rcout << "living 4" << std::endl;
 			list.prepareDRankList();
 
 			//Rcout << "finished with the prepare:" << std::endl;
 			//list.print();
-
+			//Rcout << "living 5" << std::endl;
 			tie = list.tieCoef;
 
 			nInd=itA.size();
@@ -244,11 +259,13 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 			res(id,3) = fracInB.at(c_);
 			res(id,4) = indRankSum.at(c_);
 			/* store the higher p value as we do drop all lower anyhow. */
+			//Rcout << "calc the stats value " << std::endl;
 			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 0);
 			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
 			id ++;
 		}
 	}
+
 	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
 	Rcout << "n return values: " << pass <<std::endl;
 	return res;
