@@ -45,7 +45,7 @@ RcppExport SEXP _FastWilcoxTest_logFC(SEXP ASEXP, SEXP BSEXP) {
     return rcpp_result_gen;
 }
 // StatTest
-SEXP StatTest(Eigen::MappedSparseMatrix<double> X, std::vector<int> interest, std::vector<int> background, double logFCcut, double minPct);
+NumericMatrix StatTest(Eigen::MappedSparseMatrix<double> X, std::vector<int> interest, std::vector<int> background, double logFCcut, double minPct);
 static SEXP _FastWilcoxTest_StatTest_try(SEXP XSEXP, SEXP interestSEXP, SEXP backgroundSEXP, SEXP logFCcutSEXP, SEXP minPctSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -100,7 +100,7 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
-        signatures.insert("SEXP(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double)");
+        signatures.insert("NumericMatrix(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double)");
     }
     return signatures.find(sig) != signatures.end();
 }

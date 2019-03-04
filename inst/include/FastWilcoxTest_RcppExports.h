@@ -46,11 +46,11 @@ namespace FastWilcoxTest {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
-    inline SEXP StatTest(Eigen::MappedSparseMatrix<double> X, std::vector<int> interest, std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1) {
+    inline NumericMatrix StatTest(Eigen::MappedSparseMatrix<double> X, std::vector<int> interest, std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1) {
         typedef SEXP(*Ptr_StatTest)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_StatTest p_StatTest = NULL;
         if (p_StatTest == NULL) {
-            validateSignature("SEXP(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double)");
+            validateSignature("NumericMatrix(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double)");
             p_StatTest = (Ptr_StatTest)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_StatTest");
         }
         RObject rcpp_result_gen;
@@ -64,7 +64,7 @@ namespace FastWilcoxTest {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<SEXP >(rcpp_result_gen);
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
     }
 
 }

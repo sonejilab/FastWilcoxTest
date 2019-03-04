@@ -14,7 +14,12 @@ public:
 	int index; /*!< Input index (starting from 0) */
 	double vPtr; /*!< Pointer to the value (to use with R) */
 	double rank; /*!< Fractional ranking (starting from 1) */
-	DRank () { index = -1; vPtr = -1; rank = -1; };
+	DRank () {
+		index = -1;
+		vPtr = -1;
+		rank = -1;
+		//Rcout << "C++ DRank entry defined as empty "<< std::endl;
+	};
 	DRank (int ind, double Ptr) { index = ind; vPtr = Ptr; rank = -1; };
 	void fill (int ind, double Ptr ) {
 		index = ind;
@@ -22,9 +27,9 @@ public:
 		rank =-1;
 	};
 	void setRank( double r ) { if ( r > 0 ) { rank = r; } };
-//	void print( void ){
-//		Rcout << "C++ DRank entry at index " << index << ", rank " << rank << " with value "<< vPtr << std::endl;
-//	};
+	void print( void ){
+		Rcout << "C++ DRank entry at index " << index << ", rank " << rank << " with value "<< vPtr << std::endl;
+	};
 };
 
 /* following this:
@@ -47,16 +52,33 @@ public:
      \param len: the length of the double array
 	 */
 	DRankList() { len = 0; tieCoef = -1; ulen = 0;};
+	DRankList(int n) {
+		this->len = n;
+		this->tieCoef = -1;
+		this->ulen = 0;
+		//Rcout << "C++ DRankList with " << this->len << " entries, " << this->ulen << " unique entries and "<< this->tieCoef << " ties:" << std::endl;
+		//Rcout << "DRankList starting to allocate " << n << " new DRank elements" << std::endl;
+
+		for ( int i =0; i < n; i++){
+			//Rcout << "DRankList allocating element " << i << std::endl;
+
+			this->list.emplace_back( );
+
+			//Rcout << "Can I access this entry? " << this->list.at(i) << i << std::endl;
+			//this->list.at(i).print();
+			//Rcout << "Yes!! " << i << std::endl;
+			//::Rf_error("good for now!");
+		}
+		//this->print();
+		//::Rf_error("good for now!");
+	};
 	void refill( std::vector<double> array, int newlen) {
 		// in case we populate first time
 		//Rcout << "C++ DRankList you ask for a refill ;-) " << newlen << " == my length? " << len << std::endl;
 		if ( len == 0 ) {
 			len = newlen;
 			//Rcout << "C++ DRankList you ask for a refill ;-) I try to create the vector" << std::endl;
-			list.clear(); // to be save here!
-			for(int i=0;i<len;++i) {
-				list.push_back( DRank (  i, array.at(i)) );
-			}
+			::Rf_error("please use the new DRankList(n) constructor!");
 			//Rcout << "and it worked!" << list.size() << " is the new size" << std::endl;
 			return;
 		}else if ( len ==  newlen) {
@@ -64,9 +86,7 @@ public:
 			//Rcout << "using the old data as length should be ok" << std::endl;
 		}else { // new length!!
 			//Rcout << "resetting the vector to new length" << std::endl;
-			len = newlen;
-			list.clear();
-			list.resize(len);
+			::Rf_error("Changed content length - please get yourself a new object instead - use new DRankList(n) constructor!");
 		}
 		ulen=-1;
 		tieCoef = -1;
@@ -78,12 +98,12 @@ public:
 			list.at(i).fill( i, array.at(i) );
 		}
 	};
-//	void print(void){
-//		Rcout << "C++ DRankList with " << len << " entries, " << ulen << " unique entries and "<< tieCoef << " ties:" << std::endl;
-//		for(int i=0;i<len;++i) {
-//			list.at(i).print();
-//		}
-//	};
+	void print(void){
+		Rcout << "C++ DRankList with " << len << " entries, " << ulen << " unique entries and "<< tieCoef << " ties:" << std::endl;
+		for(int i=0;i<len;++i) {
+			list.at(i).print();
+		}
+	};
 	/*! \brief test whether the DRankList has been ranked
 	 *
 	 * if sortRankDRankList has been run, the value will be 1, otherwise 0.
@@ -95,7 +115,7 @@ public:
 	};
 	/*! \brief: sort and gives rank to a DRankList
 	 *
-	 *  sortRankDRankList sorts and gives statistical (fractional) rank to a DRankList.
+	 *  sortRankDRankList sorts and gives statistical (fractional) rank to a DRanklist.
 	 *
 	 *  sortRankDRankList runs once and only once (controlled by isRanked):
 	 *  Once the ranks have been set (i.e. ranks>0), the function will exit
@@ -156,7 +176,7 @@ public:
 		if( len == ulen ) {
 			//Rcout << "C++ DRankList prepareDRankList setting tieCoef to 1.0 " << std::endl;
 			//print();
-			tieCoef=1.0;
+			this->tieCoef=1.0;
 		} else {
 			int n=len;
 			int un=ulen;

@@ -16,8 +16,7 @@ LazyData: true
 LinkingTo: 
     Rcpp, 
     RcppEigen, 
-    RcppProgress,
-    RcppThread
+    RcppProgress
 Imports: 
     Rcpp,
     Matrix
