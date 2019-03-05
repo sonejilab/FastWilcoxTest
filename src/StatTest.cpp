@@ -24,17 +24,19 @@ typedef Eigen::MappedSparseMatrix<double> MSpMat;
 
 
 // [[Rcpp::export]]
-double logFC ( std::vector<double> A, std::vector<double> B ) {
-	double Asum = A.at(0) * 1.0;
-	double Bsum = B.at(0) * 1.0;
+double logFC ( std::vector<double> A, std::vector<double> B  ) {
+	double ret;
+	double Asum = 0;
+	double Bsum = 0;
 	for ( unsigned int i=1; i<A.size(); i++ ){
-		Asum = log( exp( Asum - A.at(i)) + 1.0)  + A.at(i);
+		Asum += std::expm1(A.at(i));
 	}
 	for ( unsigned int i=1; i<B.size(); i++ ){
-		Bsum = log( exp( Bsum - B.at(i)) + 1.0 ) + B.at(i);
+		Bsum += std::expm1( B.at(i));
 	}
 	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
-	return (Asum - log(A.size()))-(Bsum - log(B.size())) ;
+	ret = (log( (Asum / A.size() ) + 1 ) - ( log(Bsum / B.size()) +1 )) ;
+	return ret ;
 }
 
 std::vector<int> minusOne ( std::vector<int>  X ){
@@ -99,6 +101,51 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 	}
 	return(res);
 }
+//' @title fastWilcoxTest runs wilcox test comparing x and y
+//' @aliases fastWilcoxTest,FastWilcoxTest-method
+//' @rdname fastWilcoxTest
+//' @description a simple replacement of wilcox.test returning less information but >10x faster
+//' @param x the interesting information
+//' @param y the background information
+//' @param type the test type (greater=0,less=1,twoSided=2,U=3,Abslog10greater=4,log10less=5,abslog10twoSided=6,Q=7)
+//' @return a double vector with 2 entries : Rank sum and p.value,
+//' @export
+// [[Rcpp::export]]
+std::vector<double> fastWilcoxTest(std::vector<double> x, std::vector<double> y,  int type ){
+
+	int n = x.size() + y.size() ;
+	Rcout << "total size " << n  << std::endl;
+
+	std::vector<double> total( n );
+	std::vector<double> res (2);
+	int j = 0;
+	for (unsigned int i = 0; i< x.size(); i++ ) {
+		total.at(j++) = x.at(i);
+	}
+	for (unsigned int i = 0; i< y.size(); i++ ) {
+		total.at(j++) = y.at(i);
+	}
+	Rcout << "start DRank list " << n  << std::endl;
+	DRankList list( n );
+	list.refill(total, n);
+	list.prepareDRankList();
+	double tie = list.tieCoef;
+
+	double nInd=x.size();
+
+	double indRankSum = 0.0;
+				//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
+	for(j=0; j<nInd; ++j) {
+		indRankSum += list.list.at(j).rank;
+	}
+	/* store the results */
+	res.at(0) = indRankSum;
+	/* store the higher p value as we do drop all lower anyhow. */
+	Rcout << "calc the stats value " << std::endl;
+
+	res.at(1) = wmw_test_stat(indRankSum, nInd, n, tie, type);
+	return res;
+}
 
 //' @title StatTest runs wilcox test on the columns of the sparse matrix
 //' @aliases StatTest,FastWilcoxTest-method
@@ -110,13 +157,14 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 //' @param background row IDS for the background
 //' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
 //' @param minPct only test genes that are detected in a minimum fraction of
-//' min.pct cells in either of the two populations. Meant to speed up the function
+//' minPct cells in either of the two populations. Meant to speed up the function
 //' by not testing genes that are very infrequently expressed. Default is 0.1
+//' @param onlyPos check only higher expression (default FALSE)
 //' @return a matrix with tested column ids, logFC and p.value
 //' @export
 // [[Rcpp::export]]
 NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
-		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1 ){
+		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1, bool onlyPos=false  ){
 
 	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
     if ( interest.size() == 0 ){
@@ -127,6 +175,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
     }
 	// internal measurements
 	std::vector<double> logFCpass(X.cols(), 0.0);
+	std::vector<bool>   testPassed(X.cols(), 0.0);
 	std::vector<double> fracInA(X.cols(), 0.0);
 	std::vector<double> fracInB(X.cols(), 0.0);
 	std::vector<double> indRankSum(X.cols(), 0.0);
@@ -174,11 +223,17 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		fracInB.at(c_) = inB / background.size();
 
 		logFCpass.at(c_) = logFC( A, B );
+
 		q = (fracInA.at(c_) > minPct) +  (fracInB.at(c_) > minPct);
-		if ( logFCpass.at(c_) > logFCcut && q > 0 ) {
+		tmp = logFCpass.at(c_);
+		if ( ! onlyPos && tmp < 0 ) {
+			tmp = tmp * -1;
+		}
+		if ( tmp > logFCcut && q > 0 ) {
 			pass++;
+			testPassed.at(c_) = true;
 		}else {
-			logFCpass.at(c_) = 0; // get the check easier later!
+			testPassed.at(c_) = false;
 		}
 	}
 	//Rcout << "test variables calculated" << std::endl;
@@ -209,7 +264,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 
 	for ( int c_=0; c_ < X.cols(); c_++ ){
 		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;
-		if ( logFCpass.at(c_) > logFCcut ) {
+		if ( testPassed.at(c_) ) {
 
 			/*Test stats copied from the BioOC package */
 			j = 0;
@@ -260,7 +315,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 			res(id,4) = indRankSum.at(c_);
 			/* store the higher p value as we do drop all lower anyhow. */
 			//Rcout << "calc the stats value " << std::endl;
-			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 0);
+			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
 			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
 			id ++;
 		}

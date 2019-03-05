@@ -5,6 +5,19 @@ logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
 }
 
+#' @title fastWilcoxTest runs wilcox test comparing x and y
+#' @aliases fastWilcoxTest,FastWilcoxTest-method
+#' @rdname fastWilcoxTest
+#' @description a simple replacement of wilcox.test returning less information but >10x faster
+#' @param x the interesting information
+#' @param y the background information
+#' @param type the test type (greater=0,less=1,twoSided=2,U=3,Abslog10greater=4,log10less=5,abslog10twoSided=6,Q=7)
+#' @return a double vector with 2 entries : Rank sum and p.value,
+#' @export
+fastWilcoxTest <- function(x, y, type) {
+    .Call(`_FastWilcoxTest_fastWilcoxTest`, x, y, type)
+}
+
 #' @title StatTest runs wilcox test on the columns of the sparse matrix
 #' @aliases StatTest,FastWilcoxTest-method
 #' @rdname StatTest
@@ -15,12 +28,13 @@ logFC <- function(A, B) {
 #' @param background row IDS for the background
 #' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
 #' @param minPct only test genes that are detected in a minimum fraction of
-#' min.pct cells in either of the two populations. Meant to speed up the function
+#' minPct cells in either of the two populations. Meant to speed up the function
 #' by not testing genes that are very infrequently expressed. Default is 0.1
+#' @param onlyPos check only higher expression (default FALSE)
 #' @return a matrix with tested column ids, logFC and p.value
 #' @export
-StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1) {
-    .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct)
+StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1, onlyPos = FALSE) {
+    .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct, onlyPos)
 }
 
 ZScore <- function(data, display_progress = TRUE) {
