@@ -8,16 +8,18 @@
 #' @param interest the intereting col IDs
 #' @param backgound the background col IDs
 #' @param logFCcut the logFC change cutoff default= 1.0
+#' @param minPct only test genes that are detected in a minimum fraction of
+#'  min.pct cells in either of the two populations. Meant to speed up the function
 #' @title description of function Rstats
 #' @export 
 setGeneric('Rstats', ## Name
-	function ( X, interest, backgound,  logFCcut = 1.0 ) { ## Argumente der generischen Funktion
+	function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1 ) { ## Argumente der generischen Funktion
 		standardGeneric('Rstats') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
 setMethod('Rstats', signature = c ('dgCMatrix'),
-	definition = function ( X, interest, backgound,  logFCcut = 1.0 ) {
+	definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1 ) {
 	logRF = unlist(apply( X, 2, function( x ) { logFC( x[interest], x[backgound] ) } ) )
 	#browser()
 	OK = which( logRF > logFCcut )
@@ -35,10 +37,18 @@ setMethod('Rstats', signature = c ('dgCMatrix'),
 } )
 
 setMethod('Rstats', signature = c ('dgeMatrix'),
-		definition = function ( X, interest, backgound,  logFCcut = 1.0 ) {
+		definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1 ) {
 			logRF = unlist(apply( X, 2, function( x ) { logFC( x[interest], x[backgound] ) } ) )
+			fracA = unlist(apply( X, 2, function( x ) { x =  x[interest]; length( x[which(x > 0)] ) /length(x) } ) )
+			fracB = unlist(apply( X, 2, function( x ) { x =  x[backgound]; length( x[which(x > 0)] ) /length(x) } ) )
 			#browser()
 			OK = which( logRF > logFCcut )
+			tmp = which( fracA[OK] > minPct)
+			tmp = unique( c( which( fracA[OK] > minPct)),names(which( fracB[OK] > minPct) ) )
+			if ( length(tmp) == 0 ) {
+				stop( "No genes passed the cutoff" )
+			}
+			OK = OK[tmp]
 			W = vector( 'numeric', length(OK))
 			p = vector( 'numeric', length(OK))
 			id = 1;
