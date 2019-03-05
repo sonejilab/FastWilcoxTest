@@ -1,5 +1,5 @@
 CXX14=g++
+CXX_STD = CXX14
 CXX14FLAGS=-O3 -Wall
 PKG_CXX14FLAGS+=-Wno-ignored-attributes
 PKG_CPPFLAGS = -I../inst/include/
-CXX14 = g++ # or clang++ if you have that
