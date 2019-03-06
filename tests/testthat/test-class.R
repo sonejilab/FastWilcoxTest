@@ -53,10 +53,9 @@ expect_equal( cor ,1 )
 cor = correlationCoefficient( X= t1, Y =rev( t1 ))
 expect_equal( cor , -0.010188, tolerance=1e-5 )
 
+system.time({ cor = CorMatrix ( Matrix::t(x@dat), x@dat[1,] ) })
 
-cor = CorMatrix ( Matrix::t(x@dat), x@dat[1,], 1:ncol(x@dat) )
-
-cor2 = apply(as.matrix(x@dat),1, cor, x@dat[1,] )
+system.time({cor2 = apply(as.matrix(x@dat),1, cor, x@dat[1,] ) })
 
 
 all.equal(cor, as.vector(cor2), 1e-7)
