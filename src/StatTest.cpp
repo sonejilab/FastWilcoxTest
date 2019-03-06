@@ -35,7 +35,7 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 		Bsum += std::expm1( B.at(i));
 	}
 	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
-	ret = (log( (Asum / A.size() ) + 1 ) - ( log(Bsum / B.size()) +1 )) ;
+	ret = (log( (Asum / A.size() )  ) - ( log(Bsum / B.size())  )) ;
 	return ret ;
 }
 

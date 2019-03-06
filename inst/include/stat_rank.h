@@ -62,7 +62,7 @@ public:
 		for ( int i =0; i < n; i++){
 			//Rcout << "DRankList allocating element " << i << std::endl;
 
-			this->list.emplace_back( );
+			this->list.push_back( DRank() );
 
 			//Rcout << "Can I access this entry? " << this->list.at(i) << i << std::endl;
 			//this->list.at(i).print();
