@@ -1,2 +1,3 @@
-PKG_CXX14FLAGS+=-Wno-ignored-attributes -std=c++14
+CXX_STD = CXX11
+PKG_CXX11FLAGS+=-Wno-ignored-attributes
 PKG_CPPFLAGS = -I../inst/include/
