@@ -7,11 +7,6 @@
 #' @return nothing
 #' @title description of function print
 #' @export 
-if ( ! isGeneric('print') ){setGeneric('print', ## Name
-	function (x) { 
-		standardGeneric('print')
-	}
-) }
 
 
 setMethod('print', signature = c ('FastWilcoxTest'),
