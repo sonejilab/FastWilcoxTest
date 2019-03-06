@@ -22,7 +22,14 @@ typedef Eigen::MappedSparseMatrix<double> MSpMat;
 
 // [[Rcpp::interfaces(r, cpp)]]
 
-
+//' @title logFC calculates a log fold change between the two input vectors
+//' @aliases logFC,FastWilcoxTest-method
+//' @rdname logFC
+//' @description a simple replacement of wilcox.test returning less information but >10x faster
+//' @param A one numeric vector of log data
+//' @param B the other log vector
+//' @return a double fold change
+//' @export
 // [[Rcpp::export]]
 double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	double ret;
