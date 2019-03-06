@@ -1,4 +1,4 @@
 CXX_STD = CXX11
-PKG_CXX11FLAGS+=-Wno-ignored-attributes
+PKG_CXX11FLAGS+=-Wno-ignored-attributes -std=gnu++11
 PKG_CPPFLAGS = -I../inst/include/
 PKG_CXXFLAGS += -Wno-ignored-attributes
