@@ -5,7 +5,8 @@
 \alias{StatTest,FastWilcoxTest-method}
 \title{StatTest runs wilcox test on the columns of the sparse matrix}
 \usage{
-StatTest(X, interest, background, logFCcut = 1, minPct = 0.1)
+StatTest(X, interest, background, logFCcut = 1, minPct = 0.1,
+  onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the sparse matrix (tests are applied to columns!)}
@@ -17,8 +18,10 @@ StatTest(X, interest, background, logFCcut = 1, minPct = 0.1)
 \item{logFCcut}{data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested}
 
 \item{minPct}{only test genes that are detected in a minimum fraction of
-min.pct cells in either of the two populations. Meant to speed up the function
+minPct cells in either of the two populations. Meant to speed up the function
 by not testing genes that are very infrequently expressed. Default is 0.1}
+
+\item{onlyPos}{check only higher expression (default FALSE)}
 }
 \value{
 a matrix with tested column ids, logFC and p.value

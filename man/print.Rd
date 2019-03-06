@@ -7,6 +7,9 @@
 \alias{show}
 \alias{show,FastWilcoxTest-method}
 \title{description of function print}
+\usage{
+\S4method{print}{FastWilcoxTest}(x)
+}
 \arguments{
 \item{x}{the FastWilcoxTest object}
 

@@ -6,7 +6,8 @@
 \alias{Rstats,FastWilcoxTest-method}
 \title{description of function Rstats}
 \usage{
-Rstats(X, interest, backgound, logFCcut = 1)
+Rstats(X, interest, backgound, logFCcut = 1, minPct = 0.1,
+  onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the sparse matrix}
@@ -16,6 +17,11 @@ Rstats(X, interest, backgound, logFCcut = 1)
 \item{backgound}{the background col IDs}
 
 \item{logFCcut}{the logFC change cutoff default= 1.0}
+
+\item{minPct}{only test genes that are detected in a minimum fraction of
+min.pct cells in either of the two populations. Meant to speed up the function}
+
+\item{onlyPos}{test only those genes with higher expression in the interest (default FALSE)}
 }
 \description{
 calculate the wilcox test on a sparse matrix as the C++ function does it.
