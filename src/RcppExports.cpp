@@ -21,16 +21,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// CorMatrix
-std::vector<double> CorMatrix(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids);
-RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+// CorMatrixIDS
+std::vector<double> CorMatrixIDS(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids);
+RcppExport SEXP _FastWilcoxTest_CorMatrixIDS(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
-    rcpp_result_gen = Rcpp::wrap(CorMatrix(X, CMP, ids));
+    rcpp_result_gen = Rcpp::wrap(CorMatrixIDS(X, CMP, ids));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CorMatrix
+std::vector<double> CorMatrix(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP);
+RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
+    rcpp_result_gen = Rcpp::wrap(CorMatrix(X, CMP));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -251,7 +263,8 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
 
 static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
-    {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 3},
+    {"_FastWilcoxTest_CorMatrixIDS", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS, 3},
+    {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
     {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},

@@ -14,6 +14,20 @@ correlationCoefficient <- function(X, Y) {
     .Call(`_FastWilcoxTest_correlationCoefficient`, X, Y)
 }
 
+#' @name CorMatrixIDS
+#' @aliases CorMatrixIDS,FastWilcoxTest-method
+#' @rdname CorMatrixIDS-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y (slower than apply cor)
+#' @param X the sparse matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @param ids the rows of the matrix to correlate to
+#' @title Calculate correlation over two double vectors
+#' @export
+CorMatrixIDS <- function(X, CMP, ids) {
+    .Call(`_FastWilcoxTest_CorMatrixIDS`, X, CMP, ids)
+}
+
 #' @name CorMatrix
 #' @aliases CorMatrix,FastWilcoxTest-method
 #' @rdname CorMatrix-methods
@@ -21,11 +35,10 @@ correlationCoefficient <- function(X, Y) {
 #' @description simply calculate the correlation between X and Y
 #' @param X the sparse matrix
 #' @param CMP the vector to correlate every column of the matrix to
-#' @param ids the rows of the matrix to correlate to
 #' @title Calculate correlation over two double vectors
 #' @export
-CorMatrix <- function(X, CMP, ids) {
-    .Call(`_FastWilcoxTest_CorMatrix`, X, CMP, ids)
+CorMatrix <- function(X, CMP) {
+    .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
 }
 
 #' @title logFC calculates a log fold change between the two input vectors

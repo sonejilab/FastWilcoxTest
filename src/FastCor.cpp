@@ -52,18 +52,18 @@ float correlationCoefficient( std::vector<double> X,  std::vector<double> Y)
 }
 
 
-//' @name CorMatrix
-//' @aliases CorMatrix,FastWilcoxTest-method
-//' @rdname CorMatrix-methods
+//' @name CorMatrixIDS
+//' @aliases CorMatrixIDS,FastWilcoxTest-method
+//' @rdname CorMatrixIDS-methods
 //' @docType methods
-//' @description simply calculate the correlation between X and Y
+//' @description simply calculate the correlation between X and Y (slower than apply cor)
 //' @param X the sparse matrix
 //' @param CMP the vector to correlate every column of the matrix to
 //' @param ids the rows of the matrix to correlate to
 //' @title Calculate correlation over two double vectors
 //' @export
 // [[Rcpp::export]]
-std::vector<double> CorMatrix (Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids ) {
+std::vector<double> CorMatrixIDS (Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids ) {
 	if ( ids.size() != CMP.size() )
 		::Rf_error("Sorry, I need arrays of the same size nrow(X[ids,]) and length(CMP)" );
 
@@ -81,4 +81,33 @@ std::vector<double> CorMatrix (Eigen::MappedSparseMatrix<double> X, std::vector<
 	}
 	return ret;
 }
+
+//' @name CorMatrix
+//' @aliases CorMatrix,FastWilcoxTest-method
+//' @rdname CorMatrix-methods
+//' @docType methods
+//' @description simply calculate the correlation between X and Y
+//' @param X the sparse matrix
+//' @param CMP the vector to correlate every column of the matrix to
+//' @title Calculate correlation over two double vectors
+//' @export
+// [[Rcpp::export]]
+std::vector<double> CorMatrix (Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP ) {
+	if ( X.rows() != CMP.size() )
+		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP)" );
+
+	std::vector<double> A(X.rows());
+	std::vector<double> ret(X.cols());
+
+	Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
+
+	for ( int c_=0; c_ < X.cols(); ++c_ ){
+		for ( unsigned int i = 0; i< X.rows(); i++ ) {
+			A.at(i) = X.coeff( i,c_);
+		}
+		ret.at(c_) = correlationCoefficient ( CMP, A );
+	}
+	return ret;
+}
+
 
