@@ -46,6 +46,48 @@ namespace FastWilcoxTest {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
+    inline std::vector<int> minusOne(std::vector<int> X) {
+        typedef SEXP(*Ptr_minusOne)(SEXP);
+        static Ptr_minusOne p_minusOne = NULL;
+        if (p_minusOne == NULL) {
+            validateSignature("std::vector<int>(*minusOne)(std::vector<int>)");
+            p_minusOne = (Ptr_minusOne)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_minusOne");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_minusOne(Shield<SEXP>(Rcpp::wrap(X)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<int> >(rcpp_result_gen);
+    }
+
+    inline std::vector<int> plusOne(std::vector<int> X) {
+        typedef SEXP(*Ptr_plusOne)(SEXP);
+        static Ptr_plusOne p_plusOne = NULL;
+        if (p_plusOne == NULL) {
+            validateSignature("std::vector<int>(*plusOne)(std::vector<int>)");
+            p_plusOne = (Ptr_plusOne)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_plusOne");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_plusOne(Shield<SEXP>(Rcpp::wrap(X)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<int> >(rcpp_result_gen);
+    }
+
     inline std::vector<double> fastWilcoxTest(std::vector<double> x, std::vector<double> y, int type) {
         typedef SEXP(*Ptr_fastWilcoxTest)(SEXP,SEXP,SEXP);
         static Ptr_fastWilcoxTest p_fastWilcoxTest = NULL;

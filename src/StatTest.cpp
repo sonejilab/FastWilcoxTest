@@ -46,6 +46,7 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	return ret ;
 }
 
+// [[Rcpp::export]]
 std::vector<int> minusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
 		X.at(i) --;
@@ -53,6 +54,7 @@ std::vector<int> minusOne ( std::vector<int>  X ){
 	return X;
 }
 
+// [[Rcpp::export]]
 std::vector<int> plusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
 		X.at(i) ++;

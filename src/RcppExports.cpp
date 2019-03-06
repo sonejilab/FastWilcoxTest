@@ -9,6 +9,31 @@
 
 using namespace Rcpp;
 
+// correlationCoefficient
+float correlationCoefficient(std::vector<double> X, std::vector<double> Y);
+RcppExport SEXP _FastWilcoxTest_correlationCoefficient(SEXP XSEXP, SEXP YSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type Y(YSEXP);
+    rcpp_result_gen = Rcpp::wrap(correlationCoefficient(X, Y));
+    return rcpp_result_gen;
+END_RCPP
+}
+// CorMatrix
+std::vector<double> CorMatrix(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids);
+RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CorMatrix(X, CMP, ids));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logFC
 double logFC(std::vector<double> A, std::vector<double> B);
 static SEXP _FastWilcoxTest_logFC_try(SEXP ASEXP, SEXP BSEXP) {
@@ -25,6 +50,74 @@ RcppExport SEXP _FastWilcoxTest_logFC(SEXP ASEXP, SEXP BSEXP) {
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_FastWilcoxTest_logFC_try(ASEXP, BSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// minusOne
+std::vector<int> minusOne(std::vector<int> X);
+static SEXP _FastWilcoxTest_minusOne_try(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::vector<int> >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(minusOne(X));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_minusOne(SEXP XSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_minusOne_try(XSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// plusOne
+std::vector<int> plusOne(std::vector<int> X);
+static SEXP _FastWilcoxTest_plusOne_try(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< std::vector<int> >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(plusOne(X));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_plusOne(SEXP XSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_plusOne_try(XSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -137,6 +230,8 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
     static std::set<std::string> signatures;
     if (signatures.empty()) {
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
+        signatures.insert("std::vector<int>(*minusOne)(std::vector<int>)");
+        signatures.insert("std::vector<int>(*plusOne)(std::vector<int>)");
         signatures.insert("std::vector<double>(*fastWilcoxTest)(std::vector<double>,std::vector<double>,int)");
         signatures.insert("NumericMatrix(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double,bool)");
     }
@@ -146,6 +241,8 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() { 
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_logFC", (DL_FUNC)_FastWilcoxTest_logFC_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_minusOne", (DL_FUNC)_FastWilcoxTest_minusOne_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_plusOne", (DL_FUNC)_FastWilcoxTest_plusOne_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_fastWilcoxTest", (DL_FUNC)_FastWilcoxTest_fastWilcoxTest_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_StatTest", (DL_FUNC)_FastWilcoxTest_StatTest_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_RcppExport_validate", (DL_FUNC)_FastWilcoxTest_RcppExport_validate);
@@ -153,7 +250,11 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
+    {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 3},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
+    {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
+    {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},
     {"_FastWilcoxTest_fastWilcoxTest", (DL_FUNC) &_FastWilcoxTest_fastWilcoxTest, 3},
     {"_FastWilcoxTest_StatTest", (DL_FUNC) &_FastWilcoxTest_StatTest, 6},
     {"_FastWilcoxTest_ZScore", (DL_FUNC) &_FastWilcoxTest_ZScore, 2},
