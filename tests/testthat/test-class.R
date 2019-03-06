@@ -48,7 +48,7 @@ t1 = rnorm( 30 )
 
 cor = correlationCoefficient( X= t1, Y = t1 )
 
-expect_equal( cor ,1  )
+expect_equal( cor ,1 )
 
 cor = correlationCoefficient( X= t1, Y =rev( t1 ))
 expect_equal( cor , -0.010188, tolerance=1e-5 )
