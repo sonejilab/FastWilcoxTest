@@ -33,6 +33,7 @@ CorMatrixIDS <- function(X, CMP, ids) {
 #' @rdname CorMatrix-methods
 #' @docType methods
 #' @description simply calculate the correlation between X and Y
+#' approximately 3x faster than an apply using the R cor function on sparse data
 #' @param X the sparse matrix
 #' @param CMP the vector to correlate every column of the matrix to
 #' @title Calculate correlation over two double vectors
