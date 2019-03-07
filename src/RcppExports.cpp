@@ -35,12 +35,12 @@ BEGIN_RCPP
 END_RCPP
 }
 // CorMatrix
-std::vector<double> CorMatrix(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP);
+std::vector<double> CorMatrix(Eigen::SparseMatrix<double> X, std::vector<double> CMP);
 RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
     rcpp_result_gen = Rcpp::wrap(CorMatrix(X, CMP));
     return rcpp_result_gen;
