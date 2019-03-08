@@ -92,22 +92,33 @@ std::vector<double> CorMatrixIDS (Eigen::MappedSparseMatrix<double> X, std::vect
 //' @title Calculate correlation over two double vectors
 //' @export
 // [[Rcpp::export]]
-std::vector<double> CorMatrix (Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP ) {
-	if ( X.rows() != CMP.size() )
-		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP)" );
+std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<double> CMP){
 
-	std::vector<double> A(X.rows());
+	X= X.transpose();
+
+	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
+
+	if ( X.innerSize() != CMP.size() )
+		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%d, %d)", X.innerSize(), CMP.size() );
+
+	std::vector<double> A(CMP.size());
 	std::vector<double> ret(X.cols());
 
-	Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
-
-	for ( int c_=0; c_ < X.cols(); ++c_ ){
-		for ( unsigned int i = 0; i< X.rows(); i++ ) {
-			A.at(i) = X.coeff( i,c_);
+	//Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
+	for (int c_=0; c_ < X.outerSize(); ++c_){
+		// https://stackoverflow.com/questions/8848575/fastest-way-to-reset-every-value-of-stdvectorint-to-0
+		std::fill(A.begin(), A.end(), 0.0);
+		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
+			A[it.row()] =  it.value();
 		}
 		ret.at(c_) = correlationCoefficient ( CMP, A );
 	}
+
+	X.transpose();
+
 	return ret;
 }
+
+
 
 
