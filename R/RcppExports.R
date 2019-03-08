@@ -97,6 +97,20 @@ ZScore <- function(data, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
 
+#' @name collapse
+#' @aliases collapse,FastWilcoxTest-method
+#' @rdname collapse-methods
+#' @docType methods
+#' @description sums up the values for each ids type
+#' @param X the sparse matrix
+#' @param ids group ids (int vector from 1 10 maxgroup for each column)
+#' @param type ( 0: logAdd; 1 : simple addition; 2: log Add -1 )
+#' @title Calculate correlation over two double vectors
+#' @export
+collapse <- function(X, ids, type) {
+    .Call(`_FastWilcoxTest_collapse`, X, ids, type)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_FastWilcoxTest_RcppExport_registerCCallable', PACKAGE = 'FastWilcoxTest')
