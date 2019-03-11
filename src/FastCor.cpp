@@ -116,7 +116,10 @@ std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<doubl
 	}
 
 	X.transpose();
+
 	return ret;
 }
+
+
 
 

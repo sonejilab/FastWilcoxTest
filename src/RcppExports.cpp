@@ -236,6 +236,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// collapse
+NumericMatrix collapse(Eigen::SparseMatrix<double> X, std::vector<int> ids, int type);
+RcppExport SEXP _FastWilcoxTest_collapse(SEXP XSEXP, SEXP idsSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(collapse(X, ids, type));
+    return rcpp_result_gen;
+END_RCPP
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _FastWilcoxTest_RcppExport_validate(const char* sig) { 
@@ -271,6 +284,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_fastWilcoxTest", (DL_FUNC) &_FastWilcoxTest_fastWilcoxTest, 3},
     {"_FastWilcoxTest_StatTest", (DL_FUNC) &_FastWilcoxTest_StatTest, 6},
     {"_FastWilcoxTest_ZScore", (DL_FUNC) &_FastWilcoxTest_ZScore, 2},
+    {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };

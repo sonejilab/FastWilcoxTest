@@ -63,3 +63,54 @@ system.time({cor2 = apply(as.matrix(x@dat),1, cor, x@dat[1,] ) })
 all.equal(cor, as.vector(cor2), 1e-7)
 
 
+
+
+context( 'Cpp collapse sparse matrix')
+
+#### normal add - should be ~7x faster ( 11.829 / 1.648 )
+
+ids = rep( 1:10, ceiling(ncol/10))
+
+system.time({red = as.data.frame(collapse( x@dat, ids, 1 ))}) ## normal addition
+colnames( red ) = 1:10;
+rownames(red) = make.names(rownames(x@dat))
+
+## now get the expected in R and make sure this is lower ;-)
+
+sumUp <- function( x, ids ) {
+	unlist(lapply( split( x, ids), function(d) { sum(d) } ))
+}
+
+system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
+
+all.equal(as.matrix(red), as.matrix(blue), 1e-7)
+
+
+#### normal log add - should be ~6x faster ( 13.993 /2.335 )
+
+system.time({red = as.data.frame(collapse( x@dat, ids, 0 ))}) ## log addition
+colnames( red ) = 1:10;
+rownames(red) = make.names(rownames(x@dat))
+
+sumUp <- function( x, ids ) {
+	log(unlist(lapply( split( x, ids), function(d) { sum(exp(d[which(d > 0 )])) } )))
+}
+
+system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
+
+all.equal(as.matrix(red), as.matrix(blue), 1e-7)
+
+
+#### normal std::expm1 add - should be ~6x faster ( 14.011 / 2.216 )
+
+system.time({red = as.data.frame(collapse( x@dat, ids, 2 ))}) ## log addition
+colnames( red ) = 1:10;
+rownames(red) = make.names(rownames(x@dat))
+
+sumUp <- function( x, ids ) {
+	log(unlist(lapply( split( x, ids), function(d) { sum(exp(d[which(d > 0 )]) -1) } )))
+}
+
+system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
+
+all.equal(as.matrix(red), as.matrix(blue), 1e-7)
