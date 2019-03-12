@@ -30,17 +30,17 @@ float correlationCoefficient( std::vector<double> X,  std::vector<double> Y)
     for (int i = 0; i < n; i++)
     {
         // sum of elements of array X.
-        sum_X = sum_X + X[i];
+        sum_X += X[i];
 
         // sum of elements of array Y.
-        sum_Y = sum_Y + Y[i];
+        sum_Y +=  Y[i];
 
         // sum of X[i] * Y[i].
-        sum_XY = sum_XY + X[i] * Y[i];
+        sum_XY += X[i] * Y[i];
 
         // sum of square of array elements.
-        squareSum_X = squareSum_X + X[i] * X[i];
-        squareSum_Y = squareSum_Y + Y[i] * Y[i];
+        squareSum_X +=  X[i] * X[i];
+        squareSum_Y +=  Y[i] * Y[i];
     }
 
     // use formula for calculating correlation coefficient.
@@ -87,6 +87,7 @@ std::vector<double> CorMatrixIDS (Eigen::MappedSparseMatrix<double> X, std::vect
 //' @rdname CorMatrix-methods
 //' @docType methods
 //' @description simply calculate the correlation between X and Y
+//' approximately 3x faster than an apply using the R cor function on sparse data
 //' @param X the sparse matrix
 //' @param CMP the vector to correlate every column of the matrix to
 //' @title Calculate correlation over two double vectors

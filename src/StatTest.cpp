@@ -53,7 +53,6 @@ std::vector<int> minusOne ( std::vector<int>  X ){
 	}
 	return X;
 }
-
 // [[Rcpp::export]]
 std::vector<int> plusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
@@ -202,15 +201,23 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	std::vector<int> itB = minusOne( background );
 
 	Rcout << "calculating filters logFC and minPct" << std::endl;
+
+	for ( unsigned int i = 0; i< itA.size(); i++ ) {
+		if ( itA.at(i) < 0 || itA.at(i) >= X.rows() ) {
+			::Rf_error( "the interest id (%d) exceeds the rows in the matrix (%d)", itA.at(i), X.rows()  );
+		}
+	}
+	for ( unsigned int i = 0; i< itB.size(); i++ ) {
+			if ( itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
+				::Rf_error( "the background id (%d) exceeds the rows in the matrix (%d)", itB.at(i), X.rows()  );
+			}
+		}
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
 		inA = 0;
 		inB = 0;
 		//Rcout << "processing line "<< c_ << std::endl;
 
 		for ( unsigned int i = 0; i< itA.size(); i++ ) {
-			if ( itA.at(i) < 0 || itA.at(i) >= X.rows() ) {
-				::Rf_error( "test out of bounds" );
-			}
 			tmp = X.coeff(itA.at(i),c_);
 			if ( tmp > 0 ){
 				inA ++;
@@ -218,9 +225,6 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 			A.at(i) = tmp;
 		}
 		for ( unsigned int i = 0; i< itB.size(); i++ ) {
-			if (itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
-				::Rf_error("itB out of bounds" );
-			}
 			tmp = X.coeff(itB.at(i),c_);
 			if ( tmp > 0 ){
 				inB ++;
