@@ -61,10 +61,10 @@ NumericMatrix collapse (Eigen::SparseMatrix<double> X, std::vector<int> ids, int
 		}
 		switch(type) {
 			case 0 :
-				for (tmp = 0; tmp < total; tmp ++ ) { res( c_, tmp  ) = log( res( c_, tmp ) );}
+				for (tmp = 0; tmp < total; tmp ++ ) { res( c_, tmp  ) = log( res( c_, tmp +1 ) );}
 				break;
 			case 2 :
-				for (tmp = 0; tmp < total; tmp ++ ) { res( c_, tmp  ) = log( res( c_, tmp ) );}
+				for (tmp = 0; tmp < total; tmp ++ ) { res( c_, tmp  ) = log( res( c_, tmp +1 ) );}
 				break;
 		}
 	}
