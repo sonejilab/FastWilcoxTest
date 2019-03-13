@@ -15,4 +15,5 @@ CorMatrix(X, CMP)
 }
 \description{
 simply calculate the correlation between X and Y
+approximately 3x faster than an apply using the R cor function on sparse data
 }
