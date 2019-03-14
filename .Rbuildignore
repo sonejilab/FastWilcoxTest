@@ -1,4 +1,6 @@
 ^RcppTestArea\.Rproj$
 ^\.Rproj\.user$
 /bad
-/scratchbord
+scratchbord
+ForceCrash.R
+X.RData
