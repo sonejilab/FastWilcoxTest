@@ -71,7 +71,7 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 	data = data.transpose();
 
-	NumericMatrix res(data.cols(), 3);
+	NumericMatrix res(data.cols(), 4);
 	for (int k=0; k < data.outerSize(); ++k){
 		double sum = 0.0;
 		double c = 0;
@@ -96,6 +96,7 @@ NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 		double sd = sqrt(sum/c);
 		res(k,1) = sum;
 		res(k,2) = sd;
+		res(k,3) = c;
 	}
 
 	data = data.transpose();
