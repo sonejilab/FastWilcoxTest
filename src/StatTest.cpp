@@ -200,7 +200,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	std::vector<int> itA = minusOne( interest );
 	std::vector<int> itB = minusOne( background );
 
-	Rcout << "calculating filters logFC and minPct" << std::endl;
+	// Rcout << "calculating filters logFC > " << logFC << " and minPct > " << minPct << std::endl;
 
 	for ( unsigned int i = 0; i< itA.size(); i++ ) {
 		if ( itA.at(i) < 0 || itA.at(i) >= X.rows() ) {
@@ -335,7 +335,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	}
 
 	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
-	Rcout << "n return values: " << pass <<std::endl;
+	//Rcout << "n return values: " << pass <<std::endl;
 	return res;
 }
 
