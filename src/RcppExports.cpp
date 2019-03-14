@@ -236,6 +236,28 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// MEAN_STD
+NumericMatrix MEAN_STD(Eigen::SparseMatrix<double> data);
+RcppExport SEXP _FastWilcoxTest_MEAN_STD(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(MEAN_STD(data));
+    return rcpp_result_gen;
+END_RCPP
+}
+// SQRT
+std::vector<double> SQRT(std::vector<double> data);
+RcppExport SEXP _FastWilcoxTest_SQRT(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::vector<double> >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(SQRT(data));
+    return rcpp_result_gen;
+END_RCPP
+}
 // collapse
 NumericMatrix collapse(Eigen::SparseMatrix<double> X, std::vector<int> ids, int type);
 RcppExport SEXP _FastWilcoxTest_collapse(SEXP XSEXP, SEXP idsSEXP, SEXP typeSEXP) {
@@ -284,6 +306,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_cppWilcoxTest", (DL_FUNC) &_FastWilcoxTest_cppWilcoxTest, 3},
     {"_FastWilcoxTest_StatTest", (DL_FUNC) &_FastWilcoxTest_StatTest, 6},
     {"_FastWilcoxTest_ZScore", (DL_FUNC) &_FastWilcoxTest_ZScore, 2},
+    {"_FastWilcoxTest_MEAN_STD", (DL_FUNC) &_FastWilcoxTest_MEAN_STD, 1},
+    {"_FastWilcoxTest_SQRT", (DL_FUNC) &_FastWilcoxTest_SQRT, 1},
     {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
