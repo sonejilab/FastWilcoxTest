@@ -108,6 +108,32 @@ ZScore <- function(data, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
 
+#' @name MEAN_STD
+#' @aliases MEAN_STD,FastWilcoxTest-method
+#' @rdname MEAN_STD-methods
+#' @docType methods
+#' @description A specific z. score method that converts the data to 10 +-1 instead of 0+-1
+#' in order to keep the not expressed clearly separate from the real data.
+#' @param data a spare matrix
+#' @title Calculate mean and std of >0 values in a sparse matrix
+#' @export
+MEAN_STD <- function(data) {
+    .Call(`_FastWilcoxTest_MEAN_STD`, data)
+}
+
+#' @name SQRT
+#' @aliases SQRT,FastWilcoxTest-method
+#' @rdname SQRT-methods
+#' @docType methods
+#' @description A specific z. score method that converts the data to 10 +-1 instead of 0+-1
+#' in order to keep the not expressed clearly separate from the real data.
+#' @param data a vector
+#' @title Calculate z score for a sparse matrix
+#' @export
+SQRT <- function(data) {
+    .Call(`_FastWilcoxTest_SQRT`, data)
+}
+
 #' @name collapse
 #' @aliases collapse,FastWilcoxTest-method
 #' @rdname collapse-methods
