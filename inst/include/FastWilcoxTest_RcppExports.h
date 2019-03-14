@@ -88,17 +88,17 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<int> >(rcpp_result_gen);
     }
 
-    inline std::vector<double> fastWilcoxTest(std::vector<double> x, std::vector<double> y, int type) {
-        typedef SEXP(*Ptr_fastWilcoxTest)(SEXP,SEXP,SEXP);
-        static Ptr_fastWilcoxTest p_fastWilcoxTest = NULL;
-        if (p_fastWilcoxTest == NULL) {
-            validateSignature("std::vector<double>(*fastWilcoxTest)(std::vector<double>,std::vector<double>,int)");
-            p_fastWilcoxTest = (Ptr_fastWilcoxTest)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_fastWilcoxTest");
+    inline std::vector<double> cppWilcoxTest(std::vector<double> x, std::vector<double> y, int type) {
+        typedef SEXP(*Ptr_cppWilcoxTest)(SEXP,SEXP,SEXP);
+        static Ptr_cppWilcoxTest p_cppWilcoxTest = NULL;
+        if (p_cppWilcoxTest == NULL) {
+            validateSignature("std::vector<double>(*cppWilcoxTest)(std::vector<double>,std::vector<double>,int)");
+            p_cppWilcoxTest = (Ptr_cppWilcoxTest)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_cppWilcoxTest");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_fastWilcoxTest(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(type)));
+            rcpp_result_gen = p_cppWilcoxTest(Shield<SEXP>(Rcpp::wrap(x)), Shield<SEXP>(Rcpp::wrap(y)), Shield<SEXP>(Rcpp::wrap(type)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

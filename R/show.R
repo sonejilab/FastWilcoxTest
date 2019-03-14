@@ -1,6 +1,6 @@
 #' @name show
 #' @aliases show,FastWilcoxTest-method
-#' @rdname print
+#' @rdname show-methods
 #' @docType methods
 #' @description  show the FastWilcoxTest
 #' @param object the FastWilcoxTest object

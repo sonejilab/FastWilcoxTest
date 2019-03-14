@@ -109,9 +109,9 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 	}
 	return(res);
 }
-//' @title fastWilcoxTest runs wilcox test comparing x and y
-//' @aliases fastWilcoxTest,FastWilcoxTest-method
-//' @rdname fastWilcoxTest
+//' @title cppWilcoxTest runs wilcox test comparing x and y
+//' @aliases cppWilcoxTest,cppWilcoxTest-method
+//' @rdname cppWilcoxTest
 //' @description a simple replacement of wilcox.test returning less information but >10x faster
 //' @param x the interesting information
 //' @param y the background information
@@ -119,7 +119,7 @@ double wmw_test_stat(double rankSum, int nInds, int nTotal, double tieCoef, int 
 //' @return a double vector with 2 entries : Rank sum and p.value,
 //' @export
 // [[Rcpp::export]]
-std::vector<double> fastWilcoxTest(std::vector<double> x, std::vector<double> y,  int type ){
+std::vector<double> cppWilcoxTest(std::vector<double> x, std::vector<double> y,  int type ){
 
 	int n = x.size() + y.size() ;
 	Rcout << "total size " << n  << std::endl;

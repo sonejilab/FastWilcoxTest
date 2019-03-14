@@ -62,17 +62,17 @@ plusOne <- function(X) {
     .Call(`_FastWilcoxTest_plusOne`, X)
 }
 
-#' @title fastWilcoxTest runs wilcox test comparing x and y
-#' @aliases fastWilcoxTest,FastWilcoxTest-method
-#' @rdname fastWilcoxTest
+#' @title cppWilcoxTest runs wilcox test comparing x and y
+#' @aliases cppWilcoxTest,cppWilcoxTest-method
+#' @rdname cppWilcoxTest
 #' @description a simple replacement of wilcox.test returning less information but >10x faster
 #' @param x the interesting information
 #' @param y the background information
 #' @param type the test type (greater=0,less=1,twoSided=2,U=3,Abslog10greater=4,log10less=5,abslog10twoSided=6,Q=7)
 #' @return a double vector with 2 entries : Rank sum and p.value,
 #' @export
-fastWilcoxTest <- function(x, y, type) {
-    .Call(`_FastWilcoxTest_fastWilcoxTest`, x, y, type)
+cppWilcoxTest <- function(x, y, type) {
+    .Call(`_FastWilcoxTest_cppWilcoxTest`, x, y, type)
 }
 
 #' @title StatTest runs wilcox test on the columns of the sparse matrix
