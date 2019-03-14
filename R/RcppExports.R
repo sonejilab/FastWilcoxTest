@@ -94,6 +94,16 @@ StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1, only
     .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct, onlyPos)
 }
 
+#' @name ZScore
+#' @aliases ZScore,FastWilcoxTest-method
+#' @rdname ZScore-methods
+#' @docType methods
+#' @description A specific z. score method that converts the data to 10 +-1 instead of 0+-1
+#' in order to keep the not expressed clearly separate from the real data.
+#' @param data the sparse Matrix
+#' @param display_progress show a progress bar (TRUE)
+#' @title Calculate z score for a sparse matrix
+#' @export
 ZScore <- function(data, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
