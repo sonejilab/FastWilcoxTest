@@ -18,7 +18,8 @@ expect_equal( dim(x@dat), dim(zscored) )
 
 Rinfo = cbind(  apply(x@dat,1,function(d) { mean(d[which(d>0)] ) } ),  
 		apply(x@dat,1,function(d) { x= d[which(d>0)]; sum( (x - mean(x)) * (x-mean(x)) ) } ),  
-		apply(x@dat,1,function(d) { sd(d[which(d>0)] ) } )
+		apply(x@dat,1,function(d) { sd(d[which(d>0)] ) }),
+		apply(x@dat,1,function(d) { length(which(d>0)) })
 )
 
 CPPinfo = MEAN_STD( x@dat )
@@ -26,6 +27,7 @@ CPPinfo = MEAN_STD( x@dat )
 expect_equal( as.vector(Rinfo[,1]), as.vector(CPPinfo[,1]) )
 expect_equal( as.vector(Rinfo[,2]), as.vector(CPPinfo[,2]) )
 expect_equal( as.vector(Rinfo[,3]), as.vector(CPPinfo[,3]) )
+expect_equal( as.vector(Rinfo[,4]), as.vector(CPPinfo[,4]) )
 
 
 ## R z.score...
