@@ -1,6 +1,6 @@
 #' @name as_FastWilcoxTest
 #' @aliases as_FastWilcoxTest,FastWilcoxTest-method
-#' @rdname as_FastWilcoxTest-methods
+#' @rdname as_FastWilcoxTest
 #' @docType methods
 #' @description Creates a FastWilcoxTest from a matrix.
 #' @param x a matrix object
