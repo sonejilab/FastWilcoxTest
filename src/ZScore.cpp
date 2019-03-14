@@ -100,7 +100,7 @@ NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 	}
 
 	data = data.transpose();
-	colnames(res) = CharacterVector::create("mean", "v-mean squared", "std" );
+	colnames(res) = CharacterVector::create("mean", "v-mean squared", "std", "N" );
 	return res;
 }
 
