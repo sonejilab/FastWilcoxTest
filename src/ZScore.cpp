@@ -1,7 +1,7 @@
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppProgress)]]
 #include <RcppEigen.h>
-/*#include <progress.hpp> */
+#include <progress.hpp>
 #include <math.h>
 using namespace Rcpp;
 typedef Eigen::SparseVector<double> SpVec;
@@ -22,13 +22,15 @@ typedef  Map<VectorXd>  MapVecd;
 //' @export
 //[[Rcpp::export]]
 Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool display_progress=true){
-	/* Progress p(data.outerSize(), display_progress); */
+
+
 	data = data.transpose();
 
+	Progress p(data.outerSize(), display_progress);
 	//int total = 0;
 	for (int k=0; k < data.outerSize(); ++k){
 		//total ++;
-		/*p.increment();*/
+		p.increment();
 		double sum = 0.0;
 		double c = 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
@@ -44,7 +46,7 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 			it.valueRef() = entry;
 			//Rcout <<  it.value() <<",";
 		}
-		double sd = sqrt(sum/c);
+		double sd = sqrt(sum/(c -1)); //to copy the R implementation
 
 		//Rcout << " and sd = "<< sd << std::endl;
 		/*Rcout << k << " mean " << mean << " and sd " << sd << "with count "<< c<< std::endl;*/
@@ -89,11 +91,11 @@ NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 			if ( it.value() != -1) {
 				double entry = (it.value() - mean);
 				sum += entry*entry;
-				it.valueRef() = entry;
+				//it.valueRef() = entry;
 			}
 			//Rcout <<  it.value() <<",";
 		}
-		double sd = sqrt(sum/c);
+		double sd = sqrt(sum/ (c -1)); //to copy the R implementation
 		res(k,1) = sum;
 		res(k,2) = sd;
 		res(k,3) = c;

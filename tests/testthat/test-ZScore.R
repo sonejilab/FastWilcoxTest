@@ -12,23 +12,28 @@ x <- as_FastWilcoxTest( dat )
 
 rm(dat)
 
-zscored = ZScore(x@dat)
 
-expect_equal( dim(x@dat), dim(zscored) )
-
+system.time( {
 Rinfo = cbind(  apply(x@dat,1,function(d) { mean(d[which(d>0)] ) } ),  
 		apply(x@dat,1,function(d) { x= d[which(d>0)]; sum( (x - mean(x)) * (x-mean(x)) ) } ),  
 		apply(x@dat,1,function(d) { sd(d[which(d>0)] ) }),
 		apply(x@dat,1,function(d) { length(which(d>0)) })
 )
+})
 
-CPPinfo = MEAN_STD( x@dat )
+system.time( { CPPinfo = MEAN_STD( x@dat ) } )
+
+# 14.451 (R) vs 2.511 (c++) using ncol = 10000 and nrow=9000
 
 expect_equal( as.vector(Rinfo[,1]), as.vector(CPPinfo[,1]) )
 expect_equal( as.vector(Rinfo[,2]), as.vector(CPPinfo[,2]) )
 expect_equal( as.vector(Rinfo[,3]), as.vector(CPPinfo[,3]) )
 expect_equal( as.vector(Rinfo[,4]), as.vector(CPPinfo[,4]) )
 
+
+system.time({zscored = ZScore(x@dat)})
+
+expect_equal( dim(x@dat), dim(zscored) )
 
 ## R z.score...
 z.score = function ( x ){
@@ -51,8 +56,11 @@ z.score = function ( x ){
 }
 
 i=0
-zscoredR =  t(apply( x@dat,1, z.score))
+system.time({zscoredR =  t(apply( x@dat,1, z.score))})
+
+# 11.080 (R) 2.803 (c++) using ncol = 10000 and nrow=9000
 
 expect_equal( dim(zscoredR), dim(zscored) )
 
-expect_equal( Matrix::Matrix(zscoredR, sparse=T)@x , zscored@x, 6e-4 )
+
+expect_equal( Matrix::Matrix(zscoredR, sparse=T)@x , zscored@x)
