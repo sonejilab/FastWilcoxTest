@@ -12,6 +12,11 @@ x <- as_FastWilcoxTest( dat )
 
 rm(dat)
 
+x@dat@x = log( x@dat@x +1 )
+
+bad = sample( 1:length( x@dat@x), round( length( x@dat@x) / 100) )  
+x@dat@x[ bad ] = -1 # simulate my normalization result
+
 
 system.time( {
 Rinfo = cbind(  apply(x@dat,1,function(d) { mean(d[which(d>0)] ) } ),  
@@ -63,4 +68,22 @@ system.time({zscoredR =  t(apply( x@dat,1, z.score))})
 expect_equal( dim(zscoredR), dim(zscored) )
 
 
-expect_equal( Matrix::Matrix(zscoredR, sparse=T)@x , zscored@x)
+expect_equal( Matrix::Matrix(zscoredR, sparse=T)@x , zscored@x )
+
+
+## OK now lets do some error checking..
+
+mBad = matrix(0, nrow=3, ncol=10)
+
+mBad[1,c(1,4,6,8) ] = 1
+mBad[2,c(2,5,8,1)] = c(1,1,3,4)
+mBad[3,4] = 1
+
+zBad = ZScore( Matrix::Matrix( mBad, sparse=T) )
+
+mBad[1,c(1,4,6,8) ] = 10
+mBad[2,c(2,5,8,1)] = c( 9.166667, 9.166667, 10.5, 11.16667 )
+mBad[3,4] = 10
+
+expect_equal( Matrix::Matrix(mBad, sparse=T)@x , zBad@x, 1e-5 )
+

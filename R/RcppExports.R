@@ -148,6 +148,10 @@ collapse <- function(X, ids, type) {
     .Call(`_FastWilcoxTest_collapse`, X, ids, type)
 }
 
+toColNums <- function(data) {
+    .Call(`_FastWilcoxTest_toColNums`, data)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_FastWilcoxTest_RcppExport_registerCCallable', PACKAGE = 'FastWilcoxTest')
