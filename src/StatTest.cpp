@@ -310,13 +310,8 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 			indRankSum.at(c_) = 0.0;
 			//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
 			for(j=0; j<nInd; ++j) {
-				if(!(itA.at(j)>=0 && itA.at(j)<=n-1))
-					::Rf_error("Index out of range: gene set %d, gene %d\n", c_+1, j+1);
-				if ( list.list.size() <= itA.at(j) )
-					::Rf_error("Not enough values in the ranked list; list size %d <= data size", list.list.size(), itA.at(j));
-				//Rcout << "adding to RankSum for gene id " << c_ << " and index == "
-				//		<<  itA.at(j) << " and value " <<  list.list.at(itA.at(j)).rank << std::endl;
-				indRankSum.at(c_) += list.list.at(itA.at(j)).rank;
+				//The A data is stored from 0 to nInd in the total vector which is basis for the list!
+				indRankSum.at(c_) += list.list.at(j).rank;
 			}
 			// never destroy the  DRankList - that kills the R gc() functionality!!
 			//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;

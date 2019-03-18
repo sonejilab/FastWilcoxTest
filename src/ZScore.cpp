@@ -27,32 +27,65 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 	data = data.transpose();
 
 	Progress p(data.outerSize(), display_progress);
+	//Rcout << "outerSize "<< data.outerSize() << " and innerSize " << data.innerSize() << std::endl;
+	/* my normalization never creates negative values, but sores 'lost data'
+	 * as -1 values. These must not be used in the normalization process
+	 */
+	std::vector<bool> USE(data.innerSize() );
+	int iter = 0;
 	//int total = 0;
 	for (int k=0; k < data.outerSize(); ++k){
 		//total ++;
 		p.increment();
 		double sum = 0.0;
 		double c = 0;
+		std::fill(USE.begin(), USE.end(), false );
+		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
-			c += 1.0;
-			sum += it.value();
+			if (it.value() > 0 ) {
+				USE[iter] = true;
+				c += 1.0;
+				sum += it.value();
+			}
+			iter++;
 		}
 		double mean = sum / c;
 		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
 		sum = 0.0d;
+		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
-			double entry = (it.value() - mean);
-			sum += entry*entry;
-			it.valueRef() = entry;
-			//Rcout <<  it.value() <<",";
+			if ( USE[iter++]) {
+				double entry = (it.value() - mean);
+				sum += entry*entry;
+				it.valueRef() = entry;
+				//Rcout <<  it.value() <<",";
+			}
 		}
-		double sd = sqrt(sum/(c -1)); //to copy the R implementation
+		double sd;
+		if ( (c -1) == 0.0 ){
+			sd = 0.0;
+		}
+		else{
+			sd = sqrt(sum/(c -1)); //to copy the R implementation
+		}
 
 		//Rcout << " and sd = "<< sd << std::endl;
 		/*Rcout << k << " mean " << mean << " and sd " << sd << "with count "<< c<< std::endl;*/
-		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
-			double entry = 10.0 +(it.value() / sd)  ;
-			it.valueRef() = entry;
+		iter= 0;
+		if ( sd == 0 ){
+			double entry = 10.0 ;
+			for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+				if 	( USE[iter++]) {
+					it.valueRef() = entry;
+				}
+			}
+		}else {
+			for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+				if 	( USE[iter++]) {
+					double entry = 10.0 +(it.value() / sd)  ;
+					it.valueRef() = entry;
+				}
+			}
 		}
 	}
 	data = data.transpose();
@@ -74,31 +107,41 @@ NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 	data = data.transpose();
 
 	NumericMatrix res(data.cols(), 4);
+	std::vector<bool> USE(data.innerSize() );
+	int iter = 0;
+	//int total = 0;
 	for (int k=0; k < data.outerSize(); ++k){
+		//total ++;
 		double sum = 0.0;
-		double c = 0;
+		int c = 0;
+		std::fill(USE.begin(), USE.end(), false );
+		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
-			if ( it.value() != -1) {
-				c += 1.0;
+			if (it.value() > 0 ) {
+				USE[iter] = true;
+				c ++;
 				sum += it.value();
 			}
+			iter++;
 		}
 		double mean = sum / c;
+		res(k,3) = c;
 		res(k,0) = mean;
 		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
 		sum = 0.0d;
+		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
-			if ( it.value() != -1) {
+			if ( USE[iter++]) {
 				double entry = (it.value() - mean);
 				sum += entry*entry;
-				//it.valueRef() = entry;
+				it.valueRef() = entry;
+				//Rcout <<  it.value() <<",";
 			}
-			//Rcout <<  it.value() <<",";
 		}
-		double sd = sqrt(sum/ (c -1)); //to copy the R implementation
+		double sd = sqrt(sum/(c -1)); //to copy the R implementation
+
 		res(k,1) = sum;
 		res(k,2) = sd;
-		res(k,3) = c;
 	}
 
 	data = data.transpose();
