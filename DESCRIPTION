@@ -1,15 +1,16 @@
 Package: FastWilcoxTest
 Title: This package implements a wilcox ranked sum test in Rcpp that is allied to a Sparse Matrix
-Version: 0.1.0.0100
+Version: 0.1.0.0200
 Authors@R: 
-    person(given = "First",
-           family = "Last",
+    person(given = "Stefan",
+           family = "Lang",
            role = c("aut", "cre"),
-           email = "first.last@example.com")
+           email = "Stefan.Lang@med.lu.se")
 Description: This package re-implements the Seurat::FindMarkers( test.use == "wilcox" ) 
 	but implements all calculation steps in c++. 
 	Thereby the function is more than 10 times faster than the Seurat R implementation.
 	The c++ wilcox code was extracted from the BioQC BioConductor package.
+	It also contains other fast c++ function to interact with sparse matrices.
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
