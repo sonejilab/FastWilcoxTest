@@ -12,7 +12,7 @@ Rstats(X, interest, backgound, logFCcut = 1, minPct = 0.1,
 \arguments{
 \item{X}{the sparse matrix}
 
-\item{interest}{the intereting col IDs}
+\item{interest}{the interesting col IDs}
 
 \item{backgound}{the background col IDs}
 

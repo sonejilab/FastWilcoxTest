@@ -14,5 +14,5 @@ if ( ! isGeneric('as_FastWilcoxTest') ){setGeneric('as_FastWilcoxTest', ## Name
 
 setMethod('as_FastWilcoxTest', signature = c ('matrix'),
 	definition = function ( x ) {
-	new('FastWilcoxTest', dat=Matrix::Matrix( x, sparse=T) )
+	methods::new('FastWilcoxTest', dat=Matrix::Matrix( x, sparse=T) )
 } )

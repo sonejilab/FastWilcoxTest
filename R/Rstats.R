@@ -5,7 +5,7 @@
 #' @description calculate the wilcox test on a sparse matrix as the C++ function does it.
 #' The data in the sparse matrix should be log transformed (not log10 or log2!)
 #' @param X the sparse matrix
-#' @param interest the intereting col IDs
+#' @param interest the interesting col IDs
 #' @param backgound the background col IDs
 #' @param logFCcut the logFC change cutoff default= 1.0
 #' @param minPct only test genes that are detected in a minimum fraction of
@@ -47,7 +47,7 @@ setMethod('Rstats', signature = c ('matrix'),
 			id = 1;
 			message ( paste( length(OK), "genes pass the logFC and frac. expr. filters."))
 			for ( i in OK ) {
-				t = wilcox.test( X[interest, i], X[backgound,i])
+				t = stats::wilcox.test( X[interest, i], X[backgound,i])
 				W[id] = t$statistic
 				p[id] = t$p.value
 				id = id +1

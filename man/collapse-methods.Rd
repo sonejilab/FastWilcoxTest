@@ -13,7 +13,7 @@ collapse(X, ids, type)
 
 \item{ids}{group ids (int vector from 1 10 maxgroup for each column)}
 
-\item{type}{( 0: logAdd; 1 : simple addition; 2: log Add -1 )}
+\item{type}{( 0: logAdd (defunct); 1 : simple addition; 2: log Add -1 (defunct) )}
 }
 \description{
 sums up the values for each ids type

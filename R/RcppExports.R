@@ -141,7 +141,7 @@ SQRT <- function(data) {
 #' @description sums up the values for each ids type
 #' @param X the sparse matrix
 #' @param ids group ids (int vector from 1 10 maxgroup for each column)
-#' @param type ( 0: logAdd; 1 : simple addition; 2: log Add -1 )
+#' @param type ( 0: logAdd (defunct); 1 : simple addition; 2: log Add -1 (defunct) )
 #' @title Calculate correlation over two double vectors
 #' @export
 collapse <- function(X, ids, type) {

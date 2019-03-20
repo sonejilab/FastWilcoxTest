@@ -1,6 +1,6 @@
 Package: FastWilcoxTest
-Title: This package implements a wilcox ranked sum test in Rcpp that is allied to a Sparse Matrix
-Version: 0.1.0.0200
+Title: A Wilcox Ranked Sum Test Implementation using Rcpp; Tests are Applied to a Sparse Matrix
+Version: 0.1.3
 Authors@R: 
     person(given = "Stefan",
            family = "Lang",
@@ -22,7 +22,8 @@ Imports:
     Rcpp,
     Matrix,
     methods,
-    stats
+    stats,
+    reshape2
 Suggests: 
     testthat
 RoxygenNote: 6.1.1

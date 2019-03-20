@@ -1,6 +1,2 @@
 CXX_STD = CXX14
-PKG_CXX14FLAGS+=-Wno-ignored-attributes
-PKG_CXXFLAGS += -Wno-ignored-attributes
 PKG_CPPFLAGS = -I../inst/include/
-PKG_LIBS_donotuse = `$(R_HOME)/bin/Rscript -e "Rcpp:::LdFlags()"` `gsl-config --libs`
-

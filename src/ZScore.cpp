@@ -51,7 +51,7 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 		}
 		double mean = sum / c;
 		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
-		sum = 0.0d;
+		sum = 0.0;
 		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
 			if ( USE[iter++]) {
@@ -128,7 +128,7 @@ NumericMatrix MEAN_STD (Eigen::SparseMatrix<double> data){
 		res(k,3) = c;
 		res(k,0) = mean;
 		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
-		sum = 0.0d;
+		sum = 0.0;
 		iter= 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
 			if ( USE[iter++]) {
