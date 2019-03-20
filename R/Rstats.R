@@ -1,5 +1,11 @@
+setGeneric('Rstats', ## Name
+	function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1 , onlyPos=FALSE) { ## Argumente der generischen Funktion
+		standardGeneric('Rstats') ## der Aufruf von standardGeneric sorgt für das Dispatching
+	}
+)
+
 #' @name Rstats
-#' @aliases Rstats,FastWilcoxTest-method
+#' @aliases Rstats,dgCMatrix-method
 #' @rdname Rstats-methods
 #' @docType methods
 #' @description calculate the wilcox test on a sparse matrix as the C++ function does it.
@@ -13,17 +19,23 @@
 #' @param onlyPos test only those genes with higher expression in the interest (default FALSE)
 #' @title description of function Rstats
 #' @export 
-setGeneric('Rstats', ## Name
-	function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1 , onlyPos=FALSE) { ## Argumente der generischen Funktion
-		standardGeneric('Rstats') ## der Aufruf von standardGeneric sorgt für das Dispatching
-	}
-)
-
 setMethod('Rstats', signature = c ('dgCMatrix'),
 	definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {
 		Rstats( as.matrix(X), interest, backgound,  logFCcut, minPct, onlyPos )
 } )
 
+#' @describeIn Rstats matrix
+#' @docType methods
+#' @description use the R wilcox.test function instead of a c++ version.
+#' @param X the normal matrix
+#' @param interest the interesting col IDs
+#' @param backgound the background col IDs
+#' @param logFCcut the logFC change cutoff default= 1.0
+#' @param minPct only test genes that are detected in a minimum fraction of
+#'  min.pct cells in either of the two populations. Meant to speed up the function
+#' @param onlyPos test only those genes with higher expression in the interest (default FALSE)
+#' @title description of function Rstats
+#' @export
 setMethod('Rstats', signature = c ('matrix'),
 		definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {
 			logRF = unlist(apply( X, 2, function( x ) { logFC( x[interest], x[backgound] ) } ) )

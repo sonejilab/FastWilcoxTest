@@ -1,4 +1,11 @@
-#' @name FastWilcoxTest
+#' The FastWilcoxTest class
+#' 
+#' is only a wrapper around a sparse matrix. The class itself is not used apart from the test scripts.
+#' All functionallity is exported as c++ header FastWilcoxTest.h 
+#' as well as normal R function FastWilcosTest::<function name>().
+#' 
+#' @name FastWilcoxTest-class
+#' @rdname FastWilcoxTest-class
 #' @title FastWilcoxTest
 #' @description  An S4 class to train to code R C++
 #' The class itself is totally unused. All function are directly applied to the dgCMatrix matrix.
