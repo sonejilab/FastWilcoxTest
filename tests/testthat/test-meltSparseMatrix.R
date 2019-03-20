@@ -15,7 +15,7 @@ meltedR = NULL;
 system.time( {
 	rownames(dat) = 1:nrow(dat)
 	colnames(dat) = 1:ncol(dat)
-	meltedR = reshape2::melt( dat)
+	meltedR = reshape2::melt( dat )
 	bad = which(meltedR[,3] == 0 )
 	if ( length(bad) > 0)
 		meltedR = meltedR[-bad,]

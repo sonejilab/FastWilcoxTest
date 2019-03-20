@@ -6,12 +6,13 @@
 \title{FastWilcoxTest}
 \description{
 An S4 class to train to code R C++
+The class itself is totally unused. All function are directly applied to the dgCMatrix matrix.
 }
 \section{Slots}{
 
 \describe{
-\item{\code{dat}}{a dgCMatrix to lear how to modify that using C++}
+\item{\code{dat}}{a dgCMatrix to learn how to modify that using C++}
 
-\item{\code{usedObj}}{here a set of used and probably lateron important objects can be saved. Be very carful using any of them!}
+\item{\code{usedObj}}{here a set of used and probably important objects can be saved. Be very careful using any of them!}
 }}
 
