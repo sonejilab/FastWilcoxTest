@@ -3,15 +3,14 @@
 \docType{methods}
 \name{meltSparseMatrix}
 \alias{meltSparseMatrix}
-\alias{meltSparseMatrix,FastWilcoxTest-method}
-\title{description of function meltSparseMatrix}
+\alias{meltSparseMatrix,dgCMatrix-method}
+\title{fast melt a sparse matrix omitting all '0' entries.}
+\usage{
+\S4method{meltSparseMatrix}{dgCMatrix}(x)
+}
 \arguments{
 \item{x}{a sparse matrix}
 }
-\value{
-a data.frame with the columns gene_id, cell_id and value
-containing the row ids, the col ids and the value stored in the sparse matrix using c++
-}
 \description{
-melt a sparse matrix into row ids, col ids and value
+melt a sparse matrix into a data.frame with gene.id = row ids, cell_id = col ids and value = x@x
 }

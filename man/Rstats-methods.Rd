@@ -3,11 +3,11 @@
 \docType{methods}
 \name{Rstats}
 \alias{Rstats}
-\alias{Rstats,FastWilcoxTest-method}
+\alias{Rstats,dgCMatrix-method}
 \title{description of function Rstats}
 \usage{
-Rstats(X, interest, backgound, logFCcut = 1, minPct = 0.1,
-  onlyPos = FALSE)
+\S4method{Rstats}{dgCMatrix}(X, interest, backgound, logFCcut = 1,
+  minPct = 0.1, onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the sparse matrix}

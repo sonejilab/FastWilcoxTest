@@ -3,8 +3,11 @@
 \docType{methods}
 \name{as_FastWilcoxTest}
 \alias{as_FastWilcoxTest}
-\alias{as_FastWilcoxTest,FastWilcoxTest-method}
+\alias{as_FastWilcoxTest,matrix-method}
 \title{description of function as_FastWilcoxTest}
+\usage{
+\S4method{as_FastWilcoxTest}{matrix}(x)
+}
 \arguments{
 \item{x}{a matrix object}
 }
