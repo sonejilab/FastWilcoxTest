@@ -6,10 +6,10 @@ Authors@R:
            family = "Lang",
            role = c("aut", "cre"),
            email = "Stefan.Lang@med.lu.se")
-Description: This package re-implements the Seurat::FindMarkers( test.use == "wilcox" ) 
-	but implements all calculation steps in c++. 
+Description: Re-implementation the the Seurat::FindMarkers( test.use == "wilcox" ) function 
+	but implementing all calculation steps in c++. 
 	Thereby the function is more than 10 times faster than the Seurat R implementation.
-	The c++ wilcox code was extracted from the BioQC BioConductor package.
+	The c++ code was extracted from the BioQC BioConductor package.
 	It also contains other fast c++ function to interact with sparse matrices.
 License: GPL-3
 Encoding: UTF-8
