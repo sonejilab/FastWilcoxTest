@@ -26,7 +26,10 @@ using namespace Rcpp;
 //[[Rcpp::export]]
 Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int nUMI, bool display_progress=true ){
 
+
+
 	Progress p(X.outerSize(), display_progress);
+
 
 	double sum;
 	double fact; // the scaling factor
@@ -37,6 +40,19 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 	DRankList lostAndGained( X.rows() ); // far too big list
 
 	//Rcout << "inizialized  DRankList with " << X.rows() << " possible values" << std::endl;
+	nK = 0;
+	for (int k=0; k < X.outerSize(); ++k){
+		sum = 0;
+		for (Eigen::SparseMatrix<double>::InnerIterator it(X, k); it; ++it){
+			sum += it.value();
+		}
+		if ( nK < sum )
+			nK = sum;
+	}
+	if ( nUMI < (nK / 10) ){
+		p.cleanup();
+		::Rf_error( "Please adjust the nUMI value - you would unnecessarily lose about 90 percent of the available information" );
+	}
 
 	for (int k=0; k < X.outerSize(); ++k){
 
@@ -126,14 +142,14 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 					//Rcout << "after " << X.coeff( lostAndGained.list.at( i ).index ,k ) << std::endl;
 				}
 			}else if ( sum > nUMI ) {
-				int diff =  sum -nUMI +1;
+				int diff =  sum -nUMI;
 				if ( less_max < diff )
 					::Rf_error( "Not enough close values to fix the  sum (%d) > nUMI (%d) problem (max %d)" , sum, nUMI, less_max);
 
 				//Rcout << k <<" sum is bigger than nUMI - need to remove -1 x " << diff << " values (sum=" <<  sum<<")" << std::endl;
 
 				lostAndGained.sortDRankList(); // sort by it value
-				for( int i = 1; i < diff; i++){
+				for( int i = 0; i < diff; i++){
 					//Rcout << "   value before (-) " << X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) << " ("<< ( lostAndGained.len - i )<< ") ";
 					if ( X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) == -1.0 ){
 						diff ++;
@@ -151,5 +167,6 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 			}
 		}
 	}
+	//p.cleanup();
 	return (X);
 }

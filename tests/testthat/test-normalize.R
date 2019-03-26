@@ -2,7 +2,7 @@
 context( 'Cpp collapse sparse matrix')
 
 set.seed(1)
-ncol = 100
+ncol = 1000
 nrow=9000
 dat = matrix(round(rnorm(ncol*nrow,mean = 5, sd = 7)),ncol=ncol)
 dat[which(dat < 1)] = 0
@@ -13,7 +13,7 @@ x <- as_FastWilcoxTest( dat )
 
 rm(dat)
 
-to = min(Matrix::colSums(x@dat))
+to = min(Matrix::colSums(x@dat)) 
 
 ret <- NormalizeCells(x@dat, to, display_progress = FALSE) ; 
 
