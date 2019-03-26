@@ -3,6 +3,7 @@
 export(CorMatrix)
 export(CorMatrixIDS)
 export(MEAN_STD)
+export(NormalizeCells)
 export(Rzscore)
 export(SQRT)
 export(StatTest)

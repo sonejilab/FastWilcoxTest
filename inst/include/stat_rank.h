@@ -1,7 +1,15 @@
-/*! \file stat_rank.h
+/* The origin of this file was obtained from the BioQC bioconductor package (GLP-3).
+ * Thanks to Jitao David Zhang, Laura Badi, Gregor Sturm and Roland Ambs, the autors of that package.
+ * I pushed most of the original c logics into c++ classes.
+ * In addition to that the main input is now either two vectors or
+ * a sparse matrix instead of a conventional matrix in the original implementation.
+ *
+ *
+ \file stat_rank.h
     \brief Header for statistical ranking
 
     Details.
+
  */
 
 #include <Rcpp.h>
@@ -16,8 +24,8 @@ public:
 	double rank; /*!< Fractional ranking (starting from 1) */
 	DRank () {
 		index = -1;
-		vPtr = -1;
-		rank = -1;
+		vPtr = -1.0;
+		rank = -1.0;
 		//Rcout << "C++ DRank entry defined as empty "<< std::endl;
 	};
 	DRank (int ind, double Ptr) { index = ind; vPtr = Ptr; rank = -1; };
@@ -29,6 +37,11 @@ public:
 	void setRank( double r ) { if ( r > 0 ) { rank = r; } };
 	void print( void ){
 		Rcout << "C++ DRank entry at index " << index << ", rank " << rank << " with value "<< vPtr << std::endl;
+	};
+	void purge() {
+		this->index = -1;
+		this->vPtr = -1.0;
+		this->rank = -1.0;
 	};
 };
 
@@ -45,6 +58,7 @@ public:
 	std::vector<DRank> list; /*!< Dynamic array of DRanks */
 	int len; /*!< Length of the array */
 	int ulen; /*!< Length of unique elements */
+	bool ranked = false;
 	double tieCoef; /*!< Tie coefficient used by the WMW test */
 
 	/*! \brief create an DRankList object
@@ -59,7 +73,7 @@ public:
 		//Rcout << "C++ DRankList with " << this->len << " entries, " << this->ulen << " unique entries and "<< this->tieCoef << " ties:" << std::endl;
 		//Rcout << "DRankList starting to allocate " << n << " new DRank elements" << std::endl;
 
-		for ( int i =0; i < n; i++){
+		for ( int i =0; i <= n; i++){
 			//Rcout << "DRankList allocating element " << i << std::endl;
 
 			this->list.push_back( DRank() );
@@ -111,6 +125,8 @@ public:
 	int isRanked(void) {
 		if ( list.size() == 0)
 			return 0;
+		if ( ranked )
+			return 1;
 		return(list.at(0).rank>0);
 	};
 	/*! \brief: sort and gives rank to a DRankList
@@ -132,7 +148,7 @@ public:
 		for(i=0;i<len; ++i)
 			backup.at(i)=list.at(i).vPtr;
 
-		std::sort(list.begin(), list.end(),  [](DRank const &l, DRank const &r) { return l.vPtr < r.vPtr; } );
+		std::sort(list.begin(), list.begin() + len,  [](DRank const &l, DRank const &r) { return l.vPtr < r.vPtr; } );
 
 		for(i=0; i<len;i=j+1) {
 		    j=i;
@@ -153,7 +169,7 @@ public:
 	 */
 	void rankDRankList() {
 		this->sortRankDRankList();
-		std::sort(list.begin(), list.end(),  [](DRank const &l, DRank const &r) { return l.index < r.index; } );
+		std::sort(list.begin(), list.begin() + len,  [](DRank const &l, DRank const &r) { return l.index < r.index; } );
 	};
 	/*! \brief: sortDRankList
 	 * \param list A DRankList object
@@ -162,7 +178,7 @@ public:
 	 */
 	void sortDRankList() {
 		this->sortRankDRankList();
-		std::sort(list.begin(), list.end(),  [](DRank const &l, DRank const &r) { return l.vPtr < r.vPtr; } );
+		std::sort(list.begin(), list.begin() + len,  [](DRank const &l, DRank const &r) { return l.vPtr < r.vPtr; } );
 	};
 
 	/*! \brief: prepareDRankList
@@ -200,6 +216,23 @@ public:
 		//Rcout << "returned(ed) " << std::endl;
 		//print();
 	};
+
+	/* totally reset the object - this object can not be re-filled using refill().
+	 * The programmer needs to make sure that not too many entries are filled in!
+	 */
+	void purge() {
+		// keep the len info
+		this->tieCoef = -1;
+		this->ulen = 0;
+		for (int i=0; i <= this->len; ++i ){
+			list.at(i).purge();
+		}
+		this->len = 0; // the list has to be filled using add
+	};
+	// add a value that can have a different id than the internal position.
+	void add( int id, double value ){
+		this->list.at(++this->len).fill( id, value);
+	}
 
 
 };
