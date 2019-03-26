@@ -133,8 +133,12 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 				//Rcout << k << " sum is smaller than nUMI - need to add +1 x " << diff << " values (sum=" <<  sum<<")" << std::endl;
 				lostAndGained.sortDRankList(); // sort by it value
 				//Rcout << "list sorted " <<std::endl;
-				for( int i = 1; i < diff; i++){
+				for( int i = 0; i < diff; i++){
 					//Rcout << "   value before (+) " << X.coeff( lostAndGained.list.at( i ).index ,k ) << " ("<<i<<") ";
+					if ( lostAndGained.list.at( i ).index == -1 ){
+						diff ++;
+						continue;
+					}
 					if ( X.coeff( lostAndGained.list.at( i ).index ,k ) == -1.0 )
 						X.coeffRef( lostAndGained.list.at( i ).index ,k ) = 1.0;
 					else
@@ -151,6 +155,10 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 				lostAndGained.sortDRankList(); // sort by it value
 				for( int i = 0; i < diff; i++){
 					//Rcout << "   value before (-) " << X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) << " ("<< ( lostAndGained.len - i )<< ") ";
+					if ( lostAndGained.list.at( lostAndGained.len - i ).index == -1 ){
+						diff ++;
+						continue;
+					}
 					if ( X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) == -1.0 ){
 						diff ++;
 					}else {
