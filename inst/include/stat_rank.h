@@ -30,6 +30,8 @@ public:
 	};
 	DRank (int ind, double Ptr) { index = ind; vPtr = Ptr; rank = -1; };
 	void fill (int ind, double Ptr ) {
+		if ( ind < 0 )
+			::Rf_error("DRank.fill(ind = %d, Ptr=%d) ind is not allowed!!", ind, Ptr );
 		index = ind;
 		vPtr = Ptr;
 		rank =-1;
