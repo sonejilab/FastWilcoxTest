@@ -42,6 +42,20 @@ CorMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
 }
 
+#' @name NormalizeCells
+#' @aliases NormalizeCells,FastWilcoxTest-method
+#' @rdname NormalizeCells-methods
+#' @docType methods
+#' @description Normalize the single cell expression values to a total of nUMI reads.
+#' @param data the sparse Matrix (row = genes, col = cells)
+#' @param nUMI aim to normalize each cell to (cells expressing less are set to 0)
+#' @param display_progress show a progress bar (TRUE)
+#' @title UMI normalize a single cell expression matrix
+#' @export
+NormalizeCells <- function(X, nUMI, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_NormalizeCells`, X, nUMI, display_progress)
+}
+
 #' @title logFC calculates a log fold change between the two input vectors
 #' @aliases logFC,FastWilcoxTest-method
 #' @rdname logFC

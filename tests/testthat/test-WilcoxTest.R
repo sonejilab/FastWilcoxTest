@@ -27,7 +27,7 @@ R = Rstats(Matrix::t(x@dat), 1:20, 30:80, .099, .099)
 ## remove one value that has a p value difference of 5.372936e-03 (1.00000000 vs 0.99462706)
 Cpp = Cpp[-59,]
 R = R[-59,]
-expect_equal( as.vector(R[,'p.value'] ), as.vector( Cpp[,'p.value']) , tolerance=1e-10)
+expect_equal( as.vector(R[,'p.value'] ), as.vector( Cpp[,'p.value']))
 
 
 system.time({Cpp = StatTest(Matrix::t(x@dat), 1:20, 30:80, .1, .1, TRUE) })
@@ -37,4 +37,4 @@ system.time({R = Rstats(Matrix::t(x@dat), 1:20, 30:80, .099, .099, TRUE) })
 Cpp = Cpp[-22,]
 R = R[-22,]
 
-expect_equal( as.vector(R[,'p.value'] ), as.vector( Cpp[,'p.value']) , tolerance=1e-10)
+expect_equal( as.vector(R[,'p.value'] ), as.vector( Cpp[,'p.value']) )

@@ -1,3 +1,9 @@
+/* Copyright Stefan Lang apart from the wmw_test_stat function which is
+ * a direct copy from the BioQC package and therefore the copyright lies by
+ * the owner of this package (GLP-3).
+ */
+
+
 // [[Rcpp::depends(RcppEigen)]]
 // [[Rcpp::depends(RcppProgress)]]
 #include <RcppEigen.h>
