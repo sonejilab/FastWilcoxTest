@@ -47,7 +47,7 @@ CorMatrix <- function(X, CMP) {
 #' @rdname NormalizeCells-methods
 #' @docType methods
 #' @description Normalize the single cell expression values to a total of nUMI reads.
-#' @param data the sparse Matrix (row = genes, col = cells)
+#' @param X the sparse Matrix (row = genes, col = cells)
 #' @param nUMI aim to normalize each cell to (cells expressing less are set to 0)
 #' @param display_progress show a progress bar (TRUE)
 #' @title UMI normalize a single cell expression matrix
