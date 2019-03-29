@@ -23,3 +23,13 @@ setClass(
 				usedObj= list()
   )
 )
+
+#' @name x
+#' @title A simple FastWilcoxTest object containing random data to run the tests on.
+#' @description The data was created following the example in as_FastWilcoxTest()
+#' @docType data
+#' @usage x
+#' @format FastWilcoxTest
+#' @keywords data
+'x'
+NULL;
