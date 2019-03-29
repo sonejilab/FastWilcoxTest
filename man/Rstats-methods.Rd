@@ -4,7 +4,7 @@
 \name{Rstats}
 \alias{Rstats}
 \alias{Rstats,dgCMatrix-method}
-\title{description of function Rstats}
+\title{Run the 'wilcoxTest' on a sparse matrix like the c++ 'StatsTest'}
 \usage{
 \S4method{Rstats}{dgCMatrix}(X, interest, backgound, logFCcut = 1,
   minPct = 0.1, onlyPos = FALSE)
@@ -25,5 +25,10 @@ min.pct cells in either of the two populations. Meant to speed up the function}
 }
 \description{
 calculate the wilcox test on a sparse matrix as the C++ function does it.
-The data in the sparse matrix should be log transformed (not log10 or log2!)
+This function has been implemented for test puroses and keeped to allow tests for every user.
+}
+\examples{
+x
+stats = Rstats(x@dat, interest=1:10, background=20:30, logFCcut= 0, minPct=0, onlyPos=FALSE )
+dim(stats)
 }
