@@ -41,14 +41,14 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 	DRankList lostAndGained( X.rows() ); // far too big list
 
 	//Rcout << "inizialized  DRankList with " << X.rows() << " possible values" << std::endl;
-	nK = 0;
+	nK = 1*10^190;
 	for (int k=0; k < X.outerSize(); ++k){
 		sum = 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(X, k); it; ++it){
 			sum += it.value();
 		}
-		if ( nK < sum )
-			nK = sum;
+		if ( nK > sum )
+			nK = sum; //minimum
 	}
 	if ( nUMI < (nK / 10) ){
 		p.cleanup();
