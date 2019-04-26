@@ -9,19 +9,6 @@
 
 using namespace Rcpp;
 
-// collapse
-NumericMatrix collapse(Eigen::SparseMatrix<double> X, std::vector<int> ids, int type);
-RcppExport SEXP _FastWilcoxTest_collapse(SEXP XSEXP, SEXP idsSEXP, SEXP typeSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
-    Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
-    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
-    rcpp_result_gen = Rcpp::wrap(collapse(X, ids, type));
-    return rcpp_result_gen;
-END_RCPP
-}
 // correlationCoefficient
 float correlationCoefficient(std::vector<double> X, std::vector<double> Y);
 RcppExport SEXP _FastWilcoxTest_correlationCoefficient(SEXP XSEXP, SEXP YSEXP) {
@@ -72,6 +59,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// NormalizeSamples
+Eigen::SparseMatrix<double> NormalizeSamples(Eigen::SparseMatrix<double> X, std::vector<double> scaleFactor, bool display_progress);
+RcppExport SEXP _FastWilcoxTest_NormalizeSamples(SEXP XSEXP, SEXP scaleFactorSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type scaleFactor(scaleFactorSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(NormalizeSamples(X, scaleFactor, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logFC
 double logFC(std::vector<double> A, std::vector<double> B);
 static SEXP _FastWilcoxTest_logFC_try(SEXP ASEXP, SEXP BSEXP) {
@@ -93,6 +93,10 @@ RcppExport SEXP _FastWilcoxTest_logFC(SEXP ASEXP, SEXP BSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -124,6 +128,10 @@ RcppExport SEXP _FastWilcoxTest_minusOne(SEXP XSEXP) {
         UNPROTECT(1);
         Rf_onintr();
     }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
         SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
@@ -153,6 +161,10 @@ RcppExport SEXP _FastWilcoxTest_plusOne(SEXP XSEXP) {
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -185,6 +197,10 @@ RcppExport SEXP _FastWilcoxTest_cppWilcoxTest(SEXP xSEXP, SEXP ySEXP, SEXP typeS
     if (rcpp_isInterrupt_gen) {
         UNPROTECT(1);
         Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -221,35 +237,9 @@ RcppExport SEXP _FastWilcoxTest_StatTest(SEXP XSEXP, SEXP interestSEXP, SEXP bac
         UNPROTECT(1);
         Rf_onintr();
     }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
-// toColNums
-std::vector<double> toColNums(Eigen::SparseMatrix<double> data);
-static SEXP _FastWilcoxTest_toColNums_try(SEXP dataSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type data(dataSEXP);
-    rcpp_result_gen = Rcpp::wrap(toColNums(data));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _FastWilcoxTest_toColNums(SEXP dataSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_FastWilcoxTest_toColNums_try(dataSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
     }
     Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
     if (rcpp_isError_gen) {
@@ -294,6 +284,53 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// collapse
+NumericMatrix collapse(Eigen::SparseMatrix<double> X, std::vector<int> ids, int type);
+RcppExport SEXP _FastWilcoxTest_collapse(SEXP XSEXP, SEXP idsSEXP, SEXP typeSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
+    Rcpp::traits::input_parameter< int >::type type(typeSEXP);
+    rcpp_result_gen = Rcpp::wrap(collapse(X, ids, type));
+    return rcpp_result_gen;
+END_RCPP
+}
+// toColNums
+std::vector<double> toColNums(Eigen::SparseMatrix<double> data);
+static SEXP _FastWilcoxTest_toColNums_try(SEXP dataSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type data(dataSEXP);
+    rcpp_result_gen = Rcpp::wrap(toColNums(data));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_toColNums(SEXP dataSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_toColNums_try(dataSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 
 // validate (ensure exported C++ functions exist before calling them)
 static int _FastWilcoxTest_RcppExport_validate(const char* sig) { 
@@ -322,20 +359,21 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
     {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
     {"_FastWilcoxTest_CorMatrixIDS", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS, 3},
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
+    {"_FastWilcoxTest_NormalizeSamples", (DL_FUNC) &_FastWilcoxTest_NormalizeSamples, 3},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
     {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},
     {"_FastWilcoxTest_cppWilcoxTest", (DL_FUNC) &_FastWilcoxTest_cppWilcoxTest, 3},
     {"_FastWilcoxTest_StatTest", (DL_FUNC) &_FastWilcoxTest_StatTest, 6},
-    {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
     {"_FastWilcoxTest_ZScore", (DL_FUNC) &_FastWilcoxTest_ZScore, 2},
     {"_FastWilcoxTest_MEAN_STD", (DL_FUNC) &_FastWilcoxTest_MEAN_STD, 1},
     {"_FastWilcoxTest_SQRT", (DL_FUNC) &_FastWilcoxTest_SQRT, 1},
+    {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
+    {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}
 };
