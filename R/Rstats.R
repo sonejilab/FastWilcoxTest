@@ -9,7 +9,7 @@ setGeneric('Rstats', ## Name
 #' @rdname Rstats-methods
 #' @docType methods
 #' @description calculate the wilcox test on a sparse matrix as the C++ function does it.
-#' The data in the sparse matrix should be log transformed (not log10 or log2!)
+#' This function has been implemented for test puroses and keeped to allow tests for every user.
 #' @param X the sparse matrix
 #' @param interest the interesting col IDs
 #' @param backgound the background col IDs
@@ -17,7 +17,11 @@ setGeneric('Rstats', ## Name
 #' @param minPct only test genes that are detected in a minimum fraction of
 #'  min.pct cells in either of the two populations. Meant to speed up the function
 #' @param onlyPos test only those genes with higher expression in the interest (default FALSE)
-#' @title description of function Rstats
+#' @title Run the 'wilcoxTest' on a sparse matrix like the c++ 'StatsTest'
+#' @examples
+#' x
+#' stats = Rstats(x@dat, interest=1:10, background=20:30, logFCcut= 0, minPct=0, onlyPos=FALSE )
+#' dim(stats)
 #' @export 
 setMethod('Rstats', signature = c ('dgCMatrix'),
 	definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {

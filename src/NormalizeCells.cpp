@@ -18,7 +18,7 @@ using namespace Rcpp;
 //' @rdname NormalizeCells-methods
 //' @docType methods
 //' @description Normalize the single cell expression values to a total of nUMI reads.
-//' @param data the sparse Matrix (row = genes, col = cells)
+//' @param X the sparse Matrix (row = genes, col = cells)
 //' @param nUMI aim to normalize each cell to (cells expressing less are set to 0)
 //' @param display_progress show a progress bar (TRUE)
 //' @title UMI normalize a single cell expression matrix
@@ -35,32 +35,33 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 	double fact; // the scaling factor
 	const double zero=0.0; // to set lost cells to 0
 	const double l = -1.0; // to set lost genes to -1
-	double nK, rn; // the below 0 fraction of the normalized value
-	int less_max, more_max;
+	double nK, rn, tmp; // the below 0 fraction of the normalized value
+	int have_less_max, have_more_max, keepRes;
+	keepRes = 100;
 	DRankList lostAndGained( X.rows() ); // far too big list
 
 	//Rcout << "inizialized  DRankList with " << X.rows() << " possible values" << std::endl;
-	nK = 0;
+	nK = 1*10^190;
 	for (int k=0; k < X.outerSize(); ++k){
 		sum = 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(X, k); it; ++it){
 			sum += it.value();
 		}
-		if ( nK < sum )
-			nK = sum;
+		if ( nK > sum )
+			nK = sum; //minimum
 	}
 	if ( nUMI < (nK / 10) ){
 		p.cleanup();
-		::Rf_error( "Please adjust the nUMI value - you would unnecessarily lose about 90 percent of the available information" );
+		::Rf_error( "Please adjust the nUMI value - you would unnecessarily lose >90 percent of the available information" );
 	}
 
 	for (int k=0; k < X.outerSize(); ++k){
 
 		p.increment();
 		sum = 0;
-		less_max = 0; more_max = 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(X, k); it; ++it){
-			sum += it.value();
+			if ( it.value() > 0)
+				sum += it.value();
 		}
 		if ( sum == nUMI) {
 			continue;
@@ -74,13 +75,15 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 
 		}else {
 			fact = double(sum / nUMI);
+			//Rcout <<"sum " << sum<< " is OK fact set to " <<  fact << std::endl;
+
 			sum = 0.0;
+			have_less_max = 0; have_more_max = 0;
 
 			lostAndGained.len=X.rows();
 			lostAndGained.purge();
 			lostAndGained.ranked = true; //I do not need the ranking function here!
 
-			 //Rcout <<"sum " << sum<< " is OK fact set to " <<  fact << std::endl;
 			/* new logics - store the random difference between nK and rn
 			* and later on select those with the highest negative/positive difference.
 			* To make that work store 2-diff respectively 1-diff for the <0.2 nK resp <0.5 nK that still passed and
@@ -91,31 +94,15 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 				nK = modf((it.value() /fact), &neu);
 				rn = R::runif(0,1);
 				//Rcout << "makes sense?: value " <<it.value() << "/"<< fact << " (fact) = " << neu << "." << nK << std::endl;
-
+				modf(( nK* keepRes ), &tmp);
 				if (  rn  <= nK )  { //the test passed
 					neu ++; // new value +1
-					if ( nK < 0.2 ) {
-						//low, but passed - could be dropped if we get too many
-						lostAndGained.add( it.row(), ( 3.0 - ( rn - nK ) ) );
-						more_max++;
-					}else if ( nK <= 0.5 ) {
-						lostAndGained.add( it.row(), ( 2.0 - ( rn - nK ) ) );
-						more_max++;
-					}else {
-						lostAndGained.add( it.row(), (  rn - nK  ) ); //positive
-						more_max++;
-					}
+
+					lostAndGained.add( it.row(), ( keepRes+1 - tmp - ( rn - nK ) ) );
+					have_more_max++;
 				}else{ //test failed
-					if ( nK > 0.8 ) {
-						lostAndGained.add( it.row(), ( -3.0 + rn - nK) );
-						less_max ++;
-					}else if ( nK >= 0.5 ) {
-						lostAndGained.add( it.row(), ( -2.0 + rn - nK)  );
-						less_max ++;
-					}else {
-						lostAndGained.add( it.row(), (  nK - rn )  ); //negative
-						less_max ++;
-					}
+					lostAndGained.add( it.row(), ( -tmp-1 + ( rn - nK ) ) );
+					have_less_max ++;
 				}
 				if ( neu <= 0.0 ) {
 					it.valueRef() = l; // lost expression (-1.0)
@@ -125,16 +112,16 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 				}
 			}
 			if ( sum < nUMI ) {
-				// reduce some values
-				int diff = nUMI - sum +1;
-				if ( more_max < diff )
-					::Rf_error( "Not enough close values to fix the  sum (%d) < nUMI problem (%d) (max $d)" , sum, nUMI, more_max);
+				// increase some values
+				int diff = nUMI - sum -1  ;
+				if ( have_less_max + have_more_max < diff )
+					::Rf_error( "cell %d: Not enough close values to fix the  sum (%d) < nUMI problem (%d) (max $d)" ,k, sum, nUMI, have_more_max);
 
-				//Rcout << k << " sum is smaller than nUMI - need to add +1 x " << diff << " values (sum=" <<  sum<<")" << std::endl;
+				//Rcout << k << " sum is smaller than nUMI - need to add +1 x " << diff << " values (sum=" <<  sum<<"; nUMI="<<nUMI<<")" << std::endl;
 				lostAndGained.sortDRankList(); // sort by it value
 				//Rcout << "list sorted " <<std::endl;
-				for( int i = 0; i < diff; i++){
-					//Rcout << "   value before (+) " << X.coeff( lostAndGained.list.at( i ).index ,k ) << " ("<<i<<") ";
+				for( int i = 0; i < diff+1; i++){
+					//Rcout << "   order nr.="<<lostAndGained.list.at( i ).vPtr<<" value before (+) " << X.coeff( lostAndGained.list.at( i ).index ,k ) << " ("<<i<<") ";
 					if ( lostAndGained.list.at( i ).index == -1 ){
 						diff ++;
 						continue;
@@ -146,18 +133,17 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 					//Rcout << "after " << X.coeff( lostAndGained.list.at( i ).index ,k ) << std::endl;
 				}
 			}else if ( sum > nUMI ) {
-				int diff =  sum -nUMI;
-				if ( less_max < diff )
-					::Rf_error( "Not enough close values to fix the  sum (%d) > nUMI (%d) problem (max %d)" , sum, nUMI, less_max);
+				int diff =  sum -nUMI ;
+				if ( have_less_max + have_more_max < diff )
+					::Rf_error( "cell %d: Not enough close values to fix the  sum (%d) > nUMI (%d) problem (max %d)" ,k, sum, nUMI, have_less_max);
 
-				//Rcout << k <<" sum is bigger than nUMI - need to remove -1 x " << diff << " values (sum=" <<  sum<<")" << std::endl;
+				//Rcout << k <<" sum is bigger than nUMI - need to remove -1 x " << diff << " values (sum=" <<  sum<<"; nUMI="<<nUMI<<")" << std::endl;
 
 				lostAndGained.sortDRankList(); // sort by it value
 				for( int i = 0; i < diff; i++){
-					//Rcout << "   value before (-) " << X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) << " ("<< ( lostAndGained.len - i )<< ") ";
+					//Rcout << "   order nr.="<<lostAndGained.list.at( i ).vPtr<<" value before (-) " << X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) << " ("<< ( lostAndGained.len - i )<< ") ";
 					if ( lostAndGained.list.at( lostAndGained.len - i ).index == -1 ){
 						diff ++;
-						continue;
 					}
 					if ( X.coeff( lostAndGained.list.at( lostAndGained.len - i ).index ,k ) == -1.0 ){
 						diff ++;
