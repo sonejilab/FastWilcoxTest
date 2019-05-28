@@ -5,6 +5,10 @@
 
 
 using namespace Rcpp;
+#include <R.h>
+#include <Rdefines.h>
+
+// [[Rcpp::interfaces(r, cpp)]]
 
 //' @name correlationCoefficient
 //' @aliases correlationCoefficient,FastWilcoxTest-method
@@ -51,6 +55,7 @@ float correlationCoefficient( std::vector<double> X,  std::vector<double> Y)
     return corr;
 }
 
+// [[Rcpp::interfaces(r, cpp)]]
 
 //' @name CorMatrixIDS
 //' @aliases CorMatrixIDS,FastWilcoxTest-method

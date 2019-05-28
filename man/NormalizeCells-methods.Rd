@@ -9,11 +9,11 @@
 NormalizeCells(X, nUMI, display_progress = TRUE)
 }
 \arguments{
+\item{X}{the sparse Matrix (row = genes, col = cells)}
+
 \item{nUMI}{aim to normalize each cell to (cells expressing less are set to 0)}
 
 \item{display_progress}{show a progress bar (TRUE)}
-
-\item{data}{the sparse Matrix (row = genes, col = cells)}
 }
 \description{
 Normalize the single cell expression values to a total of nUMI reads.
