@@ -11,40 +11,146 @@ using namespace Rcpp;
 
 // correlationCoefficient
 float correlationCoefficient(std::vector<double> X, std::vector<double> Y);
-RcppExport SEXP _FastWilcoxTest_correlationCoefficient(SEXP XSEXP, SEXP YSEXP) {
+static SEXP _FastWilcoxTest_correlationCoefficient_try(SEXP XSEXP, SEXP YSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type Y(YSEXP);
     rcpp_result_gen = Rcpp::wrap(correlationCoefficient(X, Y));
     return rcpp_result_gen;
-END_RCPP
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_correlationCoefficient(SEXP XSEXP, SEXP YSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_correlationCoefficient_try(XSEXP, YSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
 }
 // CorMatrixIDS
 std::vector<double> CorMatrixIDS(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids);
-RcppExport SEXP _FastWilcoxTest_CorMatrixIDS(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+static SEXP _FastWilcoxTest_CorMatrixIDS_try(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
     rcpp_result_gen = Rcpp::wrap(CorMatrixIDS(X, CMP, ids));
     return rcpp_result_gen;
-END_RCPP
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_CorMatrixIDS(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_CorMatrixIDS_try(XSEXP, CMPSEXP, idsSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
 }
 // CorMatrix
 std::vector<double> CorMatrix(Eigen::SparseMatrix<double> X, std::vector<double> CMP);
-RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
+static SEXP _FastWilcoxTest_CorMatrix_try(SEXP XSEXP, SEXP CMPSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
     rcpp_result_gen = Rcpp::wrap(CorMatrix(X, CMP));
     return rcpp_result_gen;
-END_RCPP
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_CorMatrix_try(XSEXP, CMPSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// LinLang
+std::vector<double> LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, bool display_progress);
+static SEXP _FastWilcoxTest_LinLang_try(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type Grouping(GroupingSEXP);
+    Rcpp::traits::input_parameter< int >::type nGroup(nGroupSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(LinLang(X, Grouping, nGroup, display_progress));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_LinLang(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP display_progressSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_LinLang_try(XSEXP, GroupingSEXP, nGroupSEXP, display_progressSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
 }
 // NormalizeCells
 Eigen::SparseMatrix<double> NormalizeCells(Eigen::SparseMatrix<double> X, int nUMI, bool display_progress);
@@ -323,6 +429,10 @@ RcppExport SEXP _FastWilcoxTest_toColNums(SEXP dataSEXP) {
 static int _FastWilcoxTest_RcppExport_validate(const char* sig) { 
     static std::set<std::string> signatures;
     if (signatures.empty()) {
+        signatures.insert("float(*correlationCoefficient)(std::vector<double>,std::vector<double>)");
+        signatures.insert("std::vector<double>(*CorMatrixIDS)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
+        signatures.insert("std::vector<double>(*CorMatrix)(Eigen::SparseMatrix<double>,std::vector<double>)");
+        signatures.insert("std::vector<double>(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,bool)");
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
         signatures.insert("std::vector<int>(*minusOne)(std::vector<int>)");
         signatures.insert("std::vector<int>(*plusOne)(std::vector<int>)");
@@ -335,6 +445,10 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
 
 // registerCCallable (register entry points for exported C++ functions)
 RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() { 
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_correlationCoefficient", (DL_FUNC)_FastWilcoxTest_correlationCoefficient_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrixIDS", (DL_FUNC)_FastWilcoxTest_CorMatrixIDS_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix", (DL_FUNC)_FastWilcoxTest_CorMatrix_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_LinLang", (DL_FUNC)_FastWilcoxTest_LinLang_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_logFC", (DL_FUNC)_FastWilcoxTest_logFC_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_minusOne", (DL_FUNC)_FastWilcoxTest_minusOne_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_plusOne", (DL_FUNC)_FastWilcoxTest_plusOne_try);
@@ -349,6 +463,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
     {"_FastWilcoxTest_CorMatrixIDS", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS, 3},
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
+    {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 4},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},

@@ -2,6 +2,7 @@
 
 export(CorMatrix)
 export(CorMatrixIDS)
+export(LinLang)
 export(MEAN_STD)
 export(NormalizeCells)
 export(Rzscore)
