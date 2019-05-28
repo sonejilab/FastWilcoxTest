@@ -71,6 +71,20 @@ NormalizeCells <- function(X, nUMI, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_NormalizeCells`, X, nUMI, display_progress)
 }
 
+#' @name NormalizeSamples
+#' @aliases NormalizeSamples,FastWilcoxTest-method
+#' @rdname NormalizeSamples-methods
+#' @docType methods
+#' @description Normalize the NGS expression values by log re-scaling.
+#' @param data the sparse Matrix (row = genes, col = cells)
+#' @param scaleFactor the geometric mean of the data (use DESeq2 to get these)
+#' @param display_progress show a progress bar (TRUE)
+#' @title rescale a matrix using scaleFactor per column
+#' @export
+NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_NormalizeSamples`, X, scaleFactor, display_progress)
+}
+
 #' @title logFC calculates a log fold change between the two input vectors
 #' @aliases logFC,FastWilcoxTest-method
 #' @rdname logFC
