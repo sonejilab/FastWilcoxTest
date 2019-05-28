@@ -15,7 +15,7 @@
 #include <Rcpp.h>
 using namespace Rcpp;
 
-
+float correlationCoefficient( std::vector<double> X,  std::vector<double> Y);
 
 class DRank {
 public:

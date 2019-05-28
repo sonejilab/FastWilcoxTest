@@ -36,7 +36,8 @@ d= lapply ( 1:100, function( i ) {
 	## are all other values in the range +-1 of the norm data?
 	expect_equal(norm[-lost], norm_double[-lost], 1 )
 	NULL;
-		} )
+		} 
+)
 
 ## use inbult data
 
