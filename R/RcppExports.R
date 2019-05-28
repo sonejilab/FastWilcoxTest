@@ -42,6 +42,21 @@ CorMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
 }
 
+#' @name LinLang
+#' @aliases LinLang,FastWilcoxTest-method
+#' @rdname LinLang-methods
+#' @docType methods
+#' @description Identify genes slowly rising above the detection limit
+#' @param X the sparse Matrix (row = genes, col = cells)
+#' @param Grouping a numeric vector of group IDs
+#' @param nGroup the number of groups
+#' @param display_progress show a progress bar (TRUE)
+#' @title LinLang test for rise above the detection limit
+#' @export
+LinLang <- function(X, Grouping, nGroup, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_LinLang`, X, Grouping, nGroup, display_progress)
+}
+
 #' @name NormalizeCells
 #' @aliases NormalizeCells,FastWilcoxTest-method
 #' @rdname NormalizeCells-methods

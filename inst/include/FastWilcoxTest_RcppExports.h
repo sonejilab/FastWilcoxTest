@@ -25,6 +25,90 @@ namespace FastWilcoxTest {
         }
     }
 
+    inline float correlationCoefficient(std::vector<double> X, std::vector<double> Y) {
+        typedef SEXP(*Ptr_correlationCoefficient)(SEXP,SEXP);
+        static Ptr_correlationCoefficient p_correlationCoefficient = NULL;
+        if (p_correlationCoefficient == NULL) {
+            validateSignature("float(*correlationCoefficient)(std::vector<double>,std::vector<double>)");
+            p_correlationCoefficient = (Ptr_correlationCoefficient)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_correlationCoefficient");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_correlationCoefficient(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<float >(rcpp_result_gen);
+    }
+
+    inline std::vector<double> CorMatrixIDS(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids) {
+        typedef SEXP(*Ptr_CorMatrixIDS)(SEXP,SEXP,SEXP);
+        static Ptr_CorMatrixIDS p_CorMatrixIDS = NULL;
+        if (p_CorMatrixIDS == NULL) {
+            validateSignature("std::vector<double>(*CorMatrixIDS)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
+            p_CorMatrixIDS = (Ptr_CorMatrixIDS)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrixIDS");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_CorMatrixIDS(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(CMP)), Shield<SEXP>(Rcpp::wrap(ids)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
+    inline std::vector<double> CorMatrix(Eigen::SparseMatrix<double> X, std::vector<double> CMP) {
+        typedef SEXP(*Ptr_CorMatrix)(SEXP,SEXP);
+        static Ptr_CorMatrix p_CorMatrix = NULL;
+        if (p_CorMatrix == NULL) {
+            validateSignature("std::vector<double>(*CorMatrix)(Eigen::SparseMatrix<double>,std::vector<double>)");
+            p_CorMatrix = (Ptr_CorMatrix)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_CorMatrix(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(CMP)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
+    inline std::vector<double> LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, bool display_progress = true) {
+        typedef SEXP(*Ptr_LinLang)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_LinLang p_LinLang = NULL;
+        if (p_LinLang == NULL) {
+            validateSignature("std::vector<double>(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,bool)");
+            p_LinLang = (Ptr_LinLang)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_LinLang");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_LinLang(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Grouping)), Shield<SEXP>(Rcpp::wrap(nGroup)), Shield<SEXP>(Rcpp::wrap(display_progress)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
     inline double logFC(std::vector<double> A, std::vector<double> B) {
         typedef SEXP(*Ptr_logFC)(SEXP,SEXP);
         static Ptr_logFC p_logFC = NULL;
