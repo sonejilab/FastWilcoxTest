@@ -50,3 +50,23 @@ expect_equal( sums , exp,  0)
 
 
 
+context( 'Sample scale Lg norm')
+
+
+dat = matrix(round(rnorm(ncol*nrow,mean = 5, sd = 7)),ncol=ncol)
+dat[which(dat < 1)] = 0
+colnames(dat) <- paste('Sample', 1:ncol)
+rownames(dat) <- paste( 'gene', 1:nrow)
+
+x <- as_FastWilcoxTest( dat )
+
+rm(dat)
+
+ret <- NormalizeSamples(x@dat, rep( 100, ncol) , display_progress = FALSE) ;
+colnames(ret) = colnames(x@dat)
+rownames(ret) = rownames(x@dat)
+
+expect_true( all.equal( as.matrix(x@dat) / 100, as.matrix(ret)) )
+
+
+

@@ -165,6 +165,19 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// NormalizeSamples
+Eigen::SparseMatrix<double> NormalizeSamples(Eigen::SparseMatrix<double> X, std::vector<double> scaleFactor, bool display_progress);
+RcppExport SEXP _FastWilcoxTest_NormalizeSamples(SEXP XSEXP, SEXP scaleFactorSEXP, SEXP display_progressSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type scaleFactor(scaleFactorSEXP);
+    Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
+    rcpp_result_gen = Rcpp::wrap(NormalizeSamples(X, scaleFactor, display_progress));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logFC
 double logFC(std::vector<double> A, std::vector<double> B);
 static SEXP _FastWilcoxTest_logFC_try(SEXP ASEXP, SEXP BSEXP) {
@@ -465,6 +478,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
     {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 4},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
+    {"_FastWilcoxTest_NormalizeSamples", (DL_FUNC) &_FastWilcoxTest_NormalizeSamples, 3},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
     {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},
