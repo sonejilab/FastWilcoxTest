@@ -50,11 +50,12 @@ CorMatrix <- function(X, CMP) {
 #' @param X the sparse Matrix (row = genes, col = cells)
 #' @param Grouping a numeric vector of group IDs
 #' @param nGroup the number of groups
+#' @param minPct ignore genes with less than a fraction of 0.1 (default) of the cells expressing them
 #' @param display_progress show a progress bar (TRUE)
 #' @title LinLang test for rise above the detection limit
 #' @export
-LinLang <- function(X, Grouping, nGroup, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_LinLang`, X, Grouping, nGroup, display_progress)
+LinLang <- function(X, Grouping, nGroup, minPct = 0.1, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_LinLang`, X, Grouping, nGroup, minPct, display_progress)
 }
 
 #' @name NormalizeCells
