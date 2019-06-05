@@ -6,7 +6,7 @@
 \alias{LinLang,FastWilcoxTest-method}
 \title{LinLang test for rise above the detection limit}
 \usage{
-LinLang(X, Grouping, nGroup, display_progress = TRUE)
+LinLang(X, Grouping, nGroup, minPct = 0.1, display_progress = TRUE)
 }
 \arguments{
 \item{X}{the sparse Matrix (row = genes, col = cells)}
@@ -14,6 +14,8 @@ LinLang(X, Grouping, nGroup, display_progress = TRUE)
 \item{Grouping}{a numeric vector of group IDs}
 
 \item{nGroup}{the number of groups}
+
+\item{minPct}{ignore genes with less than a fraction of 0.1 (default) of the cells expressing them}
 
 \item{display_progress}{show a progress bar (TRUE)}
 }

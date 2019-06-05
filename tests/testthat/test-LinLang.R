@@ -14,7 +14,7 @@ x <- as_FastWilcoxTest( dat )
 rm(dat)
 
 
-res = LinLang(Matrix::t(x@dat), Grouping= group, nGroup=5, display_progress=TRUE )
+system.time( {res = LinLang(Matrix::t(x@dat), Grouping= group, nGroup=5, display_progress=TRUE )})
 
 
 RLinLang <- function( x, Grouping, nGroup) {
@@ -23,9 +23,14 @@ RLinLang <- function( x, Grouping, nGroup) {
 		c( length(x), length(which(x!= 0)), mean( x[which(x!= 0)]) )
 	}))
 	d1[3,which(is.na(d1[3,]))] = 0
-	cor( as.vector(t(d1[2,]) / t(d1[1,])), as.vector(t(d1[3,])))
+	cmp = 1:nGroup
+	A = cor(cmp,  as.vector(t(d1[2,]) / t(d1[1,])) )
+	B = cor( cmp , as.vector(t(d1[3,])))
+	C = cor( as.vector(t(d1[2,]) / t(d1[1,])), as.vector(t(d1[3,])))
+	c( A, B, C, var( as.vector(t(d1[2,]) / t(d1[1,]))) , var( as.vector(t(d1[3,])))) 
 }
 
-resR = apply( x@dat, 1, RLinLang, Grouping= group, nGroup=5 )
-
-expect_equal( res , as.vector(resR) ,1e-7)
+system.time( {resR = t(data.frame(apply( x@dat, 1, RLinLang, Grouping= group, nGroup=5 )))})
+rownames(resR) = NULL
+colnames(resR) = colnames(res)
+expect_equal( res , as.matrix(resR) ,1e-7)

@@ -88,17 +88,17 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
-    inline std::vector<double> LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, bool display_progress = true) {
-        typedef SEXP(*Ptr_LinLang)(SEXP,SEXP,SEXP,SEXP);
+    inline NumericMatrix LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, double minPct = 0.1, bool display_progress = true) {
+        typedef SEXP(*Ptr_LinLang)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_LinLang p_LinLang = NULL;
         if (p_LinLang == NULL) {
-            validateSignature("std::vector<double>(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,bool)");
+            validateSignature("NumericMatrix(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,double,bool)");
             p_LinLang = (Ptr_LinLang)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_LinLang");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_LinLang(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Grouping)), Shield<SEXP>(Rcpp::wrap(nGroup)), Shield<SEXP>(Rcpp::wrap(display_progress)));
+            rcpp_result_gen = p_LinLang(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Grouping)), Shield<SEXP>(Rcpp::wrap(nGroup)), Shield<SEXP>(Rcpp::wrap(minPct)), Shield<SEXP>(Rcpp::wrap(display_progress)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();
@@ -106,7 +106,7 @@ namespace FastWilcoxTest {
             throw Rcpp::LongjumpException(rcpp_result_gen);
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
     }
 
     inline double logFC(std::vector<double> A, std::vector<double> B) {

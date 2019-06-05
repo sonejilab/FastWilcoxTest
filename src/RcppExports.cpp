@@ -116,23 +116,24 @@ RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
     return rcpp_result_gen;
 }
 // LinLang
-std::vector<double> LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, bool display_progress);
-static SEXP _FastWilcoxTest_LinLang_try(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP display_progressSEXP) {
+NumericMatrix LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, double minPct, bool display_progress);
+static SEXP _FastWilcoxTest_LinLang_try(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP minPctSEXP, SEXP display_progressSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<int> >::type Grouping(GroupingSEXP);
     Rcpp::traits::input_parameter< int >::type nGroup(nGroupSEXP);
+    Rcpp::traits::input_parameter< double >::type minPct(minPctSEXP);
     Rcpp::traits::input_parameter< bool >::type display_progress(display_progressSEXP);
-    rcpp_result_gen = Rcpp::wrap(LinLang(X, Grouping, nGroup, display_progress));
+    rcpp_result_gen = Rcpp::wrap(LinLang(X, Grouping, nGroup, minPct, display_progress));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _FastWilcoxTest_LinLang(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP display_progressSEXP) {
+RcppExport SEXP _FastWilcoxTest_LinLang(SEXP XSEXP, SEXP GroupingSEXP, SEXP nGroupSEXP, SEXP minPctSEXP, SEXP display_progressSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_FastWilcoxTest_LinLang_try(XSEXP, GroupingSEXP, nGroupSEXP, display_progressSEXP));
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_LinLang_try(XSEXP, GroupingSEXP, nGroupSEXP, minPctSEXP, display_progressSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -445,7 +446,7 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
         signatures.insert("float(*correlationCoefficient)(std::vector<double>,std::vector<double>)");
         signatures.insert("std::vector<double>(*CorMatrixIDS)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
         signatures.insert("std::vector<double>(*CorMatrix)(Eigen::SparseMatrix<double>,std::vector<double>)");
-        signatures.insert("std::vector<double>(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,bool)");
+        signatures.insert("NumericMatrix(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,double,bool)");
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
         signatures.insert("std::vector<int>(*minusOne)(std::vector<int>)");
         signatures.insert("std::vector<int>(*plusOne)(std::vector<int>)");
@@ -476,7 +477,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
     {"_FastWilcoxTest_CorMatrixIDS", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS, 3},
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
-    {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 4},
+    {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 5},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
     {"_FastWilcoxTest_NormalizeSamples", (DL_FUNC) &_FastWilcoxTest_NormalizeSamples, 3},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
