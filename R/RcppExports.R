@@ -196,6 +196,17 @@ toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
 }
 
+#' @title ColNotZero returns the amount of not zero values in each column
+#' @aliases ColNotZero,FastWilcoxTest-method
+#' @rdname ColNotZero
+#' @description a c++ implementation of apply(x,2,function(d) {length(which(d!=0))} )
+#' @param data a sparse matrix
+#' @return a vector with nGene information
+#' @export
+ColNotZero <- function(data) {
+    .Call(`_FastWilcoxTest_ColNotZero`, data)
+}
+
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
     .Call('_FastWilcoxTest_RcppExport_registerCCallable', PACKAGE = 'FastWilcoxTest')

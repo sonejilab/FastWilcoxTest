@@ -235,6 +235,27 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline std::vector<double> ColNotZero(Eigen::SparseMatrix<double> data) {
+        typedef SEXP(*Ptr_ColNotZero)(SEXP);
+        static Ptr_ColNotZero p_ColNotZero = NULL;
+        if (p_ColNotZero == NULL) {
+            validateSignature("std::vector<double>(*ColNotZero)(Eigen::SparseMatrix<double>)");
+            p_ColNotZero = (Ptr_ColNotZero)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_ColNotZero");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_ColNotZero(Shield<SEXP>(Rcpp::wrap(data)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
 }
 
 #endif // RCPP_FastWilcoxTest_RCPPEXPORTS_H_GEN_
