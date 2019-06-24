@@ -1,3 +1,7 @@
+# 0.1.8
+
+Added a ColNotZero function to quickly calculate the not zero entries in a sparse matrix. Column wise to e.g. quickly access the amount of expressed genes in a table.
+
 # 0.1.7
 
 Added the LinLang function to identify genes that show a linear raise over the detection limit in a given grouping.  
