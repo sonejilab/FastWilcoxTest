@@ -222,20 +222,21 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		inA = 0;
 		inB = 0;
 		//Rcout << "processing line "<< c_ << std::endl;
-
+		std::fill(A.begin(), A.end(), false );
+		std::fill(B.begin(), B.end(), false );
 		for ( unsigned int i = 0; i< itA.size(); i++ ) {
 			tmp = X.coeff(itA.at(i),c_);
 			if ( tmp > 0 ){
 				inA ++;
+				A.at(i) = tmp;
 			}
-			A.at(i) = tmp;
 		}
 		for ( unsigned int i = 0; i< itB.size(); i++ ) {
 			tmp = X.coeff(itB.at(i),c_);
 			if ( tmp > 0 ){
 				inB ++;
+				B.at(i) = tmp;
 			}
-			B.at(i) = tmp;
 		}
 		//Rcout << "could we have 0's?  "<< c_ <<  " interest.size() " << interest.size() << " background.size() "<< background.size() << std::endl;
 		fracInA.at(c_) = inA / interest.size();
@@ -339,5 +340,4 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	//Rcout << "n return values: " << pass <<std::endl;
 	return res;
 }
-
 
