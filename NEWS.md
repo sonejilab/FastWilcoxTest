@@ -1,3 +1,7 @@
+# 0.1.9
+
+Added a simple euclidian_distances function to allow timeline creation.
+
 # 0.1.8
 
 Added a ColNotZero function to quickly calculate the not zero entries in a sparse matrix. Column wise to e.g. quickly access the amount of expressed genes in a table.

@@ -192,6 +192,22 @@ collapse <- function(X, ids, type) {
     .Call(`_FastWilcoxTest_collapse`, X, ids, type)
 }
 
+#' Calculate the euclidian distance between consecutive points
+#' Can also produce the integral values of the distance.
+#' @name euclidian_distances
+#' @aliases euclidian_distances,FastWilcoxTest-method
+#' @rdname euclidian_distances-methods
+#' @docType methods
+#' @description calculates the (2D) euclidian distance for a set of x and y values
+#' @param X one ORDERED numeric vector
+#' @param Y the other vector
+#' @param sum create a total sum of these values (integral) default = FALSE
+#' @title Calculate  over two double vectors
+#' @export
+euclidian_distances <- function(X, Y, sum = FALSE) {
+    .Call(`_FastWilcoxTest_euclidian_distances`, X, Y, sum)
+}
+
 toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
 }
