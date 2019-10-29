@@ -208,6 +208,23 @@ euclidian_distances <- function(X, Y, sum = FALSE) {
     .Call(`_FastWilcoxTest_euclidian_distances`, X, Y, sum)
 }
 
+#' Calculate the euclidian distance between consecutive points
+#' Can also produce the integral values of the distance.
+#' @name euclidian_distances3d
+#' @aliases euclidian_distances3d,FastWilcoxTest-method
+#' @rdname euclidian_distances3d-methods
+#' @docType methods
+#' @description calculates the (3D) euclidian distance for a set of x and y values
+#' @param X one ORDERED numeric vector
+#' @param Y the other vector
+#' @param Z the thrid dimension
+#' @param sum create a total sum of these values (integral) default = FALSE
+#' @title Calculate  over two double vectors
+#' @export
+euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
+    .Call(`_FastWilcoxTest_euclidian_distances3d`, X, Y, Z, sum)
+}
+
 toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
 }
