@@ -235,6 +235,27 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline std::vector<double> euclidian_distances3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, bool sum = false) {
+        typedef SEXP(*Ptr_euclidian_distances3d)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_euclidian_distances3d p_euclidian_distances3d = NULL;
+        if (p_euclidian_distances3d == NULL) {
+            validateSignature("std::vector<double>(*euclidian_distances3d)(std::vector<double>,std::vector<double>,std::vector<double>,bool)");
+            p_euclidian_distances3d = (Ptr_euclidian_distances3d)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_distances3d");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_euclidian_distances3d(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(sum)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
     inline std::vector<double> toColNums(Eigen::SparseMatrix<double> data) {
         typedef SEXP(*Ptr_toColNums)(SEXP);
         static Ptr_toColNums p_toColNums = NULL;
