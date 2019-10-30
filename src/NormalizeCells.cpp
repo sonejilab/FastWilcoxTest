@@ -12,6 +12,28 @@ using namespace Rcpp;
 #include <stat_rank.h>
 
 
+//' @name LogNorm
+//' @aliases LogNorm,FastWilcoxTest-method
+//' @rdname LogNorm-methods
+//' @docType methods
+//' @description Normalize the single cell expression read counts values to a scale_factor.
+//' @param X the sparse Matrix (row = genes, col = cells)
+//' @param scale_factor the total read count to reach
+//' @param display_progress show a progress bar (TRUE)
+//' @title UMI normalize a single cell expression matrix
+//' @export
+//[[Rcpp::export]]
+Eigen::SparseMatrix<double> LogNorm(Eigen::SparseMatrix<double> data, int scale_factor, bool display_progress = true){
+  Progress p(data.outerSize(), display_progress);
+  Eigen::VectorXd colSums = data.transpose() * Eigen::VectorXd::Ones(data.rows());
+  for (int k=0; k < data.outerSize(); ++k){
+    p.increment();
+    for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+      it.valueRef() = log1p(double(it.value()) / colSums[k] * scale_factor);
+    }
+  }
+  return data;
+}
 
 //' @name NormalizeCells
 //' @aliases NormalizeCells,FastWilcoxTest-method
