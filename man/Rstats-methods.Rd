@@ -27,8 +27,3 @@ min.pct cells in either of the two populations. Meant to speed up the function}
 calculate the wilcox test on a sparse matrix as the C++ function does it.
 This function has been implemented for test puroses and keeped to allow tests for every user.
 }
-\examples{
-x
-stats = Rstats(x@dat, interest=1:10, background=20:30, logFCcut= 0, minPct=0, onlyPos=FALSE )
-dim(stats)
-}

@@ -14,9 +14,3 @@
 \description{
 melt a sparse matrix into a data.frame with gene.id = row ids, cell_id = col ids and value = x@x
 }
-\examples{
-x
-melted = meltSparseMatrix(x@dat)
-dim(melted)
-colnames(melted)
-}
