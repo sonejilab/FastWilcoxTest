@@ -5,10 +5,6 @@
 #' @description calculate the z.score as the cpp function does it
 #' @param obj the FastWilcoxTest
 #' @title description of function Rzscore
-#' @examples
-#' x
-#' zscored = Rstats(x@dat, interest=1:10, background=20:30, logFCcut= 0, minPct=0, onlyPos=FALSE )
-#' dim(zscored)
 #' @export 
 if ( ! isGeneric('Rzscore') ){setGeneric('Rzscore', ## Name
 	function ( obj ) { 

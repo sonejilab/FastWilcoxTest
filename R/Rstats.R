@@ -18,10 +18,6 @@ setGeneric('Rstats', ## Name
 #'  min.pct cells in either of the two populations. Meant to speed up the function
 #' @param onlyPos test only those genes with higher expression in the interest (default FALSE)
 #' @title Run the 'wilcoxTest' on a sparse matrix like the c++ 'StatsTest'
-#' @examples
-#' x
-#' stats = Rstats(x@dat, interest=1:10, background=20:30, logFCcut= 0, minPct=0, onlyPos=FALSE )
-#' dim(stats)
 #' @export 
 setMethod('Rstats', signature = c ('dgCMatrix'),
 	definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {
