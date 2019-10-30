@@ -256,6 +256,48 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline std::vector<double> eDist3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, int id) {
+        typedef SEXP(*Ptr_eDist3d)(SEXP,SEXP,SEXP,SEXP);
+        static Ptr_eDist3d p_eDist3d = NULL;
+        if (p_eDist3d == NULL) {
+            validateSignature("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int)");
+            p_eDist3d = (Ptr_eDist3d)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_eDist3d");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_eDist3d(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(id)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
+    inline std::vector<int> euclidian_order3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z) {
+        typedef SEXP(*Ptr_euclidian_order3d)(SEXP,SEXP,SEXP);
+        static Ptr_euclidian_order3d p_euclidian_order3d = NULL;
+        if (p_euclidian_order3d == NULL) {
+            validateSignature("std::vector<int>(*euclidian_order3d)(std::vector<double>,std::vector<double>,std::vector<double>)");
+            p_euclidian_order3d = (Ptr_euclidian_order3d)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_order3d");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_euclidian_order3d(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(Z)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<std::vector<int> >(rcpp_result_gen);
+    }
+
     inline std::vector<double> toColNums(Eigen::SparseMatrix<double> data) {
         typedef SEXP(*Ptr_toColNums)(SEXP);
         static Ptr_toColNums p_toColNums = NULL;

@@ -1,3 +1,7 @@
+# 0.1.10
+
+Added timeline functionallity to fit a timeline into 3D points.
+
 # 0.1.9
 
 Added a simple euclidian_distances function to allow timeline creation.

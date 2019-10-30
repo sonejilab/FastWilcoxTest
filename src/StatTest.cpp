@@ -342,163 +342,163 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 }
 
 
-//' @title StatTest2 runs wilcox test on the columns of the sparse matrix
-//' @aliases StatTest2,FastWilcoxTest-method
-//' @rdname StatTest2
-//' @description This test implements the Seurat FindMarkers( test.use == "wilcox" ) function
-//' in the greatest possible way, but using Rcpp instead of R. So far I could get a ~10x speed improvement.
-//' @param A the sparse matrix of the test group
-//' @param B the sparse matrix of the background
-//' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
-//' @param minPct only test genes that are detected in a minimum fraction of
-//' minPct cells in either of the two populations. Meant to speed up the function
-//' by not testing genes that are very infrequently expressed. Default is 0.1
-//' @param onlyPos check only higher expression (default FALSE)
-//' @return a matrix with tested column ids, logFC and p.value
-//' @export
-// [[Rcpp::export]]Eigen::SparseMatrix<double> data
+// //' @title StatTest2 runs wilcox test on the columns of the sparse matrix
+// //' @aliases StatTest2,FastWilcoxTest-method
+// //' @rdname StatTest2
+// //' @description This test implements the Seurat FindMarkers( test.use == "wilcox" ) function
+// //' in the greatest possible way, but using Rcpp instead of R. So far I could get a ~10x speed improvement.
+// //' @param A the sparse matrix of the test group
+// //' @param B the sparse matrix of the background
+// //' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
+// //' @param minPct only test genes that are detected in a minimum fraction of
+// //' minPct cells in either of the two populations. Meant to speed up the function
+// //' by not testing genes that are very infrequently expressed. Default is 0.1
+// //' @param onlyPos check only higher expression (default FALSE)
+// //' @return a matrix with tested column ids, logFC and p.value
+// //' @export
+// // [[Rcpp::export]]Eigen::SparseMatrix<double> data
 
-NumericMatrix StatTest2 (Eigen::SparseMatrix<double> A, Eigen::SparseMatrix<double> B,
-		, double logFCcut = 1.0, double minPct = 0.1, bool onlyPos=false  ){
+// NumericMatrix StatTest2 (Eigen::SparseMatrix<double> A, Eigen::SparseMatrix<double> B,
+// 		 double logFCcut = 1.0, double minPct = 0.1, bool onlyPos=false  ){
 
-	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
-    if ( interest.size() == 0 ){
-    	::Rf_error("No values in interest group" );
-    }
-    if ( background.size() == 0 ){
-        ::Rf_error("No values in background group" );
-    }
-	// internal measurements
-	std::vector<double> logFCpass(X.cols(), 0.0);
-	std::vector<bool>   testPassed(X.cols(), 0.0);
-	std::vector<double> fracInA(X.cols(), 0.0);
-	std::vector<double> fracInB(X.cols(), 0.0);
-	std::vector<double> indRankSum(X.cols(), 0.0);
-    // tmp data storage
-	std::vector<double> Adat(interest.size(), 0.0);
-	std::vector<double> Bdat(background.size(), 0.0 );
-	double inA = 0;
-	double inB = 0;
-	double tmp = 0;
-    // how many genes pass all filters
-	int pass = 0;
-	int q = 0;
-	int i = 0;
+// 	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
+//     if ( interest.size() == 0 ){
+//     	::Rf_error("No values in interest group" );
+//     }
+//     if ( background.size() == 0 ){
+//         ::Rf_error("No values in background group" );
+//     }
+// 	// internal measurements
+// 	std::vector<double> logFCpass(X.cols(), 0.0);
+// 	std::vector<bool>   testPassed(X.cols(), 0.0);
+// 	std::vector<double> fracInA(X.cols(), 0.0);
+// 	std::vector<double> fracInB(X.cols(), 0.0);
+// 	std::vector<double> indRankSum(X.cols(), 0.0);
+//     // tmp data storage
+// 	std::vector<double> Adat(interest.size(), 0.0);
+// 	std::vector<double> Bdat(background.size(), 0.0 );
+// 	double inA = 0;
+// 	double inB = 0;
+// 	double tmp = 0;
+//     // how many genes pass all filters
+// 	int pass = 0;
+// 	int q = 0;
+// 	int i = 0;
 
-	// Rcout << "calculating filters logFC > " << logFC << " and minPct > " << minPct << std::endl;
-	for ( int k=0; k < A.outerSize(); ++k){
-	    i = 0;
-	    std::fill(Adat.begin(), Adat.end(), false );
-		std::fill(Bdat.begin(), Bdat.end(), false );
-    	for (Eigen::SparseMatrix<double>::InnerIterator it(A, k); it; ++it){
-       	 Adat.at(i++) = it.value()
-    	}
-    	fracInA[k] = i/A.innerSize();
-    	i = 0;
-    	for (Eigen::SparseMatrix<double>::InnerIterator it(B, k); it; ++it){
-       	 Bdat.at(i) =  it.value();
-    	}
-    	fracInB[k] = i/B.innerSize();
-  		tmp = logFCpass.at(k) = logFC( A, B );
-  		if ( ! onlyPos && tmp < 0 ) {
-			tmp = tmp * -1;
-		}
-		if ( tmp > logFCcut && q > 0 ) {
-			pass++;
-			testPassed.at(k) = true;
-		}else {
-			testPassed.at(k) = false;
-		}
-  	}
+// 	// Rcout << "calculating filters logFC > " << logFC << " and minPct > " << minPct << std::endl;
+// 	for ( int k=0; k < A.outerSize(); ++k){
+// 	    i = 0;
+// 	    std::fill(Adat.begin(), Adat.end(), false );
+// 		std::fill(Bdat.begin(), Bdat.end(), false );
+//     	for (Eigen::SparseMatrix<double>::InnerIterator it(A, k); it; ++it){
+//        	 Adat.at(i++) = it.value()
+//     	}
+//     	fracInA[k] = i/A.innerSize();
+//     	i = 0;
+//     	for (Eigen::SparseMatrix<double>::InnerIterator it(B, k); it; ++it){
+//        	 Bdat.at(i) =  it.value();
+//     	}
+//     	fracInB[k] = i/B.innerSize();
+//   		tmp = logFCpass.at(k) = logFC( A, B );
+//   		if ( ! onlyPos && tmp < 0 ) {
+// 			tmp = tmp * -1;
+// 		}
+// 		if ( tmp > logFCcut && q > 0 ) {
+// 			pass++;
+// 			testPassed.at(k) = true;
+// 		}else {
+// 			testPassed.at(k) = false;
+// 		}
+//   	}
 	
-	//Rcout << "test variables calculated" << std::endl;
-	if ( pass == 0 ){
-			::Rf_error("No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" );
-	}
-	else {
-		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
-	}
+// 	//Rcout << "test variables calculated" << std::endl;
+// 	if ( pass == 0 ){
+// 			::Rf_error("No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" );
+// 	}
+// 	else {
+// 		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
+// 	}
 
-	//Rcout << "allocate NumericMatrix with " << pass << " rows and " << 6 << "cols" << std::endl;
-	/* allocate a result 'matrix' */
-	NumericMatrix res(pass, 6);
+// 	//Rcout << "allocate NumericMatrix with " << pass << " rows and " << 6 << "cols" << std::endl;
+// 	/* allocate a result 'matrix' */
+// 	NumericMatrix res(pass, 6);
 
-	//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
-	std::vector<double> total( A.innerSize() + B.innerSize() , -1.0 );
-	int n = total.size();
-	int id = 0;
-	int j;
-	int nInd;
-	double tie;
-	//double indRankSum;
+// 	//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
+// 	std::vector<double> total( A.innerSize() + B.innerSize() , -1.0 );
+// 	int n = total.size();
+// 	int id = 0;
+// 	int j;
+// 	int nInd;
+// 	double tie;
+// 	//double indRankSum;
 
-	//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
-	DRankList list( n );
-	//Rcout << "living 2" << std::endl;
-	//list.print();
+// 	//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
+// 	DRankList list( n );
+// 	//Rcout << "living 2" << std::endl;
+// 	//list.print();
 
-	for ( int c_=0; c_ < A.outerSize(); c_++ ){
-		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;
-		if ( testPassed.at(c_) ) {
+// 	for ( int c_=0; c_ < A.outerSize(); c_++ ){
+// 		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;
+// 		if ( testPassed.at(c_) ) {
 
-			/*Test stats copied from the BioOC package */
-			j = 0;
-			//#TODO fix me!
-			//here I need to make sure that I do it correctly!!
-			//just fill in enough values!!
+// 			/*Test stats copied from the BioOC package */
+// 			j = 0;
+// 			//#TODO fix me!
+// 			//here I need to make sure that I do it correctly!!
+// 			//just fill in enough values!!
 			
-			std::fill(total.begin(), total.end(), false );
-			for (Eigen::SparseMatrix<double>::InnerIterator it(A, c_); it; ++it){
-       			 total.at(j++) = it.value()
-    		}
-    		j = Adat.innerSize();
-    		for (Eigen::SparseMatrix<double>::InnerIterator it(B, c_); it; ++it){
-       			 total.at(j++) = it.value()
-    		}
+// 			std::fill(total.begin(), total.end(), false );
+// 			for (Eigen::SparseMatrix<double>::InnerIterator it(A, c_); it; ++it){
+//        			 total.at(j++) = it.value()
+//     		}
+//     		j = Adat.innerSize();
+//     		for (Eigen::SparseMatrix<double>::InnerIterator it(B, c_); it; ++it){
+//        			 total.at(j++) = it.value()
+//     		}
 			
-			n = total.size();
+// 			n = total.size();
 
-			// populate the DRankList object
-			//Rcout << "living 3" << std::endl;
-			list.refill(total, n);
-			//Rcout << "isRanked " << list.isRanked() <<std::endl;
-			//list.sortRankDRankList();
-			//Rcout << "isRanked " << list.isRanked() <<std::endl;
-			// test DRankLint internals
-			//continue;
-			//Rcout << "living 4" << std::endl;
-			list.prepareDRankList();
+// 			// populate the DRankList object
+// 			//Rcout << "living 3" << std::endl;
+// 			list.refill(total, n);
+// 			//Rcout << "isRanked " << list.isRanked() <<std::endl;
+// 			//list.sortRankDRankList();
+// 			//Rcout << "isRanked " << list.isRanked() <<std::endl;
+// 			// test DRankLint internals
+// 			//continue;
+// 			//Rcout << "living 4" << std::endl;
+// 			list.prepareDRankList();
 
-			//Rcout << "finished with the prepare:" << std::endl;
-			//list.print();
-			//Rcout << "living 5" << std::endl;
-			tie = list.tieCoef;
+// 			//Rcout << "finished with the prepare:" << std::endl;
+// 			//list.print();
+// 			//Rcout << "living 5" << std::endl;
+// 			tie = list.tieCoef;
 
-			nInd=A.innerSize();
+// 			nInd=A.innerSize();
 
-			indRankSum.at(c_) = 0.0;
-			//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
-			for(j=0; j<nInd; ++j) {
-				//The A data is stored from 0 to nInd in the total vector which is basis for the list!
-				indRankSum.at(c_) += list.list.at(j).rank;
-			}
-			// never destroy the  DRankList - that kills the R gc() functionality!!
-			//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;
-			/* store the results */
-			res(id,0) = c_ + 1;
-			res(id,1) = logFCpass.at(c_);
-			res(id,2) = fracInA.at(c_);
-			res(id,3) = fracInB.at(c_);
-			res(id,4) = indRankSum.at(c_);
-			/* store the higher p value as we do drop all lower anyhow. */
-			//Rcout << "calc the stats value " << std::endl;
-			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
-			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
-			id ++;
-		}
-	}
+// 			indRankSum.at(c_) = 0.0;
+// 			//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
+// 			for(j=0; j<nInd; ++j) {
+// 				//The A data is stored from 0 to nInd in the total vector which is basis for the list!
+// 				indRankSum.at(c_) += list.list.at(j).rank;
+// 			}
+// 			// never destroy the  DRankList - that kills the R gc() functionality!!
+// 			//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;
+// 			/* store the results */
+// 			res(id,0) = c_ + 1;
+// 			res(id,1) = logFCpass.at(c_);
+// 			res(id,2) = fracInA.at(c_);
+// 			res(id,3) = fracInB.at(c_);
+// 			res(id,4) = indRankSum.at(c_);
+// 			/* store the higher p value as we do drop all lower anyhow. */
+// 			//Rcout << "calc the stats value " << std::endl;
+// 			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
+// 			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
+// 			id ++;
+// 		}
+// 	}
 
-	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
-	//Rcout << "n return values: " << pass <<std::endl;
-	return res;
-}
+// 	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
+// 	//Rcout << "n return values: " << pass <<std::endl;
+// 	return res;
+// }

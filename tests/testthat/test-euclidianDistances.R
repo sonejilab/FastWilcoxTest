@@ -1,5 +1,6 @@
 context( 'Cpp euclidian disnatces')
 
+prefix='./'
 
 x=  c( 1:10 )
 y = c ( 1:10 )

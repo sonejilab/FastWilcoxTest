@@ -58,6 +58,20 @@ LinLang <- function(X, Grouping, nGroup, minPct = 0.1, display_progress = TRUE) 
     .Call(`_FastWilcoxTest_LinLang`, X, Grouping, nGroup, minPct, display_progress)
 }
 
+#' @name LogNorm
+#' @aliases LogNorm,FastWilcoxTest-method
+#' @rdname LogNorm-methods
+#' @docType methods
+#' @description Normalize the single cell expression read counts values to a scale_factor.
+#' @param X the sparse Matrix (row = genes, col = cells)
+#' @param scale_factor the total read count to reach
+#' @param display_progress show a progress bar (TRUE)
+#' @title UMI normalize a single cell expression matrix
+#' @export
+LogNorm <- function(data, scale_factor, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_LogNorm`, data, scale_factor, display_progress)
+}
+
 #' @name NormalizeCells
 #' @aliases NormalizeCells,FastWilcoxTest-method
 #' @rdname NormalizeCells-methods
@@ -223,6 +237,37 @@ euclidian_distances <- function(X, Y, sum = FALSE) {
 #' @export
 euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
     .Call(`_FastWilcoxTest_euclidian_distances3d`, X, Y, Z, sum)
+}
+
+#' use the eucledian distance between one cell and all cells to find the order in the data
+#' @name eDist3d
+#' @aliases eDist3d,FastWilcoxTest-method
+#' @rdname eDist3d-methods
+#' @docType methods
+#' @description calculates the (3D) euclidian distance for a set of x and y values
+#' @param X one numeric vector
+#' @param Y the other vector
+#' @param Z the thrid dimension
+#' @param id which id to start from
+#' @title find the euclidian order in a 3D vector
+#' @export
+eDist3d <- function(X, Y, Z, id) {
+    .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+}
+
+#' use the eucledian distance between all cells to find the order in the data
+#' @name euclidian_order3d
+#' @aliases euclidian_order3d,FastWilcoxTest-method
+#' @rdname euclidian_order3d-methods
+#' @docType methods
+#' @description calculates the (3D) euclidian distance for a set of x and y values
+#' @param X one numeric vector
+#' @param Y the other vector
+#' @param Z the thrid dimension
+#' @title find the euclidian order in a 3D vector
+#' @export
+euclidian_order3d <- function(X, Y, Z) {
+    .Call(`_FastWilcoxTest_euclidian_order3d`, X, Y, Z)
 }
 
 toColNums <- function(data) {

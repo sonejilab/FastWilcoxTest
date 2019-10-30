@@ -60,6 +60,7 @@ public:
 	std::vector<DRank> list; /*!< Dynamic array of DRanks */
 	int len; /*!< Length of the array */
 	int ulen; /*!< Length of unique elements */
+	int origlen;
 	bool ranked = false;
 	double tieCoef; /*!< Tie coefficient used by the WMW test */
 
@@ -70,6 +71,7 @@ public:
 	DRankList() { len = 0; tieCoef = -1; ulen = 0;};
 	DRankList(int n) {
 		this->len = n;
+		this->origlen = n;
 		this->tieCoef = -1;
 		this->ulen = 0;
 		//Rcout << "C++ DRankList with " << this->len << " entries, " << this->ulen << " unique entries and "<< this->tieCoef << " ties:" << std::endl;
@@ -97,7 +99,8 @@ public:
 			::Rf_error("please use the new DRankList(n) constructor!");
 			//Rcout << "and it worked!" << list.size() << " is the new size" << std::endl;
 			return;
-		}else if ( len ==  newlen) {
+		}else if ( origlen >=  newlen) {
+
 			// just re_init them later
 			//Rcout << "using the old data as length should be ok" << std::endl;
 		}else { // new length!!
@@ -116,10 +119,11 @@ public:
 	};
 	void print(void){
 		Rcout << "C++ DRankList with " << len << " entries, " << ulen << " unique entries and "<< tieCoef << " ties:" << std::endl;
-		for(int i=0;i<len;++i) {
+		for(int i=0;i<origlen;++i) {
 			list.at(i).print();
 		}
 	};
+
 	/*! \brief test whether the DRankList has been ranked
 	 *
 	 * if sortRankDRankList has been run, the value will be 1, otherwise 0.
@@ -164,6 +168,7 @@ public:
 
 		ulen=ucount;
 	};
+
 	/*! \brief: rankDRankList
 	 * \param list A DRankList object
 	 * It calls sortRankDRankList if the DRankList has not been ranked before
@@ -226,10 +231,11 @@ public:
 		// keep the len info
 		this->tieCoef = -1;
 		this->ulen = 0;
-		for (int i=0; i <= this->len; ++i ){
+		for (int i=0; i <= this->origlen; ++i ){
 			list.at(i).purge();
 		}
 		this->len = 0; // the list has to be filled using add
+		this->origlen = 0;
 	};
 	// add a value that can have a different id than the internal position.
 	void add( int id, double value ){
