@@ -13,6 +13,10 @@ x <- as_FastWilcoxTest( dat )
 
 rm(dat)
 
+## nGenes for samples:
+all.equal( as.vector(apply( x@dat,2, function(d) { length(which(d > 0 )) } )), toColNotZero(x@dat) )
+
+
 
 #### normal add - should be ~7x faster ( 11.829 / 1.648 )
 
@@ -62,3 +66,5 @@ sumUp <- function( x, ids ) {
 system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
 
 all.equal(as.matrix(red), as.matrix(blue), 1e-7)
+
+
