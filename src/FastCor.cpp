@@ -7,6 +7,7 @@
 using namespace Rcpp;
 #include <R.h>
 #include <Rdefines.h>
+#include <numeric>
 
 // [[Rcpp::interfaces(r, cpp)]]
 
@@ -27,7 +28,7 @@ float correlationCoefficient( std::vector<double> X,  std::vector<double> Y)
     double squareSum_X = 0.0, squareSum_Y = 0.0;
 
     if ( X.size() != Y.size() )
-    	::Rf_error("Sorry, I need arrays of the same size X and Y" );
+    	::Rf_error("Sorry, I need arrays of the same size X and Y(%d, %d)", X.size(), Y.size() );
 
     int n = X.size();
 
@@ -126,5 +127,72 @@ std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<doubl
 }
 
 
+// [[Rcpp::interfaces(r, cpp)]]
+
+//' @name CorNormalMatrix
+//' @aliases CorNormalMatrixIDS,FastWilcoxTest-method
+//' @rdname CorNormalMatrixIDS-methods
+//' @docType methods
+//' @description simply calculate the correlation between X and Y 
+//' @param X the normal matrix
+//' @param CMP the vector to correlate every column of the matrix to
+//' @title Calculate correlation over two double vectors
+//' @export
+// [[Rcpp::export]]
+std::vector<double> CorNormalMatrix (NumericMatrix X, std::vector<double> CMP ) {
+	if ( X.nrow()  != CMP.size() )
+		::Rf_error("Sorry, I need arrays of the same size nrow(X) and length(CMP)(%d, %d)", X.nrow(), CMP.size() );
+
+	std::vector<double> A(X.nrow());
+	std::vector<double> ret(X.ncol(), 100);
+
+  	int nr = X.nrow();
+	for ( int i =0; i < X.ncol(); i++ ){
+		ret.at(i) = correlationCoefficient ( CMP,  std::vector<double>(X.begin() + (nr * i), X.begin() + ((nr * (i+1))) ) );
+	}
+	return ret;
+}
 
 
+//' @name rollSum
+//' @aliases rollSum,FastWilcoxTest-method
+//' @rdname rollSum-methods
+//' @docType methods
+//' @description calculate a rolling sum of the rows
+//' @param X the sparse matrix
+//' @param n the size of the rolling window
+//' @title rolling sum over sparse matrix
+//' @export
+// [[Rcpp::export]]
+NumericMatrix  rollSum (Eigen::SparseMatrix<double> X, int n){
+
+	X= X.transpose();
+
+	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
+
+	if ( X.innerSize() < n )
+		::Rf_error("Sorry, the total columns (ncol(X)) in the data are less than the width of the rolling window (m) (%d, %d)", X.innerSize(), n );
+	//NumericMatrix ret( nrow, ncol );
+	NumericMatrix ret( X.outerSize(), X.innerSize() -n+1 );
+	std::vector<double> A(X.innerSize());
+
+
+	//Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
+	for (int c_=0; c_ < X.outerSize(); ++c_){
+		std::fill(A.begin(), A.end(), 0.0);
+		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
+			A[it.row()] =  it.value();
+		}
+		//Rcout << "summing " <<  X.innerSize() << " values up "<< n << " and col " << c_ << " values" << std::endl;
+		//now iterate over all data
+		for ( int i=n; i < X.innerSize()+1; i++){
+			ret(c_, i-n) = std::accumulate(A.begin()+(i-n), A.begin()+i, 0.0);
+			//Rcout << "sum from " <<  (i-n) <<" to "<< i << " = "<<ret(c_, i-n) << ", ";
+		}
+		//Rcout << std::endl;
+	}
+
+	X.transpose();
+
+	return ret;
+}
