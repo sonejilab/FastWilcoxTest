@@ -14,7 +14,7 @@ x <- as_FastWilcoxTest( dat )
 rm(dat)
 
 ## nGenes for samples:
-all.equal( as.vector(apply( x@dat,2, function(d) { length(which(d > 0 )) } )), toColNotZero(x@dat) )
+all.equal( as.vector(apply( x@dat,2, function(d) { length(which(d > 0 )) } )), ColNotZero(x@dat) )
 
 
 
