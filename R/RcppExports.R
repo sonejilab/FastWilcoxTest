@@ -255,21 +255,6 @@ eDist3d <- function(X, Y, Z, id) {
     .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
 }
 
-#' use the eucledian distance between all cells to find the order in the data
-#' @name euclidian_order3d
-#' @aliases euclidian_order3d,FastWilcoxTest-method
-#' @rdname euclidian_order3d-methods
-#' @docType methods
-#' @description calculates the (3D) euclidian distance for a set of x and y values
-#' @param X one numeric vector
-#' @param Y the other vector
-#' @param Z the thrid dimension
-#' @title find the euclidian order in a 3D vector
-#' @export
-euclidian_order3d <- function(X, Y, Z) {
-    .Call(`_FastWilcoxTest_euclidian_order3d`, X, Y, Z)
-}
-
 toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
 }
