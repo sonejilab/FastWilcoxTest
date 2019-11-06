@@ -1,3 +1,7 @@
+# 0.1.11
+
+Added a rolling sum function (rollSum(x,n)) and a linear correlation method for the rollSum results (CorNormalMatrix)
+
 # 0.1.10
 
 Added timeline functionallity to fit a timeline into 3D points.

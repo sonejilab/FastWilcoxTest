@@ -42,6 +42,32 @@ CorMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
 }
 
+#' @name CorNormalMatrix
+#' @aliases CorNormalMatrixIDS,FastWilcoxTest-method
+#' @rdname CorNormalMatrixIDS-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y 
+#' @param X the normal matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @title Calculate correlation over two double vectors
+#' @export
+CorNormalMatrix <- function(X, CMP) {
+    .Call(`_FastWilcoxTest_CorNormalMatrix`, X, CMP)
+}
+
+#' @name rollSum
+#' @aliases rollSum,FastWilcoxTest-method
+#' @rdname rollSum-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the size of the rolling window
+#' @title rolling sum over sparse matrix
+#' @export
+rollSum <- function(X, n) {
+    .Call(`_FastWilcoxTest_rollSum`, X, n)
+}
+
 #' @name LinLang
 #' @aliases LinLang,FastWilcoxTest-method
 #' @rdname LinLang-methods
