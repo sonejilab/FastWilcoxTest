@@ -4,7 +4,7 @@
 \name{show}
 \alias{show}
 \alias{show,BioData-method}
-\title{description of function show}
+\title{show of function show}
 \usage{
 show(object)
 }

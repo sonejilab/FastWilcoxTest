@@ -30,7 +30,7 @@ for( i in 2:length(data$x)) {
 
 expect_equal( euclidian_order3d( data$x, data$y, data$z ), order )
 
-for ( i in 1:80 ) {
+for ( i in 1:300 ) {
 	change = sample( 1:length(data$x)) 
 	cat('.')
 	ot =  euclidian_order3d( data$x[change], data$y[change], data$z[change] )

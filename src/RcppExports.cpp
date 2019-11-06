@@ -527,42 +527,6 @@ RcppExport SEXP _FastWilcoxTest_eDist3d(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// euclidian_order3d
-std::vector<int> euclidian_order3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z);
-static SEXP _FastWilcoxTest_euclidian_order3d_try(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< std::vector<double> >::type X(XSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type Y(YSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type Z(ZSEXP);
-    rcpp_result_gen = Rcpp::wrap(euclidian_order3d(X, Y, Z));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _FastWilcoxTest_euclidian_order3d(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_FastWilcoxTest_euclidian_order3d_try(XSEXP, YSEXP, ZSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // toColNums
 std::vector<double> toColNums(Eigen::SparseMatrix<double> data);
 static SEXP _FastWilcoxTest_toColNums_try(SEXP dataSEXP) {
@@ -648,7 +612,6 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<double>(*euclidian_distances)(std::vector<double>,std::vector<double>,bool)");
         signatures.insert("std::vector<double>(*euclidian_distances3d)(std::vector<double>,std::vector<double>,std::vector<double>,bool)");
         signatures.insert("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int)");
-        signatures.insert("std::vector<int>(*euclidian_order3d)(std::vector<double>,std::vector<double>,std::vector<double>)");
         signatures.insert("std::vector<double>(*toColNums)(Eigen::SparseMatrix<double>)");
         signatures.insert("std::vector<double>(*ColNotZero)(Eigen::SparseMatrix<double>)");
     }
@@ -669,7 +632,6 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_distances", (DL_FUNC)_FastWilcoxTest_euclidian_distances_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_distances3d", (DL_FUNC)_FastWilcoxTest_euclidian_distances3d_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_eDist3d", (DL_FUNC)_FastWilcoxTest_eDist3d_try);
-    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_order3d", (DL_FUNC)_FastWilcoxTest_euclidian_order3d_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_toColNums", (DL_FUNC)_FastWilcoxTest_toColNums_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_ColNotZero", (DL_FUNC)_FastWilcoxTest_ColNotZero_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_RcppExport_validate", (DL_FUNC)_FastWilcoxTest_RcppExport_validate);
@@ -696,7 +658,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_euclidian_distances", (DL_FUNC) &_FastWilcoxTest_euclidian_distances, 3},
     {"_FastWilcoxTest_euclidian_distances3d", (DL_FUNC) &_FastWilcoxTest_euclidian_distances3d, 4},
     {"_FastWilcoxTest_eDist3d", (DL_FUNC) &_FastWilcoxTest_eDist3d, 4},
-    {"_FastWilcoxTest_euclidian_order3d", (DL_FUNC) &_FastWilcoxTest_euclidian_order3d, 3},
     {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
     {"_FastWilcoxTest_ColNotZero", (DL_FUNC) &_FastWilcoxTest_ColNotZero, 1},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},

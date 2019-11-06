@@ -6,11 +6,11 @@
 #' @param x the BioData object
 #' @param object  TEXT MISSING
 #' @return nothing
-#' @title description of function show
+#' @title show of function show
 #' @export 
 setGeneric('show', ## Name
 	function (object) { ## Argumente der generischen Funktion
-		standardGeneric('definition') ## der Aufruf von standardGeneric sorgt für das Dispatching
+		standardGeneric('show') ## der Aufruf von standardGeneric sorgt für das Dispatching
 	}
 )
 
