@@ -275,10 +275,11 @@ euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
 #' @param Y the other vector
 #' @param Z the thrid dimension
 #' @param id which id to start from
+#' @param distance the distance vector to fill up.
 #' @title find the euclidian order in a 3D vector
 #' @export
-eDist3d <- function(X, Y, Z, id) {
-    .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+eDist3d <- function(X, Y, Z, id, distance) {
+    .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id, distance)
 }
 
 toColNums <- function(data) {

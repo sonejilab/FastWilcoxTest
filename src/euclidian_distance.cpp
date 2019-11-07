@@ -80,9 +80,10 @@ std::vector<double> euclidian_distances3d( std::vector<double> X,  std::vector<d
 //' @title find the euclidian order in a 3D vector
 //' @export
 // [[Rcpp::export]]
-std::vector<double> eDist3d( std::vector<double> X,  std::vector<double> Y, std::vector<double> Z, int id) {
+std::vector<double> eDist3d( std::vector<double> X,  std::vector<double> Y, std::vector<double> Z, int id ) {
+
 	std::vector<double> distance ( X.size() );
-	std::fill(distance.begin(), distance.end(), 100000000.0);
+	std::fill(distance.begin(), distance.end(), 10000.0);
 	for ( int i = 0; i< X.size(); i++ ) {
 		//if ( ! X[i] == 0.0 & Y[i] == 0.0 ) {
 			distance[i] = sqrt(	pow( (X[i] - X[id]) ,2 ) +	pow( (Y[i] - Y[id]) ,2 ) + pow( (Z[i] - Z[id]) ,2 )  );
