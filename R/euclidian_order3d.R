@@ -20,7 +20,7 @@ setMethod('euclidian_order3d', signature = c ('numeric'),
 
 	order = vector('numeric', length(x))
 	t = vector('numeric', length(x))
-	o = eDist3d( x, y, z ,0, t)
+	o = eDist3d( x, y, z ,0)
 	
 	order[1] = order(o)[length(o)]
 	origIDs = 1:length(o)
@@ -44,7 +44,7 @@ setMethod('euclidian_order3d', signature = c ('numeric'),
 				}
 				return( change[ot] )
 			}
-			t =order( eDist3d( x[OK], y[OK], z[OK] , match( order[a], OK ) -1, t ) )
+			t =order( eDist3d( x[OK], y[OK], z[OK] , match( order[a], OK ) -1 ) )
 			order[i] = OK[t[2]]
 		}
 	}

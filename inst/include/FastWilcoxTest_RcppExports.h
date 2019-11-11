@@ -298,17 +298,17 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
-    inline std::vector<double> eDist3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, int id, std::vector<double> distance) {
-        typedef SEXP(*Ptr_eDist3d)(SEXP,SEXP,SEXP,SEXP,SEXP);
+    inline std::vector<double> eDist3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, int id) {
+        typedef SEXP(*Ptr_eDist3d)(SEXP,SEXP,SEXP,SEXP);
         static Ptr_eDist3d p_eDist3d = NULL;
         if (p_eDist3d == NULL) {
-            validateSignature("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int,std::vector<double>)");
+            validateSignature("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int)");
             p_eDist3d = (Ptr_eDist3d)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_eDist3d");
         }
         RObject rcpp_result_gen;
         {
             RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_eDist3d(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(id)), Shield<SEXP>(Rcpp::wrap(distance)));
+            rcpp_result_gen = p_eDist3d(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(Y)), Shield<SEXP>(Rcpp::wrap(Z)), Shield<SEXP>(Rcpp::wrap(id)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

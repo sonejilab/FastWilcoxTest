@@ -6,7 +6,7 @@
 \alias{eDist3d,FastWilcoxTest-method}
 \title{find the euclidian order in a 3D vector}
 \usage{
-eDist3d(X, Y, Z, id, distance)
+eDist3d(X, Y, Z, id)
 }
 \arguments{
 \item{X}{one numeric vector}
@@ -16,8 +16,6 @@ eDist3d(X, Y, Z, id, distance)
 \item{Z}{the thrid dimension}
 
 \item{id}{which id to start from}
-
-\item{distance}{the distance vector to fill up.}
 }
 \description{
 calculates the (3D) euclidian distance for a set of x and y values
