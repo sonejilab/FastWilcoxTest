@@ -561,24 +561,23 @@ RcppExport SEXP _FastWilcoxTest_euclidian_distances3d(SEXP XSEXP, SEXP YSEXP, SE
     return rcpp_result_gen;
 }
 // eDist3d
-std::vector<double> eDist3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, int id, std::vector<double> distance);
-static SEXP _FastWilcoxTest_eDist3d_try(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP idSEXP, SEXP distanceSEXP) {
+std::vector<double> eDist3d(std::vector<double> X, std::vector<double> Y, std::vector<double> Z, int id);
+static SEXP _FastWilcoxTest_eDist3d_try(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP idSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::traits::input_parameter< std::vector<double> >::type X(XSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type Y(YSEXP);
     Rcpp::traits::input_parameter< std::vector<double> >::type Z(ZSEXP);
     Rcpp::traits::input_parameter< int >::type id(idSEXP);
-    Rcpp::traits::input_parameter< std::vector<double> >::type distance(distanceSEXP);
-    rcpp_result_gen = Rcpp::wrap(eDist3d(X, Y, Z, id, distance));
+    rcpp_result_gen = Rcpp::wrap(eDist3d(X, Y, Z, id));
     return rcpp_result_gen;
 END_RCPP_RETURN_ERROR
 }
-RcppExport SEXP _FastWilcoxTest_eDist3d(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP idSEXP, SEXP distanceSEXP) {
+RcppExport SEXP _FastWilcoxTest_eDist3d(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP idSEXP) {
     SEXP rcpp_result_gen;
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_FastWilcoxTest_eDist3d_try(XSEXP, YSEXP, ZSEXP, idSEXP, distanceSEXP));
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_eDist3d_try(XSEXP, YSEXP, ZSEXP, idSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -684,7 +683,7 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
         signatures.insert("NumericMatrix(*StatTest)(Eigen::MappedSparseMatrix<double>,std::vector<int>,std::vector<int>,double,double,bool)");
         signatures.insert("std::vector<double>(*euclidian_distances)(std::vector<double>,std::vector<double>,bool)");
         signatures.insert("std::vector<double>(*euclidian_distances3d)(std::vector<double>,std::vector<double>,std::vector<double>,bool)");
-        signatures.insert("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int,std::vector<double>)");
+        signatures.insert("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int)");
         signatures.insert("std::vector<double>(*toColNums)(Eigen::SparseMatrix<double>)");
         signatures.insert("std::vector<double>(*ColNotZero)(Eigen::SparseMatrix<double>)");
     }
@@ -734,7 +733,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
     {"_FastWilcoxTest_euclidian_distances", (DL_FUNC) &_FastWilcoxTest_euclidian_distances, 3},
     {"_FastWilcoxTest_euclidian_distances3d", (DL_FUNC) &_FastWilcoxTest_euclidian_distances3d, 4},
-    {"_FastWilcoxTest_eDist3d", (DL_FUNC) &_FastWilcoxTest_eDist3d, 5},
+    {"_FastWilcoxTest_eDist3d", (DL_FUNC) &_FastWilcoxTest_eDist3d, 4},
     {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
     {"_FastWilcoxTest_ColNotZero", (DL_FUNC) &_FastWilcoxTest_ColNotZero, 1},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},
