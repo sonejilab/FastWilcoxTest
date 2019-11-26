@@ -11,7 +11,7 @@ In addition this package exports a cppWilcoxTest working on two vectors instead 
 You need the R devtools package.
 
 ```
-devtools::install_github('stela2502/FastWilcoxTest')
+devtools::install_github('sonejilab/FastWilcoxTest')
 ```
 
 
