@@ -1,3 +1,8 @@
+# 0.1.12
+
+Added a function to estimate the entropy of a grouping vector based on euclidian sistance spheres around each cell. 
+Based on specific drc 3D models to judge these.
+
 # 0.1.11
 
 Added a rolling sum function (rollSum(x,n)) and a linear correlation method for the rollSum results (CorNormalMatrix)
