@@ -232,6 +232,34 @@ collapse <- function(X, ids, type) {
     .Call(`_FastWilcoxTest_collapse`, X, ids, type)
 }
 
+#' @name entropy
+#' @aliases entropy,cellexalvrR-method
+#' @rdname entropy-methods
+#' @docType methods
+#' @description calculate the entropy of one double vector. Each number is a new group.
+#' @param X a double vector of group ids
+#' @title description of function entrop
+#' @export 
+entropy <- function(X) {
+    .Call(`_FastWilcoxTest_entropy`, X)
+}
+
+#' @name SphericEntropy
+#' @aliases SphericEntropy,cellexalvrR-method
+#' @rdname SphericEntropy-methods
+#' @docType methods
+#' @description Calculate a per cell entropy for a vector of radius cut-offs.
+#' @param X1 a double vector of dim1
+#' @param X2 a double vector of dim2
+#' @param X3 a double vector of dim3
+#' @param gvect a double vector of the output group
+#' @param radii a double vector of the euclidian max distances (radius) to be checked
+#' @title description of function entrop
+#' @export 
+SphericEntropy <- function(X1, X2, X3, gvect, radii) {
+    .Call(`_FastWilcoxTest_SphericEntropy`, X1, X2, X3, gvect, radii)
+}
+
 #' Calculate the euclidian distance between consecutive points
 #' Can also produce the integral values of the distance.
 #' @name euclidian_distances

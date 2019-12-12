@@ -256,6 +256,48 @@ namespace FastWilcoxTest {
         return Rcpp::as<NumericMatrix >(rcpp_result_gen);
     }
 
+    inline double entropy(std::vector<double> X) {
+        typedef SEXP(*Ptr_entropy)(SEXP);
+        static Ptr_entropy p_entropy = NULL;
+        if (p_entropy == NULL) {
+            validateSignature("double(*entropy)(std::vector<double>)");
+            p_entropy = (Ptr_entropy)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_entropy");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_entropy(Shield<SEXP>(Rcpp::wrap(X)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
+    inline NumericMatrix SphericEntropy(std::vector<double> X1, std::vector<double> X2, std::vector<double> X3, std::vector<double> gvect, std::vector<double> radii) {
+        typedef SEXP(*Ptr_SphericEntropy)(SEXP,SEXP,SEXP,SEXP,SEXP);
+        static Ptr_SphericEntropy p_SphericEntropy = NULL;
+        if (p_SphericEntropy == NULL) {
+            validateSignature("NumericMatrix(*SphericEntropy)(std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>,std::vector<double>)");
+            p_SphericEntropy = (Ptr_SphericEntropy)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_SphericEntropy");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_SphericEntropy(Shield<SEXP>(Rcpp::wrap(X1)), Shield<SEXP>(Rcpp::wrap(X2)), Shield<SEXP>(Rcpp::wrap(X3)), Shield<SEXP>(Rcpp::wrap(gvect)), Shield<SEXP>(Rcpp::wrap(radii)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
+    }
+
     inline std::vector<double> euclidian_distances(std::vector<double> X, std::vector<double> Y, bool sum = false) {
         typedef SEXP(*Ptr_euclidian_distances)(SEXP,SEXP,SEXP);
         static Ptr_euclidian_distances p_euclidian_distances = NULL;

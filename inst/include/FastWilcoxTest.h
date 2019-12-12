@@ -3,6 +3,8 @@
 
 #include "stat_rank.h"
 
+#include "Table.h"
+
 #include "FastWilcoxTest_RcppExports.h"
 
 #endif // RCPP_FastWilcoxTest_H_GEN_
