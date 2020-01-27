@@ -59,3 +59,9 @@ system.time( { stats = CorNormalMatrix(  rolled, 1:nrow(rolled) ) })
 system.time({ exp =  cor( rolled, 1:nrow(rolled)) })
 
 expect_equal( stats, as.vector(exp))
+
+start=1:100
+s = sample(20:40, 12)
+x@dat[1:20,1:20] = x@dat[1:20,1:20] * 2
+
+res = t(rollSumStart( Matrix::t(x@dat), 10, start))

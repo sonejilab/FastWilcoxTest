@@ -9,6 +9,8 @@ using namespace Rcpp;
 #include <Rdefines.h>
 #include <numeric>
 
+#include <progress.hpp>
+
 // [[Rcpp::interfaces(r, cpp)]]
 
 //' @name correlationCoefficient
@@ -193,6 +195,94 @@ NumericMatrix  rollSum (Eigen::SparseMatrix<double> X, int n){
 	}
 
 	X.transpose();
+
+	return ret;
+}
+
+//' Calculatethe rolling sum for a max distance from the start
+//' The location of each row is taken from the S (Start) vector
+//' In R the colnames need to be set to the input colnames whereas the start positions need to be set to chrXY : S[i] - (S[i]+n)
+//' @name rollSumStart
+//' @aliases rollSumStart,FastWilcoxTest-method
+//' @rdname rollSumStartStart-methods
+//' @docType methods
+//' @description calculate a rolling sum of the rows
+//' @param X the sparse matrix
+//' @param n the length of the rolling window
+//' @param S the start positions of each X row
+//' @title rolling sum over sparse matrix
+//' @export
+// [[Rcpp::export]]
+NumericMatrix  rollSumStart (Eigen::SparseMatrix<double> X, double n, std::vector<double> S ){
+
+	Rcout << "calculating log1p(rollSumStart) for " <<  X.outerSize() << " cells " << std::endl;
+
+	Progress p(X.outerSize(), true);
+
+	//X= X.transpose();
+
+	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
+
+	if ( S.back() < n )
+		::Rf_error("Sorry, the total dimension of S is smaller than the window dimension) (%d, %d)", S.back(), n );
+
+	//NumericMatrix ret( nrow, ncol );
+	std::vector<double> A (X.innerSize());
+
+	double tmp = 0;
+
+	std::vector<int> addN (0);
+	std::vector<int> start (0);
+	// calculate that only once!
+	for ( int i = 0; i<  S.size()-1; i ++ ) {
+		for ( int a = i; a < S.size(); a++) {
+			// does the distance exceed the max didstance?
+			if ( S[a] - S[i] >= n ){
+				addN.push_back( a -i );
+				start.push_back(i);
+//				Rcout << "S[ ->i<- ] "<< S[i] << " is more than n "<< n <<" bp away from S[-> a <-] "<< S[a] << "addN[i] = " << addN[i]<< std::endl;
+				i = i + ( a-i ) /2;
+				break;
+			}
+		}
+	}
+	NumericMatrix ret( addN.size(), X.outerSize() +2 );
+	for ( int i = 0; i < addN.size(); i++ ){
+		ret(i,0) = start[i]*1.0;
+		ret(i,1) = addN[i]*1.0;
+	}
+
+	for (int c_=0; c_ < X.outerSize(); ++c_){
+		std::fill(A.begin(), A.end(), 0.0);
+		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
+			A[it.row()] =  it.value();
+		}
+		p.increment();
+		//Rcout << "summing " <<  X.innerSize() << " values for cell col " << c_ << std::endl;
+		//now iterate over all data
+		for ( int i=0; i < addN.size(); i++){
+			
+			//Rcout << "addN = " << addN << std::endl;
+			if ( addN[i] < 5 ){
+				ret(i, c_+2) = 0.0;
+			}
+			else {
+				ret(i, c_+2) = log1p(std::accumulate(A.begin()+(start[i]), A.begin()+start[i]+addN[i], 0.0));
+				// tmp = std::accumulate(A.begin()+(i), A.begin()+i+addN[i], 0.0);
+				// if ( tmp > 0 ) {
+				// 	ret(c_, i) = tmp / addN[i];
+				// }else {
+				// 	ret(c_, i) = 0.0;
+				// }
+			}
+			//Rcout << "result = "<<  ret(c_, i) <<" for cell"<< c_ << " and addN = " << addN[i] << " (i="<<i<<" of "<< addN.size() <<")"<< std::endl;
+		}
+		//break;
+		//Rcout << std::endl;
+	}
+
+	//X.transpose();
+	// colnames(ret) are the colnames of the input matrix and are unknown to c++
 
 	return ret;
 }

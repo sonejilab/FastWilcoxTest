@@ -5,8 +5,7 @@
 \alias{StatTest,FastWilcoxTest-method}
 \title{StatTest runs wilcox test on the columns of the sparse matrix}
 \usage{
-StatTest(X, interest, background, logFCcut = 1, minPct = 0.1,
-  onlyPos = FALSE)
+StatTest(X, interest, background, logFCcut = 1, minPct = 0.1, onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the sparse matrix (tests are applied to columns!)}

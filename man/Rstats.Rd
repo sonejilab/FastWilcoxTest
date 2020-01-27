@@ -5,8 +5,7 @@
 \alias{Rstats,matrix-method}
 \title{description of function Rstats}
 \usage{
-\S4method{Rstats}{matrix}(X, interest, backgound, logFCcut = 1,
-  minPct = 0.1, onlyPos = FALSE)
+\S4method{Rstats}{matrix}(X, interest, backgound, logFCcut = 1, minPct = 0.1, onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the normal matrix}
@@ -25,8 +24,8 @@ min.pct cells in either of the two populations. Meant to speed up the function}
 \description{
 use the R wilcox.test function instead of a c++ version.
 }
-\section{Methods (by class)}{
+\section{Functions}{
 \itemize{
-\item \code{matrix}: matrix
+\item \code{Rstats,matrix-method}: matrix
 }}
 

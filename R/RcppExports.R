@@ -68,6 +68,23 @@ rollSum <- function(X, n) {
     .Call(`_FastWilcoxTest_rollSum`, X, n)
 }
 
+#' Calculatethe rolling sum for a max distance from the start
+#' The location of each row is taken from the S (Start) vector
+#' In R the colnames need to be set to the input colnames whereas the start positions need to be set to chrXY : S[i] - (S[i]+n)
+#' @name rollSumStart
+#' @aliases rollSumStart,FastWilcoxTest-method
+#' @rdname rollSumStartStart-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the length of the rolling window
+#' @param S the start positions of each X row
+#' @title rolling sum over sparse matrix
+#' @export
+rollSumStart <- function(X, n, S) {
+    .Call(`_FastWilcoxTest_rollSumStart`, X, n, S)
+}
+
 #' @name LinLang
 #' @aliases LinLang,FastWilcoxTest-method
 #' @rdname LinLang-methods
