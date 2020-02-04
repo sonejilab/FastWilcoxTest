@@ -298,6 +298,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// ShuffleMatrix
+Eigen::SparseMatrix<double> ShuffleMatrix(Eigen::SparseMatrix<double> X);
+RcppExport SEXP _FastWilcoxTest_ShuffleMatrix(SEXP XSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    rcpp_result_gen = Rcpp::wrap(ShuffleMatrix(X));
+    return rcpp_result_gen;
+END_RCPP
+}
 // logFC
 double logFC(std::vector<double> A, std::vector<double> B);
 static SEXP _FastWilcoxTest_logFC_try(SEXP ASEXP, SEXP BSEXP) {
@@ -837,6 +848,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_LogNorm", (DL_FUNC) &_FastWilcoxTest_LogNorm, 3},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
     {"_FastWilcoxTest_NormalizeSamples", (DL_FUNC) &_FastWilcoxTest_NormalizeSamples, 3},
+    {"_FastWilcoxTest_ShuffleMatrix", (DL_FUNC) &_FastWilcoxTest_ShuffleMatrix, 1},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
     {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},

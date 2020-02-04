@@ -143,6 +143,17 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_NormalizeSamples`, X, scaleFactor, display_progress)
 }
 
+#' @title reshuffle data based on a sparse matrix assuming max double the amount of entries not being zero
+#' @aliases ShuffleMatrix,FastWilcoxTest-method
+#' @rdname ShuffleMatrix
+#' @description replacing the synthetic1 function of RFclust.SGE package 
+#' @param X the sparse matrix (tests are applied to columns!)
+#' @return a matrix with x, j and i avalues to be put into a new sparse matrix
+#' @export
+ShuffleMatrix <- function(X) {
+    .Call(`_FastWilcoxTest_ShuffleMatrix`, X)
+}
+
 #' @title logFC calculates a log fold change between the two input vectors
 #' @aliases logFC,FastWilcoxTest-method
 #' @rdname logFC
