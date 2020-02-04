@@ -3,11 +3,10 @@
 \docType{methods}
 \name{rollSumStart}
 \alias{rollSumStart}
-\alias{rollSum}
 \alias{rollSumStart,FastWilcoxTest-method}
 \title{rolling sum over sparse matrix}
 \usage{
-rollSum(X, n)
+rollSumStart(X, n, S)
 }
 \arguments{
 \item{X}{the sparse matrix}
@@ -21,4 +20,6 @@ calculate a rolling sum of the rows
 }
 \details{
 Calculatethe rolling sum for a max distance from the start
+The location of each row is taken from the S (Start) vector
+In R the colnames need to be set to the input colnames whereas the start positions need to be set to chrXY : S[i] - (S[i]+n)
 }

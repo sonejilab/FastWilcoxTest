@@ -10,4 +10,12 @@ x <- as_FastWilcoxTest( dat )
 
 rm(dat)
 
-ShuffleMatrix( x@dat)[1:10,1:10]
+d = ShuffleMatrix( x@dat)
+
+t1 =apply( d, 1, var )
+
+d = ShuffleMatrix( x@dat)
+
+t2 =apply( d, 1, var )
+
+expect_true( !( all.equal(t1, t2) == TRUE),label="creating different results every time" )
