@@ -148,10 +148,11 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
 #' @rdname ShuffleMatrix
 #' @description replacing the synthetic1 function of RFclust.SGE package 
 #' @param X the sparse matrix (tests are applied to columns!)
+#' @param maxCols the amount of random columns to send back (default 50)
 #' @return a matrix with x, j and i avalues to be put into a new sparse matrix
 #' @export
-ShuffleMatrix <- function(X) {
-    .Call(`_FastWilcoxTest_ShuffleMatrix`, X)
+ShuffleMatrix <- function(X, maxCols = 50L) {
+    .Call(`_FastWilcoxTest_ShuffleMatrix`, X, maxCols)
 }
 
 #' @title logFC calculates a log fold change between the two input vectors
@@ -335,6 +336,20 @@ euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
 #' @export
 eDist3d <- function(X, Y, Z, id) {
     .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+}
+
+#' @title extract proximity for the ranger results
+#' copied from https://github.com/imbs-hl/ranger/issues/234
+#' @aliases extract_proximity_oob,FastWilcoxTest-method
+#' @rdname extract_proximity_oob
+#' @description calculate the proximity matrix
+#' @param pred the predictions created from a predict(rangerRF, data, type = "terminalNodes")$predictions
+#' @param prox an empty matrix with dim(pred) dimensions
+#' @param inbag the inbag information from the ranger prediction run (rangerRF$inbag.counts)
+#' @return prox with correct values
+#' @export
+extract_proximity_oob <- function(pred, prox, inbag) {
+    .Call(`_FastWilcoxTest_extract_proximity_oob`, pred, prox, inbag)
 }
 
 toColNums <- function(data) {

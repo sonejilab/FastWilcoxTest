@@ -299,13 +299,14 @@ BEGIN_RCPP
 END_RCPP
 }
 // ShuffleMatrix
-Eigen::SparseMatrix<double> ShuffleMatrix(Eigen::SparseMatrix<double> X);
-RcppExport SEXP _FastWilcoxTest_ShuffleMatrix(SEXP XSEXP) {
+Eigen::SparseMatrix<double> ShuffleMatrix(Eigen::SparseMatrix<double> X, int maxCols);
+RcppExport SEXP _FastWilcoxTest_ShuffleMatrix(SEXP XSEXP, SEXP maxColsSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
-    rcpp_result_gen = Rcpp::wrap(ShuffleMatrix(X));
+    Rcpp::traits::input_parameter< int >::type maxCols(maxColsSEXP);
+    rcpp_result_gen = Rcpp::wrap(ShuffleMatrix(X, maxCols));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -716,6 +717,19 @@ RcppExport SEXP _FastWilcoxTest_eDist3d(SEXP XSEXP, SEXP YSEXP, SEXP ZSEXP, SEXP
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// extract_proximity_oob
+NumericMatrix extract_proximity_oob(NumericMatrix pred, NumericMatrix prox, NumericMatrix inbag);
+RcppExport SEXP _FastWilcoxTest_extract_proximity_oob(SEXP predSEXP, SEXP proxSEXP, SEXP inbagSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< NumericMatrix >::type pred(predSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type prox(proxSEXP);
+    Rcpp::traits::input_parameter< NumericMatrix >::type inbag(inbagSEXP);
+    rcpp_result_gen = Rcpp::wrap(extract_proximity_oob(pred, prox, inbag));
+    return rcpp_result_gen;
+END_RCPP
+}
 // toColNums
 std::vector<double> toColNums(Eigen::SparseMatrix<double> data);
 static SEXP _FastWilcoxTest_toColNums_try(SEXP dataSEXP) {
@@ -848,7 +862,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_LogNorm", (DL_FUNC) &_FastWilcoxTest_LogNorm, 3},
     {"_FastWilcoxTest_NormalizeCells", (DL_FUNC) &_FastWilcoxTest_NormalizeCells, 3},
     {"_FastWilcoxTest_NormalizeSamples", (DL_FUNC) &_FastWilcoxTest_NormalizeSamples, 3},
-    {"_FastWilcoxTest_ShuffleMatrix", (DL_FUNC) &_FastWilcoxTest_ShuffleMatrix, 1},
+    {"_FastWilcoxTest_ShuffleMatrix", (DL_FUNC) &_FastWilcoxTest_ShuffleMatrix, 2},
     {"_FastWilcoxTest_logFC", (DL_FUNC) &_FastWilcoxTest_logFC, 2},
     {"_FastWilcoxTest_minusOne", (DL_FUNC) &_FastWilcoxTest_minusOne, 1},
     {"_FastWilcoxTest_plusOne", (DL_FUNC) &_FastWilcoxTest_plusOne, 1},
@@ -863,6 +877,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_euclidian_distances", (DL_FUNC) &_FastWilcoxTest_euclidian_distances, 3},
     {"_FastWilcoxTest_euclidian_distances3d", (DL_FUNC) &_FastWilcoxTest_euclidian_distances3d, 4},
     {"_FastWilcoxTest_eDist3d", (DL_FUNC) &_FastWilcoxTest_eDist3d, 4},
+    {"_FastWilcoxTest_extract_proximity_oob", (DL_FUNC) &_FastWilcoxTest_extract_proximity_oob, 3},
     {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
     {"_FastWilcoxTest_ColNotZero", (DL_FUNC) &_FastWilcoxTest_ColNotZero, 1},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},

@@ -11,20 +11,16 @@ using namespace Rcpp;
 //' @rdname ShuffleMatrix
 //' @description replacing the synthetic1 function of RFclust.SGE package 
 //' @param X the sparse matrix (tests are applied to columns!)
+//' @param maxCols the amount of random columns to send back (default 50)
 //' @return a matrix with x, j and i avalues to be put into a new sparse matrix
 //' @export
 // [[Rcpp::export]]
- Eigen::SparseMatrix<double> ShuffleMatrix (Eigen::SparseMatrix<double> X) {
+ Eigen::SparseMatrix<double> ShuffleMatrix (Eigen::SparseMatrix<double> X, int maxCols = 50) {
 
-	Eigen::SparseMatrix<double> mat(X.innerSize(), X.outerSize());
-	int S=0;
-	if ( X.nonZeros() < X.innerSize() * X.outerSize() ) {
-		//allow at max twice the non zeros??
-		S = X.nonZeros() * 2;
-	}else {
-		S = X.nonZeros();
-	}
-	Rcout << "reserving " <<  S << " entries" << std::endl;
+	Eigen::SparseMatrix<double> mat(X.innerSize(), maxCols );
+
+	int S= X.innerSize() * maxCols;
+	//Rcout << "reserving " <<  S << " entries" << std::endl;
 
 	mat.reserve( S );
 
@@ -35,7 +31,7 @@ using namespace Rcpp;
 	int prob =1;
 	int i;
 	
-	for (int c_=0; c_ < X.outerSize(); ++c_){
+	for (int c_=0; c_ < maxCols; ++c_){
 		//std::fill(A.begin(), A.end(), 0.0);
 		A.fill(0.0);
 

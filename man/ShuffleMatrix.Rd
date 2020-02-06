@@ -5,10 +5,12 @@
 \alias{ShuffleMatrix,FastWilcoxTest-method}
 \title{reshuffle data based on a sparse matrix assuming max double the amount of entries not being zero}
 \usage{
-ShuffleMatrix(X)
+ShuffleMatrix(X, maxCols = 50L)
 }
 \arguments{
 \item{X}{the sparse matrix (tests are applied to columns!)}
+
+\item{maxCols}{the amount of random columns to send back (default 50)}
 }
 \value{
 a matrix with x, j and i avalues to be put into a new sparse matrix
