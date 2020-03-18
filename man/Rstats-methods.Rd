@@ -6,8 +6,7 @@
 \alias{Rstats,dgCMatrix-method}
 \title{Run the 'wilcoxTest' on a sparse matrix like the c++ 'StatsTest'}
 \usage{
-\S4method{Rstats}{dgCMatrix}(X, interest, backgound, logFCcut = 1,
-  minPct = 0.1, onlyPos = FALSE)
+\S4method{Rstats}{dgCMatrix}(X, interest, backgound, logFCcut = 1, minPct = 0.1, onlyPos = FALSE)
 }
 \arguments{
 \item{X}{the sparse matrix}

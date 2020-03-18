@@ -4,7 +4,9 @@
 \name{x}
 \alias{x}
 \title{A simple FastWilcoxTest object containing random data to run the tests on.}
-\format{FastWilcoxTest}
+\format{
+FastWilcoxTest
+}
 \usage{
 x
 }
