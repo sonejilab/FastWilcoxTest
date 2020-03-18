@@ -55,19 +55,6 @@ CorNormalMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorNormalMatrix`, X, CMP)
 }
 
-#' @name rollSum
-#' @aliases rollSum,FastWilcoxTest-method
-#' @rdname rollSum-methods
-#' @docType methods
-#' @description calculate a rolling sum of the rows
-#' @param X the sparse matrix
-#' @param n the size of the rolling window
-#' @title rolling sum over sparse matrix
-#' @export
-rollSum <- function(X, n) {
-    .Call(`_FastWilcoxTest_rollSum`, X, n)
-}
-
 #' @name LinLang
 #' @aliases LinLang,FastWilcoxTest-method
 #' @rdname LinLang-methods
@@ -307,6 +294,36 @@ euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
 #' @export
 eDist3d <- function(X, Y, Z, id) {
     .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+}
+
+#' @name rollSum
+#' @aliases rollSum,FastWilcoxTest-method
+#' @rdname rollSum-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the size of the rolling window
+#' @title rolling sum over sparse matrix
+#' @export
+rollSum <- function(X, n) {
+    .Call(`_FastWilcoxTest_rollSum`, X, n)
+}
+
+#' The numbers start at the first row and end at the last row having a full sized widow
+#' 
+#' @name rollAreaSum
+#' @aliases rollAreaSum,FastWilcoxTest-method
+#' @rdname rollAreaSum-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param size the size of the rolling window
+#' @param location the location for every row in the matrix
+#' @param funcID two functions : 1 == sum; 2 == mean
+#' @title rolling sum over sparse matrix
+#' @export
+rollAreaSum <- function(X, location, funcID, size) {
+    .Call(`_FastWilcoxTest_rollAreaSum`, X, location, funcID, size)
 }
 
 toColNums <- function(data) {
