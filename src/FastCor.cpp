@@ -166,7 +166,8 @@ std::vector<double> CorNormalMatrix (NumericMatrix X, std::vector<double> CMP ) 
 //' @title rolling sum over sparse matrix
 //' @export
 // [[Rcpp::export]]
-NumericMatrix  rollSum (Eigen::SparseMatrix<double> X, int n){
+NumericMatrix  rollSum
+ (Eigen::SparseMatrix<double> X, int n){
 
 	X= X.transpose();
 

@@ -1,5 +1,7 @@
 context( 'entropy')
 
+skip('useless and depricated')
+
 entR <- function (d) {
     if ( length(d) < 5) {
       return( 0 )
