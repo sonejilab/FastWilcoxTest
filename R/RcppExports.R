@@ -28,6 +28,21 @@ CorMatrixIDS <- function(X, CMP, ids) {
     .Call(`_FastWilcoxTest_CorMatrixIDS`, X, CMP, ids)
 }
 
+#' @name CorMatrixIDS_N
+#' @aliases CorMatrixIDS_N,FastWilcoxTest-method
+#' @rdname CorMatrixIDS_N-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y (slower than apply cor)
+#' @param X the sparse matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @param ids the rows of the matrix to correlate to
+#' @title Calculate correlation over two double vectors
+#' @returns a matrix of Rho and n (cells where both values where > 0)
+#' @export
+CorMatrixIDS_N <- function(X, CMP, ids) {
+    .Call(`_FastWilcoxTest_CorMatrixIDS_N`, X, CMP, ids)
+}
+
 #' @name CorMatrix
 #' @aliases CorMatrix,FastWilcoxTest-method
 #' @rdname CorMatrix-methods
@@ -40,6 +55,21 @@ CorMatrixIDS <- function(X, CMP, ids) {
 #' @export
 CorMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
+}
+
+#' @name CorMatrix_N
+#' @aliases CorMatrix_N,FastWilcoxTest-method
+#' @rdname CorMatrix_N-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y
+#' approximately 3x faster than an apply using the R cor function on sparse data
+#' @param X the sparse matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @title Calculate correlation over two double vectors
+#' @returns a matrix of Rho and n (cells where both values where > 0)
+#' @export
+CorMatrix_N <- function(X, CMP) {
+    .Call(`_FastWilcoxTest_CorMatrix_N`, X, CMP)
 }
 
 #' @name CorNormalMatrix

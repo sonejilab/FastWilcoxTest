@@ -80,6 +80,42 @@ RcppExport SEXP _FastWilcoxTest_CorMatrixIDS(SEXP XSEXP, SEXP CMPSEXP, SEXP idsS
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// CorMatrixIDS_N
+NumericMatrix CorMatrixIDS_N(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids);
+static SEXP _FastWilcoxTest_CorMatrixIDS_N_try(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Eigen::MappedSparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
+    Rcpp::traits::input_parameter< std::vector<int> >::type ids(idsSEXP);
+    rcpp_result_gen = Rcpp::wrap(CorMatrixIDS_N(X, CMP, ids));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_CorMatrixIDS_N(SEXP XSEXP, SEXP CMPSEXP, SEXP idsSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_CorMatrixIDS_N_try(XSEXP, CMPSEXP, idsSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // CorMatrix
 std::vector<double> CorMatrix(Eigen::SparseMatrix<double> X, std::vector<double> CMP);
 static SEXP _FastWilcoxTest_CorMatrix_try(SEXP XSEXP, SEXP CMPSEXP) {
@@ -96,6 +132,41 @@ RcppExport SEXP _FastWilcoxTest_CorMatrix(SEXP XSEXP, SEXP CMPSEXP) {
     {
         Rcpp::RNGScope rcpp_rngScope_gen;
         rcpp_result_gen = PROTECT(_FastWilcoxTest_CorMatrix_try(XSEXP, CMPSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
+// CorMatrix_N
+NumericMatrix CorMatrix_N(Eigen::SparseMatrix<double> X, std::vector<double> CMP);
+static SEXP _FastWilcoxTest_CorMatrix_N_try(SEXP XSEXP, SEXP CMPSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
+    Rcpp::traits::input_parameter< std::vector<double> >::type CMP(CMPSEXP);
+    rcpp_result_gen = Rcpp::wrap(CorMatrix_N(X, CMP));
+    return rcpp_result_gen;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_CorMatrix_N(SEXP XSEXP, SEXP CMPSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_CorMatrix_N_try(XSEXP, CMPSEXP));
     }
     Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
     if (rcpp_isInterrupt_gen) {
@@ -735,7 +806,9 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
     if (signatures.empty()) {
         signatures.insert("float(*correlationCoefficient)(std::vector<double>,std::vector<double>)");
         signatures.insert("std::vector<double>(*CorMatrixIDS)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
+        signatures.insert("NumericMatrix(*CorMatrixIDS_N)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
         signatures.insert("std::vector<double>(*CorMatrix)(Eigen::SparseMatrix<double>,std::vector<double>)");
+        signatures.insert("NumericMatrix(*CorMatrix_N)(Eigen::SparseMatrix<double>,std::vector<double>)");
         signatures.insert("std::vector<double>(*CorNormalMatrix)(NumericMatrix,std::vector<double>)");
         signatures.insert("NumericMatrix(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,double,bool)");
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
@@ -758,7 +831,9 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
 RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() { 
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_correlationCoefficient", (DL_FUNC)_FastWilcoxTest_correlationCoefficient_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrixIDS", (DL_FUNC)_FastWilcoxTest_CorMatrixIDS_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrixIDS_N", (DL_FUNC)_FastWilcoxTest_CorMatrixIDS_N_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix", (DL_FUNC)_FastWilcoxTest_CorMatrix_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix_N", (DL_FUNC)_FastWilcoxTest_CorMatrix_N_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorNormalMatrix", (DL_FUNC)_FastWilcoxTest_CorNormalMatrix_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_LinLang", (DL_FUNC)_FastWilcoxTest_LinLang_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_logFC", (DL_FUNC)_FastWilcoxTest_logFC_try);
@@ -780,7 +855,9 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
 static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_correlationCoefficient", (DL_FUNC) &_FastWilcoxTest_correlationCoefficient, 2},
     {"_FastWilcoxTest_CorMatrixIDS", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS, 3},
+    {"_FastWilcoxTest_CorMatrixIDS_N", (DL_FUNC) &_FastWilcoxTest_CorMatrixIDS_N, 3},
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
+    {"_FastWilcoxTest_CorMatrix_N", (DL_FUNC) &_FastWilcoxTest_CorMatrix_N, 2},
     {"_FastWilcoxTest_CorNormalMatrix", (DL_FUNC) &_FastWilcoxTest_CorNormalMatrix, 2},
     {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 5},
     {"_FastWilcoxTest_LogNorm", (DL_FUNC) &_FastWilcoxTest_LogNorm, 3},
