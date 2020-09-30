@@ -67,6 +67,27 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline NumericMatrix CorMatrixIDS_N(Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids) {
+        typedef SEXP(*Ptr_CorMatrixIDS_N)(SEXP,SEXP,SEXP);
+        static Ptr_CorMatrixIDS_N p_CorMatrixIDS_N = NULL;
+        if (p_CorMatrixIDS_N == NULL) {
+            validateSignature("NumericMatrix(*CorMatrixIDS_N)(Eigen::MappedSparseMatrix<double>,std::vector<double>,std::vector<int>)");
+            p_CorMatrixIDS_N = (Ptr_CorMatrixIDS_N)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrixIDS_N");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_CorMatrixIDS_N(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(CMP)), Shield<SEXP>(Rcpp::wrap(ids)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
+    }
+
     inline std::vector<double> CorMatrix(Eigen::SparseMatrix<double> X, std::vector<double> CMP) {
         typedef SEXP(*Ptr_CorMatrix)(SEXP,SEXP);
         static Ptr_CorMatrix p_CorMatrix = NULL;
@@ -86,6 +107,27 @@ namespace FastWilcoxTest {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
+    }
+
+    inline NumericMatrix CorMatrix_N(Eigen::SparseMatrix<double> X, std::vector<double> CMP) {
+        typedef SEXP(*Ptr_CorMatrix_N)(SEXP,SEXP);
+        static Ptr_CorMatrix_N p_CorMatrix_N = NULL;
+        if (p_CorMatrix_N == NULL) {
+            validateSignature("NumericMatrix(*CorMatrix_N)(Eigen::SparseMatrix<double>,std::vector<double>)");
+            p_CorMatrix_N = (Ptr_CorMatrix_N)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix_N");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_CorMatrix_N(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(CMP)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
     }
 
     inline std::vector<double> CorNormalMatrix(NumericMatrix X, std::vector<double> CMP) {

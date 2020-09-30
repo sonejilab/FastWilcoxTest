@@ -1,3 +1,8 @@
+# 0.1.13
+
+CorMatrixIDS_N and CorMatrix_N now return the t value and the n cells expressing the gene correlated to for each cor result.
+
+
 # 0.1.12
 
 Added a function to estimate the entropy of a grouping vector based on euclidian sistance spheres around each cell. 
