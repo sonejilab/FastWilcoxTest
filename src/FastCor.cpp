@@ -205,7 +205,7 @@ NumericMatrix  CorMatrix_N (Eigen::SparseMatrix<double> X, std::vector<double> C
 			
 		}
 
-		Rcout << "n = " <<  n << std::endl;
+		//Rcout << "n = " <<  n << std::endl;
 		if ( n > 2){
 			ret(c_, 0) = correlationCoefficient ( CMP, A );
 			ret(c_, 1) = n;
