@@ -140,7 +140,7 @@ NumericMatrix ZScoreAll (Eigen::SparseMatrix<double> data, bool display_progress
 			iter++;
 		}
 		double mean = sum / data.innerSize();
-		Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
+		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
 		sum = 0.0;
 		iter= 0;
 
@@ -164,8 +164,8 @@ NumericMatrix ZScoreAll (Eigen::SparseMatrix<double> data, bool display_progress
 			sd = sqrt(sum/( data.innerSize()-1)); //to copy the R implementation
 		}
 
-		Rcout << " and sd = "<< sd << std::endl;
-		Rcout << k << " mean " << mean << " and sd " << sd << "with count "<< c<< std::endl;
+		//Rcout << " and sd = "<< sd << std::endl;
+		//Rcout << k << " mean " << mean << " and sd " << sd << "with count "<< c<< std::endl;
 		
 		iter= 0;
 		
