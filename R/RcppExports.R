@@ -209,6 +209,19 @@ ZScore <- function(data, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
 
+#' @name ZScoreAll
+#' @aliases ZScoreAll,FastWilcoxTest-method
+#' @rdname ZScoreAll-methods
+#' @docType methods
+#' @description A sparse matrix z. score function returning the same as a normal one
+#' @param data the sparse Matrix
+#' @param display_progress show a progress bar (TRUE)
+#' @title Calculate z score for a sparse matrix
+#' @export
+ZScoreAll <- function(data, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_ZScoreAll`, data, display_progress)
+}
+
 #' @name MEAN_STD
 #' @aliases MEAN_STD,FastWilcoxTest-method
 #' @rdname MEAN_STD-methods
