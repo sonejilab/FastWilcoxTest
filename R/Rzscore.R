@@ -45,3 +45,23 @@ setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 		), sparse =T)
 	invisible(obj)
 } )
+
+
+#' @name RzscoreAll
+#' @aliases RzscoreAll,FastWilcoxTest-method
+#' @rdname RzscoreAll-methods
+#' @docType methods
+#' @description calculate the z.score as the cpp function does it
+#' @param obj the FastWilcoxTest
+#' @title description of function Rzscore
+#' @export 
+if ( ! isGeneric('RzscoreAll') ){setGeneric('RzscoreAll', ## Name
+	function ( obj ) { 
+		standardGeneric('RzscoreAll')
+	}
+) }
+
+setMethod('RzscoreAll', signature = c ('FastWilcoxTest'),
+	definition = function ( obj ) {
+		t(apply( obj@dat, 1 , function(d) { (d - mean(d)) / sd(d) } ))
+} )
