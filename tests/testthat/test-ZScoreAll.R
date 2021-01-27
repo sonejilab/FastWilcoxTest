@@ -1,8 +1,8 @@
 context( 'Cpp z.score')
 
 set.seed(1)
-ncol = 100
-nrow=900
+ncol = 1000
+nrow=9000
 dat = matrix(round(rnorm(ncol*nrow,mean = 3, sd = 5)),ncol=ncol)
 dat[which(dat < 1)] = 0
 colnames(dat) <- paste('Sample', 1:ncol)
@@ -13,7 +13,8 @@ x <- as_FastWilcoxTest( dat )
 rm(dat)
 
 bad = sample( 1:length( x@dat@x), round( length( x@dat@x) / 100) )  
-x@dat@x[ bad ] = -1 # simulate my normalization result
+x@dat@x[ bad ] = 0 # simulate my normalization result
+
 
 system.time({zscored = ZScoreAll(x@dat)})
 

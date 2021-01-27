@@ -2,7 +2,7 @@ context( 'Cpp z.score')
 
 set.seed(1)
 ncol = 100
-nrow=90
+nrow=900
 dat = matrix(round(rnorm(ncol*nrow,mean = 3, sd = 5)),ncol=ncol)
 dat[which(dat < 1)] = 0
 colnames(dat) <- paste('Sample', 1:ncol)
@@ -86,4 +86,3 @@ mBad[2,c(2,5,8,1)] = c( 9.166667, 9.166667, 10.5, 11.16667 )
 mBad[3,4] = 10
 
 expect_equal( Matrix::Matrix(mBad, sparse=T)@x , zBad@x, 1e-5 )
-
