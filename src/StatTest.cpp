@@ -178,15 +178,15 @@ std::vector<double> cppWilcoxTest(std::vector<double> x, std::vector<double> y, 
 //' @export
 // [[Rcpp::export]]
 NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> interest,
-		std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1, bool onlyPos=false  ){
+	std::vector<int> background, double logFCcut = 1.0, double minPct = 0.1, bool onlyPos=false  ){
 
 	//Rcout << "Standard looping over a sparse matrix initializing" << std::endl;
-    if ( interest.size() == 0 ){
-    	::Rf_error("No values in interest group" );
-    }
-    if ( background.size() == 0 ){
-        ::Rf_error("No values in background group" );
-    }
+	if ( interest.size() == 0 ){
+		::Rf_error("No values in interest group" );
+	}
+	if ( background.size() == 0 ){
+		::Rf_error("No values in background group" );
+	}
 	// internal measurements
 	std::vector<double> logFCpass(X.cols(), 0.0);
 	std::vector<bool>   testPassed(X.cols(), 0.0);
@@ -214,10 +214,10 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		}
 	}
 	for ( unsigned int i = 0; i< itB.size(); i++ ) {
-			if ( itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
-				::Rf_error( "the background id (%d) exceeds the rows in the matrix (%d)", itB.at(i), X.rows()  );
-			}
+		if ( itB.at(i) < 0 || itB.at(i) >= X.rows() ) {
+			::Rf_error( "the background id (%d) exceeds the rows in the matrix (%d)", itB.at(i), X.rows()  );
 		}
+	}
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
 		inA = 0;
 		inB = 0;
@@ -257,86 +257,85 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		}
 	}
 	//Rcout << "test variables calculated" << std::endl;
+
+	NumericMatrix res(pass, 6);
+	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
+
 	if ( pass == 0 ){
-			::Rf_error("No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" );
+		Rcout << "No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" << std::endl;
 	}
 	else {
 		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
-	}
 
-	//Rcout << "allocate NumericMatrix with " << pass << " rows and " << 6 << "cols" << std::endl;
-	/* allocate a result 'matrix' */
-	NumericMatrix res(pass, 6);
 
 	//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
-	std::vector<double> total( itA.size() + itB.size() , -1.0 );
-	int n = total.size();
-	int id = 0;
-	int j;
-	int nInd;
-	double tie;
+		std::vector<double> total( itA.size() + itB.size() , -1.0 );
+		int n = total.size();
+		int id = 0;
+		int j;
+		int nInd;
+		double tie;
 	//double indRankSum;
 
 	//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
-	DRankList list( n );
+		DRankList list( n );
 	//Rcout << "living 2" << std::endl;
 	//list.print();
 
-	for ( int c_=0; c_ < X.cols(); c_++ ){
+		for ( int c_=0; c_ < X.cols(); c_++ ){
 		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;
-		if ( testPassed.at(c_) ) {
+			if ( testPassed.at(c_) ) {
 
-			/*Test stats copied from the BioOC package */
-			j = 0;
-			for (unsigned int i = 0; i< itA.size(); i++ ) {
-				total.at(j++) = X.coeff(itA.at(i) ,c_);
-			}
-			for (unsigned int i = 0; i< itB.size(); i++ ) {
-				total.at(j++) = X.coeff(itB.at(i) ,c_);
-			}
-			n = j;
+				/*Test stats copied from the BioOC package */
+				j = 0;
+				for (unsigned int i = 0; i< itA.size(); i++ ) {
+					total.at(j++) = X.coeff(itA.at(i) ,c_);
+				}
+				for (unsigned int i = 0; i< itB.size(); i++ ) {
+					total.at(j++) = X.coeff(itB.at(i) ,c_);
+				}
+				n = j;
 
-			// populate the DRankList object
-			//Rcout << "living 3" << std::endl;
-			list.refill(total, n);
-			//Rcout << "isRanked " << list.isRanked() <<std::endl;
-			//list.sortRankDRankList();
-			//Rcout << "isRanked " << list.isRanked() <<std::endl;
-			// test DRankLint internals
-			//continue;
-			//Rcout << "living 4" << std::endl;
-			list.prepareDRankList();
+				// populate the DRankList object
+				//Rcout << "living 3" << std::endl;
+				list.refill(total, n);
+				//Rcout << "isRanked " << list.isRanked() <<std::endl;
+				//list.sortRankDRankList();
+				//Rcout << "isRanked " << list.isRanked() <<std::endl;
+				// test DRankLint internals
+				//continue;
+				//Rcout << "living 4" << std::endl;
+				list.prepareDRankList();
 
-			//Rcout << "finished with the prepare:" << std::endl;
-			//list.print();
-			//Rcout << "living 5" << std::endl;
-			tie = list.tieCoef;
+				//Rcout << "finished with the prepare:" << std::endl;
+				//list.print();
+				//Rcout << "living 5" << std::endl;
+				tie = list.tieCoef;
 
-			nInd=itA.size();
+				nInd=itA.size();
 
-			indRankSum.at(c_) = 0.0;
-			//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
-			for(j=0; j<nInd; ++j) {
+				indRankSum.at(c_) = 0.0;
+				//Rcout << "calculating for gene id " << c_ << " indRankSum starting at " << indRankSum.at(c_) << std::endl;
+				for(j=0; j<nInd; ++j) {
 				//The A data is stored from 0 to nInd in the total vector which is basis for the list!
-				indRankSum.at(c_) += list.list.at(j).rank;
+					indRankSum.at(c_) += list.list.at(j).rank;
+				}
+				// never destroy the  DRankList - that kills the R gc() functionality!!
+				//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;
+				/* store the results */
+				res(id,0) = c_ + 1;
+				res(id,1) = logFCpass.at(c_);
+				res(id,2) = fracInA.at(c_);
+				res(id,3) = fracInB.at(c_);
+				res(id,4) = indRankSum.at(c_);
+				/* store the higher p value as we do drop all lower anyhow. */
+				//Rcout << "calc the stats value " << std::endl;
+				res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
+				//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
+				id ++;
 			}
-			// never destroy the  DRankList - that kills the R gc() functionality!!
-			//Rcout << "got a result for id " << c_ << " indRankSum == " << indRankSum.at(c_) << std::endl;
-			/* store the results */
-			res(id,0) = c_ + 1;
-			res(id,1) = logFCpass.at(c_);
-			res(id,2) = fracInA.at(c_);
-			res(id,3) = fracInB.at(c_);
-			res(id,4) = indRankSum.at(c_);
-			/* store the higher p value as we do drop all lower anyhow. */
-			//Rcout << "calc the stats value " << std::endl;
-			res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
-			//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
-			id ++;
 		}
-	}
-
-	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
+	}	
 	//Rcout << "n return values: " << pass <<std::endl;
 	return res;
 }

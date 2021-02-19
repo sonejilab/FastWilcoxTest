@@ -1,3 +1,7 @@
+# 0.1.15
+
+Bugfix wilcox test to return empty matrix intead of failing.
+
 # 0.1.14
 
 Added a simple ZScoreAll function zscoring a sparse matrix returning a dense one.
