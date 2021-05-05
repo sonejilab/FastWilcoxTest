@@ -14,7 +14,7 @@ using namespace Rcpp;
 //' @param X the sparse matrix
 //' @param ids group ids (int vector from 1 10 maxgroup for each column)
 //' @param type ( 0: logAdd (defunct); 1 : simple addition; 2: mean )
-//' @title Calculate correlation over two double vectors
+//' @title collapse the data collumns based on the ids info
 //' @export
 // [[Rcpp::export]]
 NumericMatrix collapse (Eigen::SparseMatrix<double> X, std::vector<int> ids, int type ) {

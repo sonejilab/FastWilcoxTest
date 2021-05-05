@@ -777,6 +777,41 @@ RcppExport SEXP _FastWilcoxTest_toColNums(SEXP dataSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
+// sparse2SQLite_text_file
+void sparse2SQLite_text_file(Eigen::SparseMatrix<double> data, String file, char sep);
+static SEXP _FastWilcoxTest_sparse2SQLite_text_file_try(SEXP dataSEXP, SEXP fileSEXP, SEXP sepSEXP) {
+BEGIN_RCPP
+    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type data(dataSEXP);
+    Rcpp::traits::input_parameter< String >::type file(fileSEXP);
+    Rcpp::traits::input_parameter< char >::type sep(sepSEXP);
+    sparse2SQLite_text_file(data, file, sep);
+    return R_NilValue;
+END_RCPP_RETURN_ERROR
+}
+RcppExport SEXP _FastWilcoxTest_sparse2SQLite_text_file(SEXP dataSEXP, SEXP fileSEXP, SEXP sepSEXP) {
+    SEXP rcpp_result_gen;
+    {
+        Rcpp::RNGScope rcpp_rngScope_gen;
+        rcpp_result_gen = PROTECT(_FastWilcoxTest_sparse2SQLite_text_file_try(dataSEXP, fileSEXP, sepSEXP));
+    }
+    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
+    if (rcpp_isInterrupt_gen) {
+        UNPROTECT(1);
+        Rf_onintr();
+    }
+    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
+    if (rcpp_isLongjump_gen) {
+        Rcpp::internal::resumeJump(rcpp_result_gen);
+    }
+    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
+    if (rcpp_isError_gen) {
+        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
+        UNPROTECT(1);
+        Rf_error(CHAR(rcpp_msgSEXP_gen));
+    }
+    UNPROTECT(1);
+    return rcpp_result_gen;
+}
 // ColNotZero
 std::vector<double> ColNotZero(Eigen::SparseMatrix<double> data);
 static SEXP _FastWilcoxTest_ColNotZero_try(SEXP dataSEXP) {
@@ -834,6 +869,7 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<double>(*euclidian_distances3d)(std::vector<double>,std::vector<double>,std::vector<double>,bool)");
         signatures.insert("std::vector<double>(*eDist3d)(std::vector<double>,std::vector<double>,std::vector<double>,int)");
         signatures.insert("std::vector<double>(*toColNums)(Eigen::SparseMatrix<double>)");
+        signatures.insert("void(*sparse2SQLite_text_file)(Eigen::SparseMatrix<double>,String,char)");
         signatures.insert("std::vector<double>(*ColNotZero)(Eigen::SparseMatrix<double>)");
     }
     return signatures.find(sig) != signatures.end();
@@ -859,6 +895,7 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_euclidian_distances3d", (DL_FUNC)_FastWilcoxTest_euclidian_distances3d_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_eDist3d", (DL_FUNC)_FastWilcoxTest_eDist3d_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_toColNums", (DL_FUNC)_FastWilcoxTest_toColNums_try);
+    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_sparse2SQLite_text_file", (DL_FUNC)_FastWilcoxTest_sparse2SQLite_text_file_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_ColNotZero", (DL_FUNC)_FastWilcoxTest_ColNotZero_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_RcppExport_validate", (DL_FUNC)_FastWilcoxTest_RcppExport_validate);
     return R_NilValue;
@@ -893,6 +930,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_rollSum", (DL_FUNC) &_FastWilcoxTest_rollSum, 2},
     {"_FastWilcoxTest_rollAreaSum", (DL_FUNC) &_FastWilcoxTest_rollAreaSum, 4},
     {"_FastWilcoxTest_toColNums", (DL_FUNC) &_FastWilcoxTest_toColNums, 1},
+    {"_FastWilcoxTest_sparse2SQLite_text_file", (DL_FUNC) &_FastWilcoxTest_sparse2SQLite_text_file, 3},
     {"_FastWilcoxTest_ColNotZero", (DL_FUNC) &_FastWilcoxTest_ColNotZero, 1},
     {"_FastWilcoxTest_RcppExport_registerCCallable", (DL_FUNC) &_FastWilcoxTest_RcppExport_registerCCallable, 0},
     {NULL, NULL, 0}

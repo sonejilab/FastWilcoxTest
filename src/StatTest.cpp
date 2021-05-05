@@ -268,19 +268,19 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
 
 
-	//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
+		//Rcout << "allocate total vector with" << ( itA.size() + itB.size() ) << " -1's " << std::endl;
 		std::vector<double> total( itA.size() + itB.size() , -1.0 );
 		int n = total.size();
 		int id = 0;
 		int j;
 		int nInd;
 		double tie;
-	//double indRankSum;
+		//double indRankSum;
 
-	//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
+		//Rcout << "createing the DRankList with " <<  n << "list entries" << std::endl;
 		DRankList list( n );
-	//Rcout << "living 2" << std::endl;
-	//list.print();
+		//Rcout << "living 2" << std::endl;
+		//list.print();
 
 		for ( int c_=0; c_ < X.cols(); c_++ ){
 		//Rcout << "processing line " << (c_+1) << " of " <<  X.cols() << std::endl;

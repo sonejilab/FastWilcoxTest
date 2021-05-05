@@ -256,7 +256,7 @@ SQRT <- function(data) {
 #' @param X the sparse matrix
 #' @param ids group ids (int vector from 1 10 maxgroup for each column)
 #' @param type ( 0: logAdd (defunct); 1 : simple addition; 2: mean )
-#' @title Calculate correlation over two double vectors
+#' @title collapse the data collumns based on the ids info
 #' @export
 collapse <- function(X, ids, type) {
     .Call(`_FastWilcoxTest_collapse`, X, ids, type)
@@ -371,6 +371,17 @@ rollAreaSum <- function(X, location, funcID, size) {
 
 toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
+}
+
+#' @title sparse2SQLite_text_file creates a simple text file from the matrix contents
+#' @aliases sparse2SQLite_text_file,FastWilcoxTest-method
+#' @rdname sparse2SQLite_text_file
+#' @description circumvent the memory expenses during RSQlite database creation (melting the whole matrix)
+#' @param data a sparse matrix
+#' @return a vector with nGene information
+#' @export
+sparse2SQLite_text_file <- function(data, file, sep = ' ') {
+    invisible(.Call(`_FastWilcoxTest_sparse2SQLite_text_file`, data, file, sep))
 }
 
 #' @title ColNotZero returns the amount of not zero values in each column
