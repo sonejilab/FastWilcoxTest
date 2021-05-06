@@ -4,7 +4,7 @@
 \name{collapse}
 \alias{collapse}
 \alias{collapse,FastWilcoxTest-method}
-\title{Calculate correlation over two double vectors}
+\title{collapse the data collumns based on the ids info}
 \usage{
 collapse(X, ids, type)
 }
