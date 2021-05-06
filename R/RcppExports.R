@@ -369,10 +369,6 @@ rollAreaSum <- function(X, location, funcID, size) {
     .Call(`_FastWilcoxTest_rollAreaSum`, X, location, funcID, size)
 }
 
-toColNums <- function(data) {
-    .Call(`_FastWilcoxTest_toColNums`, data)
-}
-
 #' @title sparse2SQLite_text_file creates a simple text file from the matrix contents
 #' @aliases sparse2SQLite_text_file,FastWilcoxTest-method
 #' @rdname sparse2SQLite_text_file
@@ -382,6 +378,10 @@ toColNums <- function(data) {
 #' @export
 sparse2SQLite_text_file <- function(data, file, sep = ' ') {
     invisible(.Call(`_FastWilcoxTest_sparse2SQLite_text_file`, data, file, sep))
+}
+
+toColNums <- function(data) {
+    .Call(`_FastWilcoxTest_toColNums`, data)
 }
 
 #' @title ColNotZero returns the amount of not zero values in each column

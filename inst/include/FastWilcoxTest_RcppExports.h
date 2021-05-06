@@ -382,6 +382,26 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline void sparse2SQLite_text_file(Eigen::SparseMatrix<double> data, String file, char sep = ' ') {
+        typedef SEXP(*Ptr_sparse2SQLite_text_file)(SEXP,SEXP,SEXP);
+        static Ptr_sparse2SQLite_text_file p_sparse2SQLite_text_file = NULL;
+        if (p_sparse2SQLite_text_file == NULL) {
+            validateSignature("void(*sparse2SQLite_text_file)(Eigen::SparseMatrix<double>,String,char)");
+            p_sparse2SQLite_text_file = (Ptr_sparse2SQLite_text_file)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_sparse2SQLite_text_file");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_sparse2SQLite_text_file(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(file)), Shield<SEXP>(Rcpp::wrap(sep)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+    }
+
     inline std::vector<double> toColNums(Eigen::SparseMatrix<double> data) {
         typedef SEXP(*Ptr_toColNums)(SEXP);
         static Ptr_toColNums p_toColNums = NULL;
@@ -401,26 +421,6 @@ namespace FastWilcoxTest {
         if (rcpp_result_gen.inherits("try-error"))
             throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
-    }
-
-    inline void sparse2SQLite_text_file(Eigen::SparseMatrix<double> data, String file, char sep = ' ') {
-        typedef SEXP(*Ptr_sparse2SQLite_text_file)(SEXP,SEXP,SEXP);
-        static Ptr_sparse2SQLite_text_file p_sparse2SQLite_text_file = NULL;
-        if (p_sparse2SQLite_text_file == NULL) {
-            validateSignature("void(*sparse2SQLite_text_file)(Eigen::SparseMatrix<double>,String,char)");
-            p_sparse2SQLite_text_file = (Ptr_sparse2SQLite_text_file)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_sparse2SQLite_text_file");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_sparse2SQLite_text_file(Shield<SEXP>(Rcpp::wrap(data)), Shield<SEXP>(Rcpp::wrap(file)), Shield<SEXP>(Rcpp::wrap(sep)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
     }
 
     inline std::vector<double> ColNotZero(Eigen::SparseMatrix<double> data) {
