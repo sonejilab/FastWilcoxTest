@@ -1,9 +1,11 @@
 
-if ( ! isGeneric('as_FastWilcoxTest') ){setGeneric('as_FastWilcoxTest', ## Name
+#if ( ! isGeneric('as_FastWilcoxTest') ){
+setGeneric('as_FastWilcoxTest', ## Name
 	function ( x ) { 
 		standardGeneric('as_FastWilcoxTest')
 	}
-) }
+) 
+#}
 
 #' @name as_FastWilcoxTest
 #' @aliases as_FastWilcoxTest,matrix-method

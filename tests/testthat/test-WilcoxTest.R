@@ -38,3 +38,4 @@ Cpp = Cpp[-22,]
 R = R[-22,]
 
 expect_equal( as.vector(R[,'p.value'] ), as.vector( Cpp[,'p.value']) )
+

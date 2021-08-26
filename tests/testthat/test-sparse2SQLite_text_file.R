@@ -13,6 +13,10 @@ rownames(dat) <- paste( 'gene', 1:nrow)
 
 A <- as_FastWilcoxTest( dat )
 
+if ( ! file.exists( file.path( prefix, 'data', 'Output') )){
+	dir.create( file.path( prefix, 'data', 'Output') )
+}
+
 ofile = file.path( prefix, 'data', 'Output', 'cpp_melted_table.txt')
 if ( file.exists(ofile)){
 	unlink(ofile)
@@ -23,7 +27,7 @@ end_time <- Sys.time()
 
 print ( paste("load cellexalObj:",difftime(end_time, start_time,  units = "secs")[[1]], "sec"))
 
-expect_true( file.exists( ofile), label="c++ has created the oputfile" )
+expect_true( file.exists( ofile), label="c++ has created the outfile" )
 
 dat = read.delim(header=F, file= ofile, sep= " " )
 
