@@ -6,11 +6,13 @@
 #' @param obj the FastWilcoxTest
 #' @title description of function Rzscore
 #' @export 
-if ( ! isGeneric('Rzscore') ){setGeneric('Rzscore', ## Name
+#if ( ! isGeneric('Rzscore') ){
+setGeneric('Rzscore', ## Name
 	function ( obj ) { 
 		standardGeneric('Rzscore')
 	}
-) }
+)
+# }
 
 setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 	definition = function ( obj ) {
@@ -55,11 +57,13 @@ setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 #' @param obj the FastWilcoxTest
 #' @title description of function Rzscore
 #' @export 
-if ( ! isGeneric('RzscoreAll') ){setGeneric('RzscoreAll', ## Name
+#if ( ! isGeneric('RzscoreAll') ){
+setGeneric('RzscoreAll', ## Name
 	function ( obj ) { 
 		standardGeneric('RzscoreAll')
 	}
-) }
+) 
+#}
 
 setMethod('RzscoreAll', signature = c ('FastWilcoxTest'),
 	definition = function ( obj ) {
