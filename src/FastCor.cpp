@@ -84,11 +84,52 @@ std::vector<double> CorMatrixIDS (Eigen::MappedSparseMatrix<double> X, std::vect
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
 		for ( unsigned int i = 0; i< ids.size(); i++ ) {
 			A.at(i) = X.coeff(ids.at(i),c_);
+
 		}
 		ret.at(c_) = correlationCoefficient ( CMP, A );
 	}
 	return ret;
 }
+
+// [[Rcpp::interfaces(r, cpp)]]
+
+//' @name CorMatrixIDS_N
+//' @aliases CorMatrixIDS_N,FastWilcoxTest-method
+//' @rdname CorMatrixIDS_N-methods
+//' @docType methods
+//' @description simply calculate the correlation between X and Y (slower than apply cor)
+//' @param X the sparse matrix
+//' @param CMP the vector to correlate every column of the matrix to
+//' @param ids the rows of the matrix to correlate to
+//' @title Calculate correlation over two double vectors
+//' @returns a matrix of Rho and n (cells where both values where > 0)
+//' @export
+// [[Rcpp::export]]
+NumericMatrix CorMatrixIDS_N (Eigen::MappedSparseMatrix<double> X, std::vector<double> CMP, std::vector<int> ids ) {
+	if ( ids.size() != CMP.size() )
+		::Rf_error("Sorry, I need arrays of the same size nrow(X[ids,]) and length(CMP)" );
+
+	std::vector<double> A(ids.size());
+	NumericMatrix ret(X.cols(), 2);
+	
+	double zero = 0.0;
+	std::fill( ret.begin(), ret.end(), zero ) ;
+
+	ids = FastWilcoxTest::minusOne(ids);
+	Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
+
+	for ( int c_=0; c_ < X.cols(); ++c_ ){
+		double n = 0.0;
+		for ( unsigned int i = 0; i< ids.size(); i++ ) {
+			A.at(i) = X.coeff(ids.at(i),c_);
+			n++;
+		}
+		ret(c_, 0) = correlationCoefficient ( CMP, A );
+		ret(c_, 1) = n;
+	}
+	return ret;
+}
+
 
 //' @name CorMatrix
 //' @aliases CorMatrix,FastWilcoxTest-method
@@ -128,6 +169,61 @@ std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<doubl
 	return ret;
 }
 
+//' @name CorMatrix_N
+//' @aliases CorMatrix_N,FastWilcoxTest-method
+//' @rdname CorMatrix_N-methods
+//' @docType methods
+//' @description simply calculate the correlation between X and Y
+//' approximately 3x faster than an apply using the R cor function on sparse data
+//' @param X the sparse matrix
+//' @param CMP the vector to correlate every column of the matrix to
+//' @title Calculate correlation over two double vectors
+//' @returns a matrix of Rho and n (cells where both values where > 0)
+//' @export
+// [[Rcpp::export]]
+NumericMatrix  CorMatrix_N (Eigen::SparseMatrix<double> X, std::vector<double> CMP){
+
+	X= X.transpose();
+
+	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
+
+	if ( X.innerSize() != CMP.size() )
+		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%d, %d)", X.innerSize(), CMP.size() );
+
+	std::vector<double> A(CMP.size());
+	NumericMatrix ret(X.cols(), 3);
+	
+	double zero = 0.0;
+	std::fill( ret.begin(), ret.end(), zero ) ;
+
+	//Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
+	for (int c_=0; c_ < X.outerSize(); ++c_){
+		// https://stackoverflow.com/questions/8848575/fastest-way-to-reset-every-value-of-stdvectorint-to-0
+		double n = 0.0;
+		std::fill(A.begin(), A.end(), 0.0);
+		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
+			A[it.row()] =  it.value();
+			n++;
+			
+		}
+
+		//Rcout << "n = " <<  n << std::endl;
+		if ( n > 2){
+			ret(c_, 0) = correlationCoefficient ( CMP, A );
+			ret(c_, 1) = n;
+			ret(c_, 2) = ( ret(c_,0) * sqrt( n - 2.0 )) / sqrt( 1.0- ret(c_,0) * ret(c_,0));
+		}else {
+			ret(c_, 0) = 0.0;
+			ret(c_, 1) = n;
+			ret(c_, 2) = 0.0;
+		}
+		
+	}
+
+	X.transpose();
+
+	return ret;
+}
 
 // [[Rcpp::interfaces(r, cpp)]]
 

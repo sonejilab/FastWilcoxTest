@@ -14,16 +14,18 @@ x <- as_FastWilcoxTest( dat )
 rm(dat)
 
 ## nGenes for samples:
-all.equal( as.vector(apply( x@dat,2, function(d) { length(which(d > 0 )) } )), ColNotZero(x@dat) )
-
-
+expect_equal( as.vector(apply( x@dat,2, function(d) { length(which(d > 0 )) } )), ColNotZero(x@dat) )
 
 #### normal add - should be ~7x faster ( 11.829 / 1.648 )
 
-ids = rep( 1:10, ceiling(ncol/10))
+ids = rep( 1:11, floor(ncol/11))
+ids = c(ids, sample(1:11,ncol%%11))
+ids = sort(ids)
+
+expect_equal( as.vector(table(ids)), c(9,10,9,9,9,9,9,9,9,9,9), label="ids correct")
 
 system.time({red = as.data.frame(collapse( x@dat, ids, 1 ))}) ## normal addition
-colnames( red ) = 1:10;
+colnames( red ) = 1:11;
 rownames(red) = make.names(rownames(x@dat))
 
 ## now get the expected in R and make sure this is lower ;-)
@@ -34,37 +36,21 @@ sumUp <- function( x, ids ) {
 
 system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
 
-all.equal(as.matrix(red), as.matrix(blue))
-
+expect_equal(as.matrix(red), as.matrix(blue))
 
 #### normal log add - should be ~6x faster ( 13.993 /2.335 )
-
-skip('broken')
-system.time({red = as.data.frame(collapse( x@dat, ids, 0 ))}) ## log addition
-colnames( red ) = 1:10;
-rownames(red) = make.names(rownames(x@dat))
+system.time({green = as.data.frame(collapse( x@dat, ids, 2 ))}) ## normal addition
+colnames( green ) = 1:11;
+rownames(green) = make.names(rownames(x@dat))
 
 sumUp <- function( x, ids ) {
-	log(unlist(lapply( split( x, ids), function(d) { sum(exp(d[which(d > 0 )])) } )))
+	unlist(lapply( split( x, ids), function(d) { mean(d) } ))
 }
 
-system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
+system.time({ black = t({ black = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
 
-all.equal(as.matrix(red), as.matrix(blue), 1e-7)
+expect_equal(as.matrix(green), as.matrix(black))
 
 
-#### normal std::expm1 add - should be ~6x faster ( 14.011 / 2.216 )
-
-system.time({red = as.data.frame(collapse( x@dat, ids, 2 ))}) ## log addition
-colnames( red ) = 1:10;
-rownames(red) = make.names(rownames(x@dat))
-
-sumUp <- function( x, ids ) {
-	log(unlist(lapply( split( x, ids), function(d) { sum(exp(d[which(d > 0 )]) -1) } )))
-}
-
-system.time({ blue = t({ blue = data.frame(apply(  x@dat, 1, sumUp, ids ) )} ) } )
-
-all.equal(as.matrix(red), as.matrix(blue), 1e-7)
 
 

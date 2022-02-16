@@ -19,11 +19,17 @@ entR <- function (d) {
 set.seed ( 1 )
 dat = sample( 1:10, 1e+8, replace=T );
 
-print("c++ version")
-system.time({entro = entropy( dat )})
+start_time <- Sys.time()
+entro = entropy( dat )
+end_time <- Sys.time()
+print ( paste("c++ version:",difftime(end_time, start_time,  units = "secs")[[1]], "sec"))
 
-print ( "R version")
-system.time({entroR = entR( dat )})
+
+start_time <- Sys.time()
+entro = entroR = entR( dat )
+end_time <- Sys.time()
+print ( paste("R version",difftime(end_time, start_time,  units = "secs")[[1]], "sec"))
+
 
 expect_equal( entro, entroR)
 
@@ -62,7 +68,7 @@ SphericEntropyR <- function (x1,x2,x3,gvect, n ) {
     closest
 }
 
-system.time({entropyR = SphericEntropyR( x[,1], x[,2], x[,3], dat[1:1000], radii)})
+entropyR = SphericEntropyR( x[,1], x[,2], x[,3], dat[1:1000], radii)
 
 colnames(entropyR) = colnames(entropyT)
 

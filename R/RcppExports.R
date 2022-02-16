@@ -28,6 +28,21 @@ CorMatrixIDS <- function(X, CMP, ids) {
     .Call(`_FastWilcoxTest_CorMatrixIDS`, X, CMP, ids)
 }
 
+#' @name CorMatrixIDS_N
+#' @aliases CorMatrixIDS_N,FastWilcoxTest-method
+#' @rdname CorMatrixIDS_N-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y (slower than apply cor)
+#' @param X the sparse matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @param ids the rows of the matrix to correlate to
+#' @title Calculate correlation over two double vectors
+#' @returns a matrix of Rho and n (cells where both values where > 0)
+#' @export
+CorMatrixIDS_N <- function(X, CMP, ids) {
+    .Call(`_FastWilcoxTest_CorMatrixIDS_N`, X, CMP, ids)
+}
+
 #' @name CorMatrix
 #' @aliases CorMatrix,FastWilcoxTest-method
 #' @rdname CorMatrix-methods
@@ -40,6 +55,21 @@ CorMatrixIDS <- function(X, CMP, ids) {
 #' @export
 CorMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
+}
+
+#' @name CorMatrix_N
+#' @aliases CorMatrix_N,FastWilcoxTest-method
+#' @rdname CorMatrix_N-methods
+#' @docType methods
+#' @description simply calculate the correlation between X and Y
+#' approximately 3x faster than an apply using the R cor function on sparse data
+#' @param X the sparse matrix
+#' @param CMP the vector to correlate every column of the matrix to
+#' @title Calculate correlation over two double vectors
+#' @returns a matrix of Rho and n (cells where both values where > 0)
+#' @export
+CorMatrix_N <- function(X, CMP) {
+    .Call(`_FastWilcoxTest_CorMatrix_N`, X, CMP)
 }
 
 #' @name CorNormalMatrix
@@ -143,6 +173,18 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_NormalizeSamples`, X, scaleFactor, display_progress)
 }
 
+#' @title reshuffle data based on a sparse matrix assuming max double the amount of entries not being zero
+#' @aliases ShuffleMatrix,FastWilcoxTest-method
+#' @rdname ShuffleMatrix
+#' @description replacing the synthetic1 function of RFclust.SGE package 
+#' @param X the sparse matrix (tests are applied to columns!)
+#' @param maxCols the amount of random columns to send back (default 50)
+#' @return a matrix with x, j and i avalues to be put into a new sparse matrix
+#' @export
+ShuffleMatrix <- function(X, maxCols = 50L) {
+    .Call(`_FastWilcoxTest_ShuffleMatrix`, X, maxCols)
+}
+
 #' @title logFC calculates a log fold change between the two input vectors
 #' @aliases logFC,FastWilcoxTest-method
 #' @rdname logFC
@@ -209,6 +251,19 @@ ZScore <- function(data, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
 }
 
+#' @name ZScoreAll
+#' @aliases ZScoreAll,FastWilcoxTest-method
+#' @rdname ZScoreAll-methods
+#' @docType methods
+#' @description A sparse matrix z. score function returning the same as a normal one
+#' @param data the sparse Matrix
+#' @param display_progress show a progress bar (TRUE)
+#' @title Calculate z score for a sparse matrix
+#' @export
+ZScoreAll <- function(data, display_progress = TRUE) {
+    .Call(`_FastWilcoxTest_ZScoreAll`, data, display_progress)
+}
+
 #' @name MEAN_STD
 #' @aliases MEAN_STD,FastWilcoxTest-method
 #' @rdname MEAN_STD-methods
@@ -242,8 +297,8 @@ SQRT <- function(data) {
 #' @description sums up the values for each ids type
 #' @param X the sparse matrix
 #' @param ids group ids (int vector from 1 10 maxgroup for each column)
-#' @param type ( 0: logAdd (defunct); 1 : simple addition; 2: log Add -1 (defunct) )
-#' @title Calculate correlation over two double vectors
+#' @param type ( 0: logAdd (defunct); 1 : simple addition; 2: mean )
+#' @title collapse the data collumns based on the ids info
 #' @export
 collapse <- function(X, ids, type) {
     .Call(`_FastWilcoxTest_collapse`, X, ids, type)
@@ -340,6 +395,55 @@ extract_proximity_oob <- function(pred, prox, inbag) {
     .Call(`_FastWilcoxTest_extract_proximity_oob`, pred, prox, inbag)
 }
 
+#' @name rollSum
+#' @aliases rollSum,FastWilcoxTest-method
+#' @rdname rollSum-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the size of the rolling window
+#' @title rolling sum over sparse matrix
+#' @export
+rollSum <- function(X, n) {
+    .Call(`_FastWilcoxTest_rollSum`, X, n)
+}
+
+#' The numbers start at the first row and end at the last row having a full sized widow
+#' 
+#' @name rollAreaSum
+#' @aliases rollAreaSum,FastWilcoxTest-method
+#' @rdname rollAreaSum-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param size the size of the rolling window
+#' @param location the location for every row in the matrix
+#' @param funcID two functions : 1 == sum; 2 == mean
+#' @title rolling sum over sparse matrix
+#' @export
+rollAreaSum <- function(X, location, funcID, size) {
+    .Call(`_FastWilcoxTest_rollAreaSum`, X, location, funcID, size)
+}
+
+#' @title sparse2SQLite_text_file creates a simple text file from the matrix contents
+#' @aliases sparse2SQLite_text_file,FastWilcoxTest-method
+#' @rdname sparse2SQLite_text_file
+#' @description circumvent the memory expenses during RSQlite database creation (melting the whole matrix)
+#' @param data a sparse matrix
+#' @return a vector with nGene information
+#' @export
+sparse2SQLite_text_file <- function(data, file, sep = ' ') {
+    invisible(.Call(`_FastWilcoxTest_sparse2SQLite_text_file`, data, file, sep))
+}
+
+#' @title toColNums returns a vector with column IDs
+#' @aliases toColNums,FastWilcoxTest-method
+#' @rdname toColNums
+#' @description using c++ to get the column IDS mapping to the @x values.
+#' @param data a sparse matrix
+#' @return a vector with nGene information
+#' @export
+#' @return a vector of col ids in the order of the @x vector
 toColNums <- function(data) {
     .Call(`_FastWilcoxTest_toColNums`, data)
 }

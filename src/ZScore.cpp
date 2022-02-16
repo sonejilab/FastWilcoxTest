@@ -49,10 +49,14 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 			}
 			iter++;
 		}
-		double mean = sum / c;
+		double mean = sum / data.outerSize();
 		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
 		sum = 0.0;
 		iter= 0;
+
+		double sd_zero = 0.0 - mean;
+		sd_zero = sd_zero * sd_zero;
+
 		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
 			if ( USE[iter++]) {
 				double entry = (it.value() - mean);
@@ -60,13 +64,20 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 				it.valueRef() = entry;
 				//Rcout <<  it.value() <<",";
 			}
+			else {
+				sum += sd_zero;
+			}
 		}
+		// sum is missing now all sd_zero parts from sparse values - add this!
+		sum += sd_zero * ( data.innerSize() -c );
 		double sd;
+
+
 		if ( (c -1) == 0.0 ){
 			sd = 0.0;
 		}
 		else{
-			sd = sqrt(sum/(c -1)); //to copy the R implementation
+			sd = sqrt(sum/( data.outerSize()-1)); //to copy the R implementation
 		}
 
 		//Rcout << " and sd = "<< sd << std::endl;
@@ -94,6 +105,88 @@ Eigen::SparseMatrix<double> ZScore (Eigen::SparseMatrix<double> data, bool displ
 }
 
 
+//' @name ZScoreAll
+//' @aliases ZScoreAll,FastWilcoxTest-method
+//' @rdname ZScoreAll-methods
+//' @docType methods
+//' @description A sparse matrix z. score function returning the same as a normal one
+//' @param data the sparse Matrix
+//' @param display_progress show a progress bar (TRUE)
+//' @title Calculate z score for a sparse matrix
+//' @export
+//[[Rcpp::export]]
+NumericMatrix ZScoreAll (Eigen::SparseMatrix<double> data, bool display_progress=true){
+
+
+	data = data.transpose();
+	NumericMatrix res(data.outerSize(), data.innerSize());
+
+	Progress p(data.outerSize(), display_progress);
+	//Rcout << "outerSize "<< data.outerSize() << " and innerSize " << data.innerSize() << std::endl;
+	/* my normalization never creates negative values, but sores 'lost data'
+	 * as -1 values. These must not be used in the normalization process
+	 */
+	int iter = 0;
+	//int total = 0;
+	for (int k=0; k < data.outerSize(); ++k){
+		//total ++;
+		p.increment();
+		double sum = 0.0;
+		double c = 0;
+		iter= 0;
+		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+			c += 1.0;
+			sum += it.value();
+			iter++;
+		}
+		double mean = sum / data.innerSize();
+		//Rcout << "mean of row: "<< k << " showing a mean of " << c << " entries = "<< mean << std::endl;
+		sum = 0.0;
+		iter= 0;
+
+		double sd_zero = 0.0 - mean;
+		sd_zero = sd_zero * sd_zero;
+
+		for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+			double entry = (it.value() - mean);
+			sum += entry*entry;
+			it.valueRef() = entry;
+		}
+		// sum is missing now all sd_zero parts from sparse values - add this!
+		sum += sd_zero * ( data.innerSize() -c );
+		double sd;
+
+
+		if ( (c -1) == 0.0 ){
+			sd = 0.0;
+		}
+		else{
+			sd = sqrt(sum/( data.innerSize()-1)); //to copy the R implementation
+		}
+
+		//Rcout << " and sd = "<< sd << std::endl;
+		//Rcout << k << " mean " << mean << " and sd " << sd << "with count "<< c<< std::endl;
+		
+		iter= 0;
+		
+		if ( sd == 0.0 ){
+			NumericVector na_vec(res.ncol(), 0.0 );
+			res(k, _ ) = na_vec;
+		}
+		else {
+			NumericVector na_vec(res.ncol(), (-mean / sd) );
+			res(k, _ ) = na_vec;
+			for (Eigen::SparseMatrix<double>::InnerIterator it(data, k); it; ++it){
+				double entry = (it.value() / sd);
+				// or vice versa ?!
+				res(it.col(), it.row()) = entry;
+			}
+		}
+	}
+	data = data.transpose();
+	//Rcout << "Calculated a total of total different sd values: "<< total << std::endl;
+	return (res);
+}
 
 //' @name MEAN_STD
 //' @aliases MEAN_STD,FastWilcoxTest-method
