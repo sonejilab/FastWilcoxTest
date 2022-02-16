@@ -41,14 +41,13 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	double ret;
 	double Asum = 0;
 	double Bsum = 0;
-	//for ( unsigned int i=1; i<A.size(); i++ ){
-	//	Asum += std::expm1(A.at(i));
-	//}
-	//for ( unsigned int i=1; i<B.size(); i++ ){
-	//	Bsum += std::expm1( B.at(i));
-	//}
-	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
-	ret = (log( (Asum / A.size() )  ) - ( log(Bsum / B.size())  )) ;
+
+	//Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;
+	if ( A.size() == 0 || B.size() == 0 ){
+		ret = R_NaN;
+	}else{
+		ret = log( ( Bsum / B.size()) / ( (Asum / A.size()) ) )  ;
+	}
 	return ret ;
 }
 
@@ -196,9 +195,9 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
     // tmp data storage
 	std::vector<double> A(interest.size(), 0.0);
 	std::vector<double> B(background.size(), 0.0 );
-	double inA = 0;
-	double inB = 0;
-	double tmp = 0;
+	double inA = 0.0;
+	double inB = 0.0;
+	double tmp = 0.0;
     // how many genes pass all filters
 	int pass = 0;
 	int q = 0;
@@ -219,28 +218,28 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		}
 	}
 	for ( int c_=0; c_ < X.cols(); ++c_ ){
-		inA = 0;
-		inB = 0;
+		inA = 0.0;
+		inB = 0.0;
 		//Rcout << "processing line "<< c_ << std::endl;
 		std::fill(A.begin(), A.end(), false );
 		std::fill(B.begin(), B.end(), false );
 		for ( unsigned int i = 0; i< itA.size(); i++ ) {
 			tmp = X.coeff(itA.at(i),c_);
-			if ( tmp > 0 ){
+			if ( tmp > 0.0 ){
 				inA ++;
 				A.at(i) = tmp;
 			}
 		}
 		for ( unsigned int i = 0; i< itB.size(); i++ ) {
 			tmp = X.coeff(itB.at(i),c_);
-			if ( tmp > 0 ){
+			if ( tmp > 0.0 ){
 				inB ++;
 				B.at(i) = tmp;
 			}
 		}
 		//Rcout << "could we have 0's?  "<< c_ <<  " interest.size() " << interest.size() << " background.size() "<< background.size() << std::endl;
-		fracInA.at(c_) = inA / interest.size();
-		fracInB.at(c_) = inB / background.size();
+		fracInA.at(c_) = inA / static_cast<double>(interest.size());
+		fracInB.at(c_) = inB / static_cast<double>(background.size());
 
 		logFCpass.at(c_) = logFC( A, B );
 

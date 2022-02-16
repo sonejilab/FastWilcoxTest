@@ -5,6 +5,7 @@ setGeneric('as_FastWilcoxTest', ## Name
 	}
 ) 
 
+
 #' @name as_FastWilcoxTest
 #' @aliases as_FastWilcoxTest,matrix-method
 #' @rdname as_FastWilcoxTest

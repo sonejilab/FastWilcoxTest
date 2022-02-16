@@ -11,7 +11,7 @@
 #' @title Calculate correlation over two double vectors
 #' @export
 correlationCoefficient <- function(X, Y) {
-    .Call(`_FastWilcoxTest_correlationCoefficient`, X, Y)
+    .Call('_FastWilcoxTest_correlationCoefficient', PACKAGE = 'FastWilcoxTest', X, Y)
 }
 
 #' @name CorMatrixIDS
@@ -25,7 +25,7 @@ correlationCoefficient <- function(X, Y) {
 #' @title Calculate correlation over two double vectors
 #' @export
 CorMatrixIDS <- function(X, CMP, ids) {
-    .Call(`_FastWilcoxTest_CorMatrixIDS`, X, CMP, ids)
+    .Call('_FastWilcoxTest_CorMatrixIDS', PACKAGE = 'FastWilcoxTest', X, CMP, ids)
 }
 
 #' @name CorMatrixIDS_N
@@ -40,7 +40,7 @@ CorMatrixIDS <- function(X, CMP, ids) {
 #' @returns a matrix of Rho and n (cells where both values where > 0)
 #' @export
 CorMatrixIDS_N <- function(X, CMP, ids) {
-    .Call(`_FastWilcoxTest_CorMatrixIDS_N`, X, CMP, ids)
+    .Call('_FastWilcoxTest_CorMatrixIDS_N', PACKAGE = 'FastWilcoxTest', X, CMP, ids)
 }
 
 #' @name CorMatrix
@@ -54,7 +54,7 @@ CorMatrixIDS_N <- function(X, CMP, ids) {
 #' @title Calculate correlation over two double vectors
 #' @export
 CorMatrix <- function(X, CMP) {
-    .Call(`_FastWilcoxTest_CorMatrix`, X, CMP)
+    .Call('_FastWilcoxTest_CorMatrix', PACKAGE = 'FastWilcoxTest', X, CMP)
 }
 
 #' @name CorMatrix_N
@@ -69,7 +69,7 @@ CorMatrix <- function(X, CMP) {
 #' @returns a matrix of Rho and n (cells where both values where > 0)
 #' @export
 CorMatrix_N <- function(X, CMP) {
-    .Call(`_FastWilcoxTest_CorMatrix_N`, X, CMP)
+    .Call('_FastWilcoxTest_CorMatrix_N', PACKAGE = 'FastWilcoxTest', X, CMP)
 }
 
 #' @name CorNormalMatrix
@@ -82,7 +82,24 @@ CorMatrix_N <- function(X, CMP) {
 #' @title Calculate correlation over two double vectors
 #' @export
 CorNormalMatrix <- function(X, CMP) {
-    .Call(`_FastWilcoxTest_CorNormalMatrix`, X, CMP)
+    .Call('_FastWilcoxTest_CorNormalMatrix', PACKAGE = 'FastWilcoxTest', X, CMP)
+}
+
+#' Calculatethe rolling sum for a max distance from the start
+#' The location of each row is taken from the S (Start) vector
+#' In R the colnames need to be set to the input colnames whereas the start positions need to be set to chrXY : S[i] - (S[i]+n)
+#' @name rollSumStart
+#' @aliases rollSumStart,FastWilcoxTest-method
+#' @rdname rollSumStartStart-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the length of the rolling window
+#' @param S the start positions of each X row
+#' @title rolling sum over sparse matrix
+#' @export
+rollSumStart <- function(X, n, S) {
+    .Call('_FastWilcoxTest_rollSumStart', PACKAGE = 'FastWilcoxTest', X, n, S)
 }
 
 #' @name LinLang
@@ -98,7 +115,7 @@ CorNormalMatrix <- function(X, CMP) {
 #' @title LinLang test for rise above the detection limit
 #' @export
 LinLang <- function(X, Grouping, nGroup, minPct = 0.1, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_LinLang`, X, Grouping, nGroup, minPct, display_progress)
+    .Call('_FastWilcoxTest_LinLang', PACKAGE = 'FastWilcoxTest', X, Grouping, nGroup, minPct, display_progress)
 }
 
 #' @name LogNorm
@@ -112,7 +129,7 @@ LinLang <- function(X, Grouping, nGroup, minPct = 0.1, display_progress = TRUE) 
 #' @title UMI normalize a single cell expression matrix
 #' @export
 LogNorm <- function(data, scale_factor, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_LogNorm`, data, scale_factor, display_progress)
+    .Call('_FastWilcoxTest_LogNorm', PACKAGE = 'FastWilcoxTest', data, scale_factor, display_progress)
 }
 
 #' @name NormalizeCells
@@ -126,7 +143,7 @@ LogNorm <- function(data, scale_factor, display_progress = TRUE) {
 #' @title UMI normalize a single cell expression matrix
 #' @export
 NormalizeCells <- function(X, nUMI, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_NormalizeCells`, X, nUMI, display_progress)
+    .Call('_FastWilcoxTest_NormalizeCells', PACKAGE = 'FastWilcoxTest', X, nUMI, display_progress)
 }
 
 #' @name NormalizeSamples
@@ -140,7 +157,19 @@ NormalizeCells <- function(X, nUMI, display_progress = TRUE) {
 #' @title rescale a matrix using scaleFactor per column
 #' @export
 NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_NormalizeSamples`, X, scaleFactor, display_progress)
+    .Call('_FastWilcoxTest_NormalizeSamples', PACKAGE = 'FastWilcoxTest', X, scaleFactor, display_progress)
+}
+
+#' @title reshuffle data based on a sparse matrix assuming max double the amount of entries not being zero
+#' @aliases ShuffleMatrix,FastWilcoxTest-method
+#' @rdname ShuffleMatrix
+#' @description replacing the synthetic1 function of RFclust.SGE package 
+#' @param X the sparse matrix (tests are applied to columns!)
+#' @param maxCols the amount of random columns to send back (default 50)
+#' @return a matrix with x, j and i avalues to be put into a new sparse matrix
+#' @export
+ShuffleMatrix <- function(X, maxCols = 50L) {
+    .Call('_FastWilcoxTest_ShuffleMatrix', PACKAGE = 'FastWilcoxTest', X, maxCols)
 }
 
 #' @title logFC calculates a log fold change between the two input vectors
@@ -152,15 +181,15 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
 #' @return a double fold change
 #' @export
 logFC <- function(A, B) {
-    .Call(`_FastWilcoxTest_logFC`, A, B)
+    .Call('_FastWilcoxTest_logFC', PACKAGE = 'FastWilcoxTest', A, B)
 }
 
 minusOne <- function(X) {
-    .Call(`_FastWilcoxTest_minusOne`, X)
+    .Call('_FastWilcoxTest_minusOne', PACKAGE = 'FastWilcoxTest', X)
 }
 
 plusOne <- function(X) {
-    .Call(`_FastWilcoxTest_plusOne`, X)
+    .Call('_FastWilcoxTest_plusOne', PACKAGE = 'FastWilcoxTest', X)
 }
 
 #' @title cppWilcoxTest runs wilcox test comparing x and y
@@ -173,7 +202,7 @@ plusOne <- function(X) {
 #' @return a double vector with 2 entries : Rank sum and p.value,
 #' @export
 cppWilcoxTest <- function(x, y, type) {
-    .Call(`_FastWilcoxTest_cppWilcoxTest`, x, y, type)
+    .Call('_FastWilcoxTest_cppWilcoxTest', PACKAGE = 'FastWilcoxTest', x, y, type)
 }
 
 #' @title StatTest runs wilcox test on the columns of the sparse matrix
@@ -192,7 +221,7 @@ cppWilcoxTest <- function(x, y, type) {
 #' @return a matrix with tested column ids, logFC and p.value
 #' @export
 StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1, onlyPos = FALSE) {
-    .Call(`_FastWilcoxTest_StatTest`, X, interest, background, logFCcut, minPct, onlyPos)
+    .Call('_FastWilcoxTest_StatTest', PACKAGE = 'FastWilcoxTest', X, interest, background, logFCcut, minPct, onlyPos)
 }
 
 #' @name ZScore
@@ -206,7 +235,7 @@ StatTest <- function(X, interest, background, logFCcut = 1.0, minPct = 0.1, only
 #' @title Calculate z score for a sparse matrix
 #' @export
 ZScore <- function(data, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_ZScore`, data, display_progress)
+    .Call('_FastWilcoxTest_ZScore', PACKAGE = 'FastWilcoxTest', data, display_progress)
 }
 
 #' @name ZScoreAll
@@ -219,7 +248,7 @@ ZScore <- function(data, display_progress = TRUE) {
 #' @title Calculate z score for a sparse matrix
 #' @export
 ZScoreAll <- function(data, display_progress = TRUE) {
-    .Call(`_FastWilcoxTest_ZScoreAll`, data, display_progress)
+    .Call('_FastWilcoxTest_ZScoreAll', PACKAGE = 'FastWilcoxTest', data, display_progress)
 }
 
 #' @name MEAN_STD
@@ -232,7 +261,7 @@ ZScoreAll <- function(data, display_progress = TRUE) {
 #' @title Calculate mean and std of >0 values in a sparse matrix
 #' @export
 MEAN_STD <- function(data) {
-    .Call(`_FastWilcoxTest_MEAN_STD`, data)
+    .Call('_FastWilcoxTest_MEAN_STD', PACKAGE = 'FastWilcoxTest', data)
 }
 
 #' @name SQRT
@@ -245,7 +274,7 @@ MEAN_STD <- function(data) {
 #' @title Calculate z score for a sparse matrix
 #' @export
 SQRT <- function(data) {
-    .Call(`_FastWilcoxTest_SQRT`, data)
+    .Call('_FastWilcoxTest_SQRT', PACKAGE = 'FastWilcoxTest', data)
 }
 
 #' @name collapse
@@ -259,7 +288,7 @@ SQRT <- function(data) {
 #' @title collapse the data collumns based on the ids info
 #' @export
 collapse <- function(X, ids, type) {
-    .Call(`_FastWilcoxTest_collapse`, X, ids, type)
+    .Call('_FastWilcoxTest_collapse', PACKAGE = 'FastWilcoxTest', X, ids, type)
 }
 
 #' @name entropy
@@ -271,7 +300,7 @@ collapse <- function(X, ids, type) {
 #' @title description of function entrop
 #' @export 
 entropy <- function(X) {
-    .Call(`_FastWilcoxTest_entropy`, X)
+    .Call('_FastWilcoxTest_entropy', PACKAGE = 'FastWilcoxTest', X)
 }
 
 #' @name SphericEntropy
@@ -287,7 +316,7 @@ entropy <- function(X) {
 #' @title description of function entrop
 #' @export 
 SphericEntropy <- function(X1, X2, X3, gvect, radii) {
-    .Call(`_FastWilcoxTest_SphericEntropy`, X1, X2, X3, gvect, radii)
+    .Call('_FastWilcoxTest_SphericEntropy', PACKAGE = 'FastWilcoxTest', X1, X2, X3, gvect, radii)
 }
 
 #' Calculate the euclidian distance between consecutive points
@@ -303,7 +332,7 @@ SphericEntropy <- function(X1, X2, X3, gvect, radii) {
 #' @title Calculate  over two double vectors
 #' @export
 euclidian_distances <- function(X, Y, sum = FALSE) {
-    .Call(`_FastWilcoxTest_euclidian_distances`, X, Y, sum)
+    .Call('_FastWilcoxTest_euclidian_distances', PACKAGE = 'FastWilcoxTest', X, Y, sum)
 }
 
 #' Calculate the euclidian distance between consecutive points
@@ -320,7 +349,7 @@ euclidian_distances <- function(X, Y, sum = FALSE) {
 #' @title Calculate  over two double vectors
 #' @export
 euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
-    .Call(`_FastWilcoxTest_euclidian_distances3d`, X, Y, Z, sum)
+    .Call('_FastWilcoxTest_euclidian_distances3d', PACKAGE = 'FastWilcoxTest', X, Y, Z, sum)
 }
 
 #' use the eucledian distance between one cell and all cells to find the order in the data
@@ -336,7 +365,21 @@ euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
 #' @title find the euclidian order in a 3D vector
 #' @export
 eDist3d <- function(X, Y, Z, id) {
-    .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+    .Call('_FastWilcoxTest_eDist3d', PACKAGE = 'FastWilcoxTest', X, Y, Z, id)
+}
+
+#' @title extract proximity for the ranger results
+#' copied from https://github.com/imbs-hl/ranger/issues/234
+#' @aliases extract_proximity_oob,FastWilcoxTest-method
+#' @rdname extract_proximity_oob
+#' @description calculate the proximity matrix
+#' @param pred the predictions created from a predict(rangerRF, data, type = "terminalNodes")$predictions
+#' @param prox an empty matrix with dim(pred) dimensions
+#' @param inbag the inbag information from the ranger prediction run (rangerRF$inbag.counts)
+#' @return prox with correct values
+#' @export
+extract_proximity_oob <- function(pred, prox, inbag) {
+    .Call('_FastWilcoxTest_extract_proximity_oob', PACKAGE = 'FastWilcoxTest', pred, prox, inbag)
 }
 
 #' @name rollSum
@@ -349,7 +392,7 @@ eDist3d <- function(X, Y, Z, id) {
 #' @title rolling sum over sparse matrix
 #' @export
 rollSum <- function(X, n) {
-    .Call(`_FastWilcoxTest_rollSum`, X, n)
+    .Call('_FastWilcoxTest_rollSum', PACKAGE = 'FastWilcoxTest', X, n)
 }
 
 #' The numbers start at the first row and end at the last row having a full sized widow
@@ -366,7 +409,7 @@ rollSum <- function(X, n) {
 #' @title rolling sum over sparse matrix
 #' @export
 rollAreaSum <- function(X, location, funcID, size) {
-    .Call(`_FastWilcoxTest_rollAreaSum`, X, location, funcID, size)
+    .Call('_FastWilcoxTest_rollAreaSum', PACKAGE = 'FastWilcoxTest', X, location, funcID, size)
 }
 
 #' @title sparse2SQLite_text_file creates a simple text file from the matrix contents
@@ -377,7 +420,7 @@ rollAreaSum <- function(X, location, funcID, size) {
 #' @return a vector with nGene information
 #' @export
 sparse2SQLite_text_file <- function(data, file, sep = ' ') {
-    invisible(.Call(`_FastWilcoxTest_sparse2SQLite_text_file`, data, file, sep))
+    invisible(.Call('_FastWilcoxTest_sparse2SQLite_text_file', PACKAGE = 'FastWilcoxTest', data, file, sep))
 }
 
 #' @title toColNums returns a vector with column IDs
@@ -389,7 +432,7 @@ sparse2SQLite_text_file <- function(data, file, sep = ' ') {
 #' @export
 #' @return a vector of col ids in the order of the @x vector
 toColNums <- function(data) {
-    .Call(`_FastWilcoxTest_toColNums`, data)
+    .Call('_FastWilcoxTest_toColNums', PACKAGE = 'FastWilcoxTest', data)
 }
 
 #' @title ColNotZero returns the amount of not zero values in each column
@@ -400,7 +443,7 @@ toColNums <- function(data) {
 #' @return a vector with nGene information
 #' @export
 ColNotZero <- function(data) {
-    .Call(`_FastWilcoxTest_ColNotZero`, data)
+    .Call('_FastWilcoxTest_ColNotZero', PACKAGE = 'FastWilcoxTest', data)
 }
 
 # Register entry points for exported C++ functions

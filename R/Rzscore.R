@@ -11,7 +11,9 @@ setGeneric('Rzscore', ## Name
 	function ( obj ) { 
 		standardGeneric('Rzscore')
 	}
-) 
+
+)
+
 
 setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 	definition = function ( obj ) {
@@ -56,11 +58,13 @@ setMethod('Rzscore', signature = c ('FastWilcoxTest'),
 #' @param obj the FastWilcoxTest
 #' @title description of function Rzscore
 #' @export 
+
 setGeneric('RzscoreAll', ## Name
 	function ( obj ) { 
 		standardGeneric('RzscoreAll')
 	}
 ) 
+
 
 setMethod('RzscoreAll', signature = c ('FastWilcoxTest'),
 	definition = function ( obj ) {

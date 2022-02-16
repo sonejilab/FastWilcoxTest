@@ -1,8 +1,12 @@
+
 setGeneric('meltSparseMatrix', ## Name
 	function ( x ) { 
 		standardGeneric('meltSparseMatrix')
 	}
 ) 
+
+
+
 #' @name meltSparseMatrix
 #' @aliases meltSparseMatrix,dgCMatrix-method
 #' @rdname meltSparseMatrix-methods
