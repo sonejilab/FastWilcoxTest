@@ -41,12 +41,12 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	double ret;
 	double Asum = 0;
 	double Bsum = 0;
-	for ( unsigned int i=1; i<A.size(); i++ ){
-		Asum += std::expm1(A.at(i));
-	}
-	for ( unsigned int i=1; i<B.size(); i++ ){
-		Bsum += std::expm1( B.at(i));
-	}
+	//for ( unsigned int i=1; i<A.size(); i++ ){
+	//	Asum += std::expm1(A.at(i));
+	//}
+	//for ( unsigned int i=1; i<B.size(); i++ ){
+	//	Bsum += std::expm1( B.at(i));
+	//}
 	/*Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;*/
 	ret = (log( (Asum / A.size() )  ) - ( log(Bsum / B.size())  )) ;
 	return ret ;
