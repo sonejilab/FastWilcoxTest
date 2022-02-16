@@ -16,10 +16,7 @@ A = 1:6
 B = 2:8
 E = log( mean(A) / mean(B) )
 
-a= log(A+1)
-b= log(B+1)
-
-expect_equal( logFC ( a, b ), E,  tolerance=1e-1)
+expect_equal( logFC ( B, A ), E,  tolerance=1e-1)
 
 Cpp = StatTest(Matrix::t(x@dat), 1:20, 30:80, .1, .1) 
 

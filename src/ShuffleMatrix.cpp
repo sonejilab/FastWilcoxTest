@@ -30,24 +30,34 @@ using namespace Rcpp;
 	int Resampled = 0;
 	int prob =1;
 	int i;
-	
+	int inserted = 0;
 	for (int c_=0; c_ < maxCols; ++c_){
 		//std::fill(A.begin(), A.end(), 0.0);
 		A.fill(0.0);
-
+		i = 0;
 		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
-			A[it.row()] =  it.value();
+			A[i++] =  it.value();
 		}
 		//Rcout << "calculate randoms " <<  A.length() << std::endl;
 		//NumericVector ret = RcppArmadillo::sample(x, size, replace, prob);
 		// and now we need to fill that into the sparse matrix..
+		
 		for ( int i=0; i < A.length(); i++){
 			Resampled =  std::floor(R::runif(0,1) * A.length()) ; // Rcpp::sugar::SampleReplace(A, 1, R::runif(0,A.length()), false);
 			if ( A[Resampled] != 0.0) {
 				//Rcout << "insert " <<  i << ","<< c_ <<" value " << A[Resampled] << std::endl;
-				mat.insert( i, c_ ) = A[Resampled];
+				mat.insert(i, c_ ) = A[Resampled];
+				inserted ++;
 			}
 		}
 	}
-	return ( mat );
+	Eigen::SparseMatrix<double> mat2(X.innerSize(), maxCols );
+	mat2.reserve( inserted );
+	for (int c_=0; c_ < maxCols; ++c_){
+		for (Eigen::SparseMatrix<double>::InnerIterator it(mat, c_); it; ++it){
+			mat2.coeffRef(it.row(), it.col() ) = it.value();
+		}
+	}
+	//Rcout << "inserted a total of " << inserted << " values into the dgCMatrix"<< std::endl;
+	return ( mat2 );
 }

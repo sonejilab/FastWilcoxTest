@@ -41,7 +41,12 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	double ret;
 	double Asum = 0;
 	double Bsum = 0;
-
+	for ( unsigned int i=0; i<A.size(); i++ ){
+		Asum += A.at(i);
+	}
+	for ( unsigned int i=0; i<B.size(); i++ ){
+		Bsum += B.at(i);
+	}
 	//Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;
 	if ( A.size() == 0 || B.size() == 0 ){
 		ret = R_NaN;
