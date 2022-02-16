@@ -59,7 +59,7 @@ setMethod('Rstats', signature = c ('matrix'),
 			id = 1;
 			message ( paste( length(OK), "genes pass the logFC and frac. expr. filters."))
 			for ( i in OK ) {
-				t = stats::wilcox.test( X[interest, i], X[backgound,i])
+				t = stats::wilcox.test( X[interest, i], X[backgound,i], exact = FALSE)
 				W[id] = t$statistic
 				p[id] = t$p.value
 				id = id +1

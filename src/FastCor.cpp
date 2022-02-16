@@ -86,7 +86,7 @@ std::vector<double> CorMatrixIDS (Eigen::MappedSparseMatrix<double> X, std::vect
 			A.at(i) = X.coeff(ids.at(i),c_);
 
 		}
-		ret.at(c_) = correlationCoefficient ( CMP, A );
+		ret.at(c_) = FastWilcoxTest::correlationCoefficient ( CMP, A );
 	}
 	return ret;
 }
@@ -124,7 +124,7 @@ NumericMatrix CorMatrixIDS_N (Eigen::MappedSparseMatrix<double> X, std::vector<d
 			A.at(i) = X.coeff(ids.at(i),c_);
 			n++;
 		}
-		ret(c_, 0) = correlationCoefficient ( CMP, A );
+		ret(c_, 0) = FastWilcoxTest::correlationCoefficient ( CMP, A );
 		ret(c_, 1) = n;
 	}
 	return ret;
@@ -161,7 +161,7 @@ std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<doubl
 		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
 			A[it.row()] =  it.value();
 		}
-		ret.at(c_) = correlationCoefficient ( CMP, A );
+		ret.at(c_) = FastWilcoxTest::correlationCoefficient ( CMP, A );
 	}
 
 	X.transpose();
@@ -209,7 +209,7 @@ NumericMatrix  CorMatrix_N (Eigen::SparseMatrix<double> X, std::vector<double> C
 
 		//Rcout << "n = " <<  n << std::endl;
 		if ( n > 2){
-			ret(c_, 0) = correlationCoefficient ( CMP, A );
+			ret(c_, 0) = FastWilcoxTest::correlationCoefficient ( CMP, A );
 			ret(c_, 1) = n;
 			ret(c_, 2) = ( ret(c_,0) * sqrt( n - 2.0 )) / sqrt( 1.0- ret(c_,0) * ret(c_,0));
 		}else {
@@ -246,55 +246,11 @@ std::vector<double> CorNormalMatrix (NumericMatrix X, std::vector<double> CMP ) 
 
   	int nr = X.nrow();
 	for ( int i =0; i < X.ncol(); i++ ){
-		ret.at(i) = correlationCoefficient ( CMP,  std::vector<double>(X.begin() + (nr * i), X.begin() + ((nr * (i+1))) ) );
+		ret.at(i) =  FastWilcoxTest::correlationCoefficient ( CMP,  std::vector<double>(X.begin() + (nr * i), X.begin() + ((nr * (i+1))) ) );
 	}
 	return ret;
 }
 
-
-//' @name rollSum
-//' @aliases rollSum,FastWilcoxTest-method
-//' @rdname rollSum-methods
-//' @docType methods
-//' @description calculate a rolling sum of the rows
-//' @param X the sparse matrix
-//' @param n the size of the rolling window
-//' @title rolling sum over sparse matrix
-//' @export
-// [[Rcpp::export]]
-NumericMatrix  rollSum
- (Eigen::SparseMatrix<double> X, int n){
-
-	X= X.transpose();
-
-	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
-
-	if ( X.innerSize() < n )
-		::Rf_error("Sorry, the total columns (ncol(X)) in the data are less than the width of the rolling window (m) (%d, %d)", X.innerSize(), n );
-	//NumericMatrix ret( nrow, ncol );
-	NumericMatrix ret( X.outerSize(), X.innerSize() -n+1 );
-	std::vector<double> A(X.innerSize());
-
-
-	//Rcout << "calculating " <<  X.cols() << " correlations" << std::endl;
-	for (int c_=0; c_ < X.outerSize(); ++c_){
-		std::fill(A.begin(), A.end(), 0.0);
-		for (Eigen::SparseMatrix<double>::InnerIterator it(X, c_); it; ++it){
-			A[it.row()] =  it.value();
-		}
-		//Rcout << "summing " <<  X.innerSize() << " values up "<< n << " and col " << c_ << " values" << std::endl;
-		//now iterate over all data
-		for ( int i=n; i < X.innerSize()+1; i++){
-			ret(c_, i-n) = std::accumulate(A.begin()+(i-n), A.begin()+i, 0.0);
-			//Rcout << "sum from " <<  (i-n) <<" to "<< i << " = "<<ret(c_, i-n) << ", ";
-		}
-		//Rcout << std::endl;
-	}
-
-	X.transpose();
-
-	return ret;
-}
 
 //' Calculatethe rolling sum for a max distance from the start
 //' The location of each row is taken from the S (Start) vector

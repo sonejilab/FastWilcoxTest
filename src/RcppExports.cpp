@@ -226,41 +226,6 @@ RcppExport SEXP _FastWilcoxTest_CorNormalMatrix(SEXP XSEXP, SEXP CMPSEXP) {
     UNPROTECT(1);
     return rcpp_result_gen;
 }
-// rollSum
-NumericMatrix rollSum(Eigen::SparseMatrix<double> X, int n);
-static SEXP _FastWilcoxTest_rollSum_try(SEXP XSEXP, SEXP nSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::traits::input_parameter< Eigen::SparseMatrix<double> >::type X(XSEXP);
-    Rcpp::traits::input_parameter< int >::type n(nSEXP);
-    rcpp_result_gen = Rcpp::wrap(rollSum(X, n));
-    return rcpp_result_gen;
-END_RCPP_RETURN_ERROR
-}
-RcppExport SEXP _FastWilcoxTest_rollSum(SEXP XSEXP, SEXP nSEXP) {
-    SEXP rcpp_result_gen;
-    {
-        Rcpp::RNGScope rcpp_rngScope_gen;
-        rcpp_result_gen = PROTECT(_FastWilcoxTest_rollSum_try(XSEXP, nSEXP));
-    }
-    Rboolean rcpp_isInterrupt_gen = Rf_inherits(rcpp_result_gen, "interrupted-error");
-    if (rcpp_isInterrupt_gen) {
-        UNPROTECT(1);
-        Rf_onintr();
-    }
-    bool rcpp_isLongjump_gen = Rcpp::internal::isLongjumpSentinel(rcpp_result_gen);
-    if (rcpp_isLongjump_gen) {
-        Rcpp::internal::resumeJump(rcpp_result_gen);
-    }
-    Rboolean rcpp_isError_gen = Rf_inherits(rcpp_result_gen, "try-error");
-    if (rcpp_isError_gen) {
-        SEXP rcpp_msgSEXP_gen = Rf_asChar(rcpp_result_gen);
-        UNPROTECT(1);
-        Rf_error(CHAR(rcpp_msgSEXP_gen));
-    }
-    UNPROTECT(1);
-    return rcpp_result_gen;
-}
 // rollSumStart
 NumericMatrix rollSumStart(Eigen::SparseMatrix<double> X, double n, std::vector<double> S);
 static SEXP _FastWilcoxTest_rollSumStart_try(SEXP XSEXP, SEXP nSEXP, SEXP SSEXP) {
@@ -958,7 +923,6 @@ static int _FastWilcoxTest_RcppExport_validate(const char* sig) {
         signatures.insert("std::vector<double>(*CorMatrix)(Eigen::SparseMatrix<double>,std::vector<double>)");
         signatures.insert("NumericMatrix(*CorMatrix_N)(Eigen::SparseMatrix<double>,std::vector<double>)");
         signatures.insert("std::vector<double>(*CorNormalMatrix)(NumericMatrix,std::vector<double>)");
-        signatures.insert("NumericMatrix(*rollSum)(Eigen::SparseMatrix<double>,int)");
         signatures.insert("NumericMatrix(*rollSumStart)(Eigen::SparseMatrix<double>,double,std::vector<double>)");
         signatures.insert("NumericMatrix(*LinLang)(Eigen::SparseMatrix<double>,std::vector<int>,int,double,bool)");
         signatures.insert("double(*logFC)(std::vector<double>,std::vector<double>)");
@@ -986,7 +950,6 @@ RcppExport SEXP _FastWilcoxTest_RcppExport_registerCCallable() {
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix", (DL_FUNC)_FastWilcoxTest_CorMatrix_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorMatrix_N", (DL_FUNC)_FastWilcoxTest_CorMatrix_N_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_CorNormalMatrix", (DL_FUNC)_FastWilcoxTest_CorNormalMatrix_try);
-    R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_rollSum", (DL_FUNC)_FastWilcoxTest_rollSum_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_rollSumStart", (DL_FUNC)_FastWilcoxTest_rollSumStart_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_LinLang", (DL_FUNC)_FastWilcoxTest_LinLang_try);
     R_RegisterCCallable("FastWilcoxTest", "_FastWilcoxTest_logFC", (DL_FUNC)_FastWilcoxTest_logFC_try);
@@ -1013,7 +976,6 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_CorMatrix", (DL_FUNC) &_FastWilcoxTest_CorMatrix, 2},
     {"_FastWilcoxTest_CorMatrix_N", (DL_FUNC) &_FastWilcoxTest_CorMatrix_N, 2},
     {"_FastWilcoxTest_CorNormalMatrix", (DL_FUNC) &_FastWilcoxTest_CorNormalMatrix, 2},
-    {"_FastWilcoxTest_rollSum", (DL_FUNC) &_FastWilcoxTest_rollSum, 2},
     {"_FastWilcoxTest_rollSumStart", (DL_FUNC) &_FastWilcoxTest_rollSumStart, 3},
     {"_FastWilcoxTest_LinLang", (DL_FUNC) &_FastWilcoxTest_LinLang, 5},
     {"_FastWilcoxTest_LogNorm", (DL_FUNC) &_FastWilcoxTest_LogNorm, 3},

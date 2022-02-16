@@ -30,7 +30,6 @@ system.time({cor2 = apply(as.matrix(x@dat),1, cor, x@dat[1,] ) })
 
 all.equal(cor, as.vector(cor2), 1e-7)
 
-
 context( 'roll sum')
 m = Matrix::Matrix( 1:10, nrow=1, sparse=T)
 all.equal( rollSum(m,3 ), matrix(c(6,9,12,15,18,21,24,27), nrow=1))

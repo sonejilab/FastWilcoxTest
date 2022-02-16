@@ -151,27 +151,6 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
-    inline NumericMatrix rollSum(Eigen::SparseMatrix<double> X, int n) {
-        typedef SEXP(*Ptr_rollSum)(SEXP,SEXP);
-        static Ptr_rollSum p_rollSum = NULL;
-        if (p_rollSum == NULL) {
-            validateSignature("NumericMatrix(*rollSum)(Eigen::SparseMatrix<double>,int)");
-            p_rollSum = (Ptr_rollSum)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_rollSum");
-        }
-        RObject rcpp_result_gen;
-        {
-            RNGScope RCPP_rngScope_gen;
-            rcpp_result_gen = p_rollSum(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(n)));
-        }
-        if (rcpp_result_gen.inherits("interrupted-error"))
-            throw Rcpp::internal::InterruptedException();
-        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
-            throw Rcpp::LongjumpException(rcpp_result_gen);
-        if (rcpp_result_gen.inherits("try-error"))
-            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
-        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
-    }
-
     inline NumericMatrix rollSumStart(Eigen::SparseMatrix<double> X, double n, std::vector<double> S) {
         typedef SEXP(*Ptr_rollSumStart)(SEXP,SEXP,SEXP);
         static Ptr_rollSumStart p_rollSumStart = NULL;

@@ -5,6 +5,9 @@
 \alias{Rzscore}
 \alias{Rzscore,FastWilcoxTest-method}
 \title{description of function Rzscore}
+\usage{
+Rzscore(obj)
+}
 \arguments{
 \item{obj}{the FastWilcoxTest}
 }
