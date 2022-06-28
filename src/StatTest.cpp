@@ -34,7 +34,7 @@ typedef Eigen::MappedSparseMatrix<double> MSpMat;
 //' @description a simple replacement of wilcox.test returning less information but >10x faster
 //' @param A one numeric vector of log data
 //' @param B the other log vector
-//' @return a double fold change
+//' @return a double log fold change
 //' @export
 // [[Rcpp::export]]
 double logFC ( std::vector<double> A, std::vector<double> B  ) {
@@ -51,7 +51,36 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	if ( A.size() == 0 || B.size() == 0 ){
 		ret = R_NaN;
 	}else{
-		ret = log( ( Bsum / B.size()) / ( (Asum / A.size()) ) )  ;
+		ret = log(( Bsum / B.size()) / ( (Asum / A.size()) ))  ;
+	}
+	return ret ;
+}
+
+
+//' @title FC calculates a log fold change between the two input vectors
+//' @aliases FC,FastWilcoxTest-method
+//' @rdname FC
+//' @description a simple replacement of wilcox.test returning less information but >10x faster
+//' @param A one numeric vector of log data
+//' @param B the other log vector
+//' @return a double log fold change
+//' @export
+// [[Rcpp::export]]
+double FC ( std::vector<double> A, std::vector<double> B  ) {
+	double ret;
+	double Asum = 0;
+	double Bsum = 0;
+	for ( unsigned int i=0; i<A.size(); i++ ){
+		Asum += A.at(i);
+	}
+	for ( unsigned int i=0; i<B.size(); i++ ){
+		Bsum += B.at(i);
+	}
+	//Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;
+	if ( A.size() == 0 || B.size() == 0 ){
+		ret = R_NaN;
+	}else{
+		ret = ( Bsum / B.size()) / ( (Asum / A.size()) )  ;
 	}
 	return ret ;
 }
@@ -246,7 +275,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		fracInA.at(c_) = inA / static_cast<double>(interest.size());
 		fracInB.at(c_) = inB / static_cast<double>(background.size());
 
-		logFCpass.at(c_) = logFC( A, B );
+		logFCpass.at(c_) = FC( A, B );
 
 		q = (fracInA.at(c_) > minPct) +  (fracInB.at(c_) > minPct);
 		tmp = logFCpass.at(c_);
@@ -263,7 +292,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	//Rcout << "test variables calculated" << std::endl;
 
 	NumericMatrix res(pass, 6);
-	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
+	colnames(res) = CharacterVector::create("colID", "FC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
 
 	if ( pass == 0 ){
 		Rcout << "No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" << std::endl;

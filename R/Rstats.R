@@ -38,7 +38,7 @@ setMethod('Rstats', signature = c ('dgCMatrix'),
 #' @export
 setMethod('Rstats', signature = c ('matrix'),
 		definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {
-			logRF = unlist(apply( X, 2, function( x ) { logFC( x[interest], x[backgound] ) } ) )
+			logRF = unlist(apply( X, 2, function( x ) { FC( x[interest], x[backgound] ) } ) )
 			fracA = unlist(apply( X, 2, function( x ) { x =  x[interest]; length( x[which(x > 0)] ) /length(x) } ) )
 			fracB = unlist(apply( X, 2, function( x ) { x =  x[backgound]; length( x[which(x > 0)] ) /length(x) } ) )
 			#browser()

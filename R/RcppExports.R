@@ -178,10 +178,22 @@ ShuffleMatrix <- function(X, maxCols = 50L) {
 #' @description a simple replacement of wilcox.test returning less information but >10x faster
 #' @param A one numeric vector of log data
 #' @param B the other log vector
-#' @return a double fold change
+#' @return a double log fold change
 #' @export
 logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
+}
+
+#' @title FC calculates a log fold change between the two input vectors
+#' @aliases FC,FastWilcoxTest-method
+#' @rdname FC
+#' @description a simple replacement of wilcox.test returning less information but >10x faster
+#' @param A one numeric vector of log data
+#' @param B the other log vector
+#' @return a double log fold change
+#' @export
+FC <- function(A, B) {
+    .Call(`_FastWilcoxTest_FC`, A, B)
 }
 
 minusOne <- function(X) {
