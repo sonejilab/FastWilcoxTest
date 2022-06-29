@@ -1,6 +1,6 @@
 Package: FastWilcoxTest
 Title: A Wilcox Ranked Sum Test Implementation using Rcpp; Tests are Applied to a Sparse Matrix
-Version: 0.1.16
+Version: 0.1.17
 Authors@R: c(
     person(given = "Stefan", family = "Lang", role = c("aut", "cre"), email = "Stefan.Lang@med.lu.se"),
     person(given = "Jitao David", family = "Zhang", role = c( "ctb"), email = "jitao_david.zhang@roche.com")
@@ -30,4 +30,4 @@ Imports:
     reshape2
 Suggests: 
     testthat
-RoxygenNote: 7.1.2
+RoxygenNote: 7.2.0

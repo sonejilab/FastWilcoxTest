@@ -14,7 +14,7 @@
 
 \item{backgound}{the background col IDs}
 
-\item{logFCcut}{the logFC change cutoff default= 1.0}
+\item{logFCcut}{the FC change cutoff default= 1.0}
 
 \item{minPct}{only test genes that are detected in a minimum fraction of
 min.pct cells in either of the two populations. Meant to speed up the function}

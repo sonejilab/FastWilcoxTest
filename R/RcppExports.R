@@ -184,6 +184,18 @@ logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
 }
 
+#' @title FC calculates a log fold change between the two input vectors
+#' @aliases FC,FastWilcoxTest-method
+#' @rdname FC
+#' @description a simple replacement of wilcox.test returning less information but >10x faster
+#' @param A one numeric vector of log data
+#' @param B the other log vector
+#' @return a double fold change
+#' @export
+FC <- function(A, B) {
+    .Call(`_FastWilcoxTest_FC`, A, B)
+}
+
 minusOne <- function(X) {
     .Call(`_FastWilcoxTest_minusOne`, X)
 }
@@ -213,7 +225,7 @@ cppWilcoxTest <- function(x, y, type) {
 #' @param X the sparse matrix (tests are applied to columns!)
 #' @param interest row IDs for the group of interest
 #' @param background row IDS for the background
-#' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
+#' @param logFCcut only columns passing a FCcut (!) of (default 1) are tested
 #' @param minPct only test genes that are detected in a minimum fraction of
 #' minPct cells in either of the two populations. Meant to speed up the function
 #' by not testing genes that are very infrequently expressed. Default is 0.1

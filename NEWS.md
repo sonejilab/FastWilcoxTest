@@ -1,3 +1,7 @@
+# 0.1.17
+
+The not logged FC has been added to make the FC easier to read by a human
+
 # 0.1.15
 
 Bugfix wilcox test to return empty matrix intead of failing.

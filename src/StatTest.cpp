@@ -56,6 +56,34 @@ double logFC ( std::vector<double> A, std::vector<double> B  ) {
 	return ret ;
 }
 
+//' @title FC calculates a log fold change between the two input vectors
+//' @aliases FC,FastWilcoxTest-method
+//' @rdname FC
+//' @description a simple replacement of wilcox.test returning less information but >10x faster
+//' @param A one numeric vector of log data
+//' @param B the other log vector
+//' @return a double fold change
+//' @export
+// [[Rcpp::export]]
+double FC ( std::vector<double> A, std::vector<double> B  ) {
+	double ret;
+	double Asum = 0;
+	double Bsum = 0;
+	for ( unsigned int i=0; i<A.size(); i++ ){
+		Asum += A.at(i);
+	}
+	for ( unsigned int i=0; i<B.size(); i++ ){
+		Bsum += B.at(i);
+	}
+	//Rcout << "Int values A; a size; B; b size:" << Asum <<";"<< A.size()<<";"<< Bsum <<";"<< B.size() << std::endl;
+	if ( A.size() == 0 || B.size() == 0 ){
+		ret = R_NaN;
+	}else{
+		ret = ( Bsum / B.size()) / ( (Asum / A.size()) )  ;
+	}
+	return ret ;
+}
+
 // [[Rcpp::export]]
 std::vector<int> minusOne ( std::vector<int>  X ){
 	for ( unsigned int i = 0; i < X.size(); i ++) {
@@ -173,7 +201,7 @@ std::vector<double> cppWilcoxTest(std::vector<double> x, std::vector<double> y, 
 //' @param X the sparse matrix (tests are applied to columns!)
 //' @param interest row IDs for the group of interest
 //' @param background row IDS for the background
-//' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
+//' @param logFCcut only columns passing a FCcut (!) of (default 1) are tested
 //' @param minPct only test genes that are detected in a minimum fraction of
 //' minPct cells in either of the two populations. Meant to speed up the function
 //' by not testing genes that are very infrequently expressed. Default is 0.1
@@ -193,6 +221,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	}
 	// internal measurements
 	std::vector<double> logFCpass(X.cols(), 0.0);
+	std::vector<double> fc(X.cols(), 0.0);
 	std::vector<bool>   testPassed(X.cols(), 0.0);
 	std::vector<double> fracInA(X.cols(), 0.0);
 	std::vector<double> fracInB(X.cols(), 0.0);
@@ -246,12 +275,13 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		fracInA.at(c_) = inA / static_cast<double>(interest.size());
 		fracInB.at(c_) = inB / static_cast<double>(background.size());
 
-		logFCpass.at(c_) = logFC( A, B );
+		fc.at(c_) = FC( A, B );
+		logFCpass.at(c_) = log( fc.at(c_) );
 
 		q = (fracInA.at(c_) > minPct) +  (fracInB.at(c_) > minPct);
-		tmp = logFCpass.at(c_);
-		if ( ! onlyPos && tmp < 0 ) {
-			tmp = tmp * -1;
+		tmp = fc.at(c_);
+		if ( ! onlyPos && tmp < 1 ) {
+			tmp = 1/tmp;
 		}
 		if ( tmp > logFCcut && q > 0 ) {
 			pass++;
@@ -262,11 +292,11 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 	}
 	//Rcout << "test variables calculated" << std::endl;
 
-	NumericMatrix res(pass, 6);
-	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value");
+	NumericMatrix res(pass, 7);
+	colnames(res) = CharacterVector::create("colID", "logFC", "fracExprIN", "fracExprOUT", "rank.sum", "p.value", "FC");
 
 	if ( pass == 0 ){
-		Rcout << "No gene passed the logFC + min expressed filter - try changing the minPct and logFCcut variables" << std::endl;
+		Rcout << "No gene passed the FC + min expressed filter - try changing the minPct and logFCcut variables" << std::endl;
 	}
 	else {
 		Rcout << "calculating wilcox test(s) for " << pass << " genes" << std::endl;
@@ -335,6 +365,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 				/* store the higher p value as we do drop all lower anyhow. */
 				//Rcout << "calc the stats value " << std::endl;
 				res(id,5) = wmw_test_stat(indRankSum.at(c_), nInd, n, tie, 2); // two sided as in Seurat::WilcoxDETest()
+				res(id,6) = fc.at(c_);
 				//Rcout << "got a result for id " << c_ << "p.value == " << res(id,5) << std::endl;
 				id ++;
 			}

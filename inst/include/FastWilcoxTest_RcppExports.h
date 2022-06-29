@@ -214,6 +214,27 @@ namespace FastWilcoxTest {
         return Rcpp::as<double >(rcpp_result_gen);
     }
 
+    inline double FC(std::vector<double> A, std::vector<double> B) {
+        typedef SEXP(*Ptr_FC)(SEXP,SEXP);
+        static Ptr_FC p_FC = NULL;
+        if (p_FC == NULL) {
+            validateSignature("double(*FC)(std::vector<double>,std::vector<double>)");
+            p_FC = (Ptr_FC)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_FC");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_FC(Shield<SEXP>(Rcpp::wrap(A)), Shield<SEXP>(Rcpp::wrap(B)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
     inline std::vector<int> minusOne(std::vector<int> X) {
         typedef SEXP(*Ptr_minusOne)(SEXP);
         static Ptr_minusOne p_minusOne = NULL;
