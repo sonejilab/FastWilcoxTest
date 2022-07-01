@@ -44,9 +44,9 @@ setMethod('Rstats', signature = c ('matrix'),
 			fracB = unlist(apply( X, 2, function( x ) { x =  x[backgound]; length( x[which(x > 0)] ) /length(x) } ) )
 			OK = NULL
 			if ( onlyPos ) {
-				OK = which( FC > logFCcut )
+				OK = which( FC > exp(logFCcut) )
 			}else {
-				OK = which( FC > logFCcut | 1/FC > logFCcut )
+				OK = which( FC > exp(logFCcut) | 1/FC > exp(logFCcut) )
 			}
 			tmp = unique( c( which( fracA[OK] > minPct)),names(which( fracB[OK] > minPct) ) )
 

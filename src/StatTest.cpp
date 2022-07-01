@@ -283,7 +283,7 @@ NumericMatrix StatTest (Eigen::MappedSparseMatrix<double> X, std::vector<int> in
 		if ( ! onlyPos && tmp < 1 ) {
 			tmp = 1/tmp;
 		}
-		if ( tmp > logFCcut && q > 0 ) {
+		if ( tmp > exp(logFCcut) && q > 0 ) {
 			pass++;
 			testPassed.at(c_) = true;
 		}else {
