@@ -14,7 +14,7 @@ StatTest(X, interest, background, logFCcut = 1, minPct = 0.1, onlyPos = FALSE)
 
 \item{background}{row IDS for the background}
 
-\item{logFCcut}{data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested}
+\item{logFCcut}{only columns passing a FCcut (!) of (default 1) are tested}
 
 \item{minPct}{only test genes that are detected in a minimum fraction of
 minPct cells in either of the two populations. Meant to speed up the function

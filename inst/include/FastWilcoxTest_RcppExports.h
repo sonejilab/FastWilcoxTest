@@ -151,6 +151,27 @@ namespace FastWilcoxTest {
         return Rcpp::as<std::vector<double> >(rcpp_result_gen);
     }
 
+    inline NumericMatrix rollSumStart(Eigen::SparseMatrix<double> X, double n, std::vector<double> S) {
+        typedef SEXP(*Ptr_rollSumStart)(SEXP,SEXP,SEXP);
+        static Ptr_rollSumStart p_rollSumStart = NULL;
+        if (p_rollSumStart == NULL) {
+            validateSignature("NumericMatrix(*rollSumStart)(Eigen::SparseMatrix<double>,double,std::vector<double>)");
+            p_rollSumStart = (Ptr_rollSumStart)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_rollSumStart");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_rollSumStart(Shield<SEXP>(Rcpp::wrap(X)), Shield<SEXP>(Rcpp::wrap(n)), Shield<SEXP>(Rcpp::wrap(S)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<NumericMatrix >(rcpp_result_gen);
+    }
+
     inline NumericMatrix LinLang(Eigen::SparseMatrix<double> X, std::vector<int> Grouping, int nGroup, double minPct = 0.1, bool display_progress = true) {
         typedef SEXP(*Ptr_LinLang)(SEXP,SEXP,SEXP,SEXP,SEXP);
         static Ptr_LinLang p_LinLang = NULL;
@@ -183,6 +204,27 @@ namespace FastWilcoxTest {
         {
             RNGScope RCPP_rngScope_gen;
             rcpp_result_gen = p_logFC(Shield<SEXP>(Rcpp::wrap(A)), Shield<SEXP>(Rcpp::wrap(B)));
+        }
+        if (rcpp_result_gen.inherits("interrupted-error"))
+            throw Rcpp::internal::InterruptedException();
+        if (Rcpp::internal::isLongjumpSentinel(rcpp_result_gen))
+            throw Rcpp::LongjumpException(rcpp_result_gen);
+        if (rcpp_result_gen.inherits("try-error"))
+            throw Rcpp::exception(Rcpp::as<std::string>(rcpp_result_gen).c_str());
+        return Rcpp::as<double >(rcpp_result_gen);
+    }
+
+    inline double FC(std::vector<double> A, std::vector<double> B) {
+        typedef SEXP(*Ptr_FC)(SEXP,SEXP);
+        static Ptr_FC p_FC = NULL;
+        if (p_FC == NULL) {
+            validateSignature("double(*FC)(std::vector<double>,std::vector<double>)");
+            p_FC = (Ptr_FC)R_GetCCallable("FastWilcoxTest", "_FastWilcoxTest_FC");
+        }
+        RObject rcpp_result_gen;
+        {
+            RNGScope RCPP_rngScope_gen;
+            rcpp_result_gen = p_FC(Shield<SEXP>(Rcpp::wrap(A)), Shield<SEXP>(Rcpp::wrap(B)));
         }
         if (rcpp_result_gen.inherits("interrupted-error"))
             throw Rcpp::internal::InterruptedException();

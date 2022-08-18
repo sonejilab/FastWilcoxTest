@@ -30,7 +30,7 @@ setMethod('Rstats', signature = c ('dgCMatrix'),
 #' @param X the normal matrix
 #' @param interest the interesting col IDs
 #' @param backgound the background col IDs
-#' @param logFCcut the logFC change cutoff default= 1.0
+#' @param logFCcut the FC change cutoff default= 1.0
 #' @param minPct only test genes that are detected in a minimum fraction of
 #'  min.pct cells in either of the two populations. Meant to speed up the function
 #' @param onlyPos test only those genes with higher expression in the interest (default FALSE)
@@ -38,15 +38,15 @@ setMethod('Rstats', signature = c ('dgCMatrix'),
 #' @export
 setMethod('Rstats', signature = c ('matrix'),
 		definition = function ( X, interest, backgound,  logFCcut = 1.0, minPct=0.1, onlyPos=FALSE ) {
-			logRF = unlist(apply( X, 2, function( x ) { logFC( x[interest], x[backgound] ) } ) )
+
+			FC = unlist(apply( X, 2, function( x ) {  mean(x[backgound]) / mean( x[interest] ) } ) )
 			fracA = unlist(apply( X, 2, function( x ) { x =  x[interest]; length( x[which(x > 0)] ) /length(x) } ) )
 			fracB = unlist(apply( X, 2, function( x ) { x =  x[backgound]; length( x[which(x > 0)] ) /length(x) } ) )
-			#browser()
 			OK = NULL
 			if ( onlyPos ) {
-				OK = which( logRF > logFCcut )
+				OK = which( FC > exp(logFCcut) )
 			}else {
-				OK = which( abs(logRF) > logFCcut )
+				OK = which( FC > exp(logFCcut) | 1/FC > exp(logFCcut) )
 			}
 			tmp = unique( c( which( fracA[OK] > minPct)),names(which( fracB[OK] > minPct) ) )
 
@@ -59,11 +59,11 @@ setMethod('Rstats', signature = c ('matrix'),
 			id = 1;
 			message ( paste( length(OK), "genes pass the logFC and frac. expr. filters."))
 			for ( i in OK ) {
-				t = stats::wilcox.test( X[interest, i], X[backgound,i])
+				t = stats::wilcox.test( X[interest, i], X[backgound,i], exact = FALSE)
 				W[id] = t$statistic
 				p[id] = t$p.value
 				id = id +1
 			}
 			
-			cbind( colID = OK, logFC = logRF[OK], 'rank.sum' = W,  p.value = p)
+			cbind( colID = OK, FC = FC[OK], logFC= log(FC[OK]), 'rank.sum' = W,  p.value = p)
 		} )

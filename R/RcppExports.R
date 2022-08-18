@@ -85,6 +85,23 @@ CorNormalMatrix <- function(X, CMP) {
     .Call(`_FastWilcoxTest_CorNormalMatrix`, X, CMP)
 }
 
+#' Calculatethe rolling sum for a max distance from the start
+#' The location of each row is taken from the S (Start) vector
+#' In R the colnames need to be set to the input colnames whereas the start positions need to be set to chrXY : S[i] - (S[i]+n)
+#' @name rollSumStart
+#' @aliases rollSumStart,FastWilcoxTest-method
+#' @rdname rollSumStartStart-methods
+#' @docType methods
+#' @description calculate a rolling sum of the rows
+#' @param X the sparse matrix
+#' @param n the length of the rolling window
+#' @param S the start positions of each X row
+#' @title rolling sum over sparse matrix
+#' @export
+rollSumStart <- function(X, n, S) {
+    .Call(`_FastWilcoxTest_rollSumStart`, X, n, S)
+}
+
 #' @name LinLang
 #' @aliases LinLang,FastWilcoxTest-method
 #' @rdname LinLang-methods
@@ -143,6 +160,18 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
     .Call(`_FastWilcoxTest_NormalizeSamples`, X, scaleFactor, display_progress)
 }
 
+#' @title reshuffle data based on a sparse matrix assuming max double the amount of entries not being zero
+#' @aliases ShuffleMatrix,FastWilcoxTest-method
+#' @rdname ShuffleMatrix
+#' @description replacing the synthetic1 function of RFclust.SGE package 
+#' @param X the sparse matrix (tests are applied to columns!)
+#' @param maxCols the amount of random columns to send back (default 50)
+#' @return a matrix with x, j and i avalues to be put into a new sparse matrix
+#' @export
+ShuffleMatrix <- function(X, maxCols = 50L) {
+    .Call(`_FastWilcoxTest_ShuffleMatrix`, X, maxCols)
+}
+
 #' @title logFC calculates a log fold change between the two input vectors
 #' @aliases logFC,FastWilcoxTest-method
 #' @rdname logFC
@@ -153,6 +182,18 @@ NormalizeSamples <- function(X, scaleFactor, display_progress = TRUE) {
 #' @export
 logFC <- function(A, B) {
     .Call(`_FastWilcoxTest_logFC`, A, B)
+}
+
+#' @title FC calculates a log fold change between the two input vectors
+#' @aliases FC,FastWilcoxTest-method
+#' @rdname FC
+#' @description a simple replacement of wilcox.test returning less information but >10x faster
+#' @param A one numeric vector of log data
+#' @param B the other log vector
+#' @return a double fold change
+#' @export
+FC <- function(A, B) {
+    .Call(`_FastWilcoxTest_FC`, A, B)
 }
 
 minusOne <- function(X) {
@@ -184,7 +225,7 @@ cppWilcoxTest <- function(x, y, type) {
 #' @param X the sparse matrix (tests are applied to columns!)
 #' @param interest row IDs for the group of interest
 #' @param background row IDS for the background
-#' @param logFCcut data is meant to be log() transformed and only columns passing a logFCcut of (default 1) are tested
+#' @param logFCcut only columns passing a FCcut (!) of (default 1) are tested
 #' @param minPct only test genes that are detected in a minimum fraction of
 #' minPct cells in either of the two populations. Meant to speed up the function
 #' by not testing genes that are very infrequently expressed. Default is 0.1
@@ -350,6 +391,20 @@ euclidian_distances3d <- function(X, Y, Z, sum = FALSE) {
 #' @export
 eDist3d <- function(X, Y, Z, id) {
     .Call(`_FastWilcoxTest_eDist3d`, X, Y, Z, id)
+}
+
+#' @title extract proximity for the ranger results
+#' copied from https://github.com/imbs-hl/ranger/issues/234
+#' @aliases extract_proximity_oob,FastWilcoxTest-method
+#' @rdname extract_proximity_oob
+#' @description calculate the proximity matrix
+#' @param pred the predictions created from a predict(rangerRF, data, type = "terminalNodes")$predictions
+#' @param prox an empty matrix with dim(pred) dimensions
+#' @param inbag the inbag information from the ranger prediction run (rangerRF$inbag.counts)
+#' @return prox with correct values
+#' @export
+extract_proximity_oob <- function(pred, prox, inbag) {
+    .Call(`_FastWilcoxTest_extract_proximity_oob`, pred, prox, inbag)
 }
 
 #' @name rollSum

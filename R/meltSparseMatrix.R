@@ -1,10 +1,10 @@
-#if ( ! isGeneric('meltSparseMatrix') ){
+
 setGeneric('meltSparseMatrix', ## Name
 	function ( x ) { 
 		standardGeneric('meltSparseMatrix')
 	}
-)
-# }
+) 
+
 
 
 #' @name meltSparseMatrix
