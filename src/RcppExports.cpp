@@ -9,6 +9,11 @@
 
 using namespace Rcpp;
 
+#ifdef RCPP_USE_GLOBAL_ROSTREAM
+Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
+Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
+#endif
+
 // correlationCoefficient
 float correlationCoefficient(std::vector<double> X, std::vector<double> Y);
 static SEXP _FastWilcoxTest_correlationCoefficient_try(SEXP XSEXP, SEXP YSEXP) {
@@ -522,6 +527,17 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// areBracketsBalanced
+bool areBracketsBalanced(std::string xprs);
+RcppExport SEXP _FastWilcoxTest_areBracketsBalanced(SEXP xprsSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< std::string >::type xprs(xprsSEXP);
+    rcpp_result_gen = Rcpp::wrap(areBracketsBalanced(xprs));
+    return rcpp_result_gen;
+END_RCPP
+}
 // collapse
 NumericMatrix collapse(Eigen::SparseMatrix<double> X, std::vector<int> ids, int type);
 RcppExport SEXP _FastWilcoxTest_collapse(SEXP XSEXP, SEXP idsSEXP, SEXP typeSEXP) {
@@ -921,6 +937,7 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_ZScoreAll", (DL_FUNC) &_FastWilcoxTest_ZScoreAll, 2},
     {"_FastWilcoxTest_MEAN_STD", (DL_FUNC) &_FastWilcoxTest_MEAN_STD, 1},
     {"_FastWilcoxTest_SQRT", (DL_FUNC) &_FastWilcoxTest_SQRT, 1},
+    {"_FastWilcoxTest_areBracketsBalanced", (DL_FUNC) &_FastWilcoxTest_areBracketsBalanced, 1},
     {"_FastWilcoxTest_collapse", (DL_FUNC) &_FastWilcoxTest_collapse, 3},
     {"_FastWilcoxTest_entropy", (DL_FUNC) &_FastWilcoxTest_entropy, 1},
     {"_FastWilcoxTest_SphericEntropy", (DL_FUNC) &_FastWilcoxTest_SphericEntropy, 5},
