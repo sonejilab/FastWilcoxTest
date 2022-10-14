@@ -1,3 +1,8 @@
+# 0.2.0
+
+Adding of a rgb2hex color function. This function works on integer matrixes from 0 to 255 values for r,g and b.
+In addition there is a rgb2hexS function processing single colors.
+
 # 0.1.17
 
 The not logged FC has been added to make the FC easier to read by a human

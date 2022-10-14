@@ -818,6 +818,31 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
+// rgb2hexS
+std::string rgb2hexS(int red, int green, int blue, bool with_head);
+RcppExport SEXP _FastWilcoxTest_rgb2hexS(SEXP redSEXP, SEXP greenSEXP, SEXP blueSEXP, SEXP with_headSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< int >::type red(redSEXP);
+    Rcpp::traits::input_parameter< int >::type green(greenSEXP);
+    Rcpp::traits::input_parameter< int >::type blue(blueSEXP);
+    Rcpp::traits::input_parameter< bool >::type with_head(with_headSEXP);
+    rcpp_result_gen = Rcpp::wrap(rgb2hexS(red, green, blue, with_head));
+    return rcpp_result_gen;
+END_RCPP
+}
+// rgb2hex
+Rcpp::StringVector rgb2hex(Rcpp::NumericMatrix Mat);
+RcppExport SEXP _FastWilcoxTest_rgb2hex(SEXP MatSEXP) {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    Rcpp::traits::input_parameter< Rcpp::NumericMatrix >::type Mat(MatSEXP);
+    rcpp_result_gen = Rcpp::wrap(rgb2hex(Mat));
+    return rcpp_result_gen;
+END_RCPP
+}
 // rollSum
 NumericMatrix rollSum(Eigen::SparseMatrix<double> X, int n);
 RcppExport SEXP _FastWilcoxTest_rollSum(SEXP XSEXP, SEXP nSEXP) {
@@ -1036,6 +1061,8 @@ static const R_CallMethodDef CallEntries[] = {
     {"_FastWilcoxTest_euclidian_distances3d", (DL_FUNC) &_FastWilcoxTest_euclidian_distances3d, 4},
     {"_FastWilcoxTest_eDist3d", (DL_FUNC) &_FastWilcoxTest_eDist3d, 4},
     {"_FastWilcoxTest_extract_proximity_oob", (DL_FUNC) &_FastWilcoxTest_extract_proximity_oob, 3},
+    {"_FastWilcoxTest_rgb2hexS", (DL_FUNC) &_FastWilcoxTest_rgb2hexS, 4},
+    {"_FastWilcoxTest_rgb2hex", (DL_FUNC) &_FastWilcoxTest_rgb2hex, 1},
     {"_FastWilcoxTest_rollSum", (DL_FUNC) &_FastWilcoxTest_rollSum, 2},
     {"_FastWilcoxTest_rollAreaSum", (DL_FUNC) &_FastWilcoxTest_rollAreaSum, 4},
     {"_FastWilcoxTest_sparse2SQLite_text_file", (DL_FUNC) &_FastWilcoxTest_sparse2SQLite_text_file, 3},

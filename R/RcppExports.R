@@ -394,6 +394,33 @@ extract_proximity_oob <- function(pred, prox, inbag) {
     .Call(`_FastWilcoxTest_extract_proximity_oob`, pred, prox, inbag)
 }
 
+#' return a vector of hex values for a matrix of RGB values (rows)
+#' @aliases rgb2hexS,FastWilcoxTest-method
+#' @docType methods
+#' @name rgb2hexS
+#' @param red int value (0..255)
+#' @param green int value (0..255)
+#' @param blue int value (0..255)
+#' @param with_head (bool start with '#' ?)
+#' @title hex color RGB values (int)
+#' @return string vector of nrow(Mat) length
+#' @export
+rgb2hexS <- function(red, green, blue, with_head) {
+    .Call(`_FastWilcoxTest_rgb2hexS`, red, green, blue, with_head)
+}
+
+#' return a vector of hex values for a matrix of RGB values (rows)
+#' @aliases rgb2hex,FastWilcoxTest-method
+#' @name rgb2hex
+#' @docType methods
+#' @param Mat the matrix or RGB values (numeric)
+#' @title hex color vector 4 RGB matrix
+#' @return hex color
+#' @export
+rgb2hex <- function(Mat) {
+    .Call(`_FastWilcoxTest_rgb2hex`, Mat)
+}
+
 #' @name rollSum
 #' @aliases rollSum,FastWilcoxTest-method
 #' @rdname rollSum-methods
