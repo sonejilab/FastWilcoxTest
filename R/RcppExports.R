@@ -289,6 +289,19 @@ SQRT <- function(data) {
     .Call(`_FastWilcoxTest_SQRT`, data)
 }
 
+#' @name areBracketsBalanced
+#' @aliases areBracketsBalanced,FastWilcoxTest-method
+#' @rdname areBracketsBalanced-methods
+#' @docType methods
+#' @description simply check if all brackets are opened and closed in the correct way.
+#' A maximum of 500 brackets can be processed by this function.
+#' @param xprs the string to check
+#' @title check that brackets are used as should
+#' @export
+areBracketsBalanced <- function(xprs) {
+    .Call(`_FastWilcoxTest_areBracketsBalanced`, xprs)
+}
+
 #' @name collapse
 #' @aliases collapse,FastWilcoxTest-method
 #' @rdname collapse-methods
