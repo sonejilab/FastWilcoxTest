@@ -6,7 +6,7 @@
 \alias{rgb2hexS,FastWilcoxTest-method}
 \title{hex color RGB values (int)}
 \usage{
-rgb2hexS(red, green, blue, with_head)
+rgb2hexS(red, green, blue)
 }
 \arguments{
 \item{red}{int value (0..255)}
@@ -14,8 +14,6 @@ rgb2hexS(red, green, blue, with_head)
 \item{green}{int value (0..255)}
 
 \item{blue}{int value (0..255)}
-
-\item{with_head}{(bool start with '#' ?)}
 }
 \value{
 string vector of nrow(Mat) length

@@ -13,4 +13,5 @@ areBracketsBalanced(xprs)
 }
 \description{
 simply check if all brackets are opened and closed in the correct way.
+A maximum of 500 brackets can be processed by this function.
 }

@@ -414,12 +414,11 @@ extract_proximity_oob <- function(pred, prox, inbag) {
 #' @param red int value (0..255)
 #' @param green int value (0..255)
 #' @param blue int value (0..255)
-#' @param with_head (bool start with '#' ?)
 #' @title hex color RGB values (int)
 #' @return string vector of nrow(Mat) length
 #' @export
-rgb2hexS <- function(red, green, blue, with_head) {
-    .Call(`_FastWilcoxTest_rgb2hexS`, red, green, blue, with_head)
+rgb2hexS <- function(red, green, blue) {
+    .Call(`_FastWilcoxTest_rgb2hexS`, red, green, blue)
 }
 
 #' return a vector of hex values for a matrix of RGB values (rows)
