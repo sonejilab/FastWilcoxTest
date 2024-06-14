@@ -499,5 +499,5 @@ ColNotZero <- function(data) {
 
 # Register entry points for exported C++ functions
 methods::setLoadAction(function(ns) {
-    .Call('_FastWilcoxTest_RcppExport_registerCCallable', PACKAGE = 'FastWilcoxTest')
+    .Call(`_FastWilcoxTest_RcppExport_registerCCallable`)
 })

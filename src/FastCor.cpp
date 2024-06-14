@@ -30,7 +30,7 @@ float correlationCoefficient( std::vector<double> X,  std::vector<double> Y)
     double squareSum_X = 0.0, squareSum_Y = 0.0;
 
     if ( X.size() != Y.size() )
-    	::Rf_error("Sorry, I need arrays of the same size X and Y(%d, %d)", X.size(), Y.size() );
+    	::Rf_error("Sorry, I need arrays of the same size X and Y(%lu, %lu)", X.size(), Y.size() );
 
     int n = X.size();
 
@@ -149,7 +149,7 @@ std::vector<double>  CorMatrix (Eigen::SparseMatrix<double> X, std::vector<doubl
 	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
 
 	if ( X.innerSize() != CMP.size() )
-		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%d, %d)", X.innerSize(), CMP.size() );
+		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%lu, %lu)", X.innerSize(), CMP.size() );
 
 	std::vector<double> A(CMP.size());
 	std::vector<double> ret(X.cols());
@@ -188,8 +188,7 @@ NumericMatrix  CorMatrix_N (Eigen::SparseMatrix<double> X, std::vector<double> C
 	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
 
 	if ( X.innerSize() != CMP.size() )
-		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%d, %d)", X.innerSize(), CMP.size() );
-
+		::Rf_error("Sorry, I need arrays of the same size ncol(X) and length(CMP) (%lu, %lu)", X.innerSize(), CMP.size() );
 	std::vector<double> A(CMP.size());
 	NumericMatrix ret(X.cols(), 3);
 	
@@ -239,7 +238,7 @@ NumericMatrix  CorMatrix_N (Eigen::SparseMatrix<double> X, std::vector<double> C
 // [[Rcpp::export]]
 std::vector<double> CorNormalMatrix (NumericMatrix X, std::vector<double> CMP ) {
 	if ( X.nrow()  != CMP.size() )
-		::Rf_error("Sorry, I need arrays of the same size nrow(X) and length(CMP)(%d, %d)", X.nrow(), CMP.size() );
+		::Rf_error("Sorry, I need arrays of the same size nrow(X) and length(CMP)(%u, %lu)", X.nrow(), CMP.size() );
 
 	std::vector<double> A(X.nrow());
 	std::vector<double> ret(X.ncol(), 100);
@@ -277,7 +276,7 @@ NumericMatrix  rollSumStart (Eigen::SparseMatrix<double> X, double n, std::vecto
 	//Rcout << "calculating " <<  X.outerSize() << " tests (columns) using "<< CMP.size()<< " resp. " << X.innerSize() << " values" << std::endl;
 
 	if ( S.back() < n )
-		::Rf_error("Sorry, the total dimension of S is smaller than the window dimension) (%d, %d)", S.back(), n );
+		::Rf_error("Sorry, the total dimension of S is smaller than the window dimension) (%f, %f)", S.back(), n );
 
 	//NumericMatrix ret( nrow, ncol );
 	std::vector<double> A (X.innerSize());

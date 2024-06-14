@@ -137,7 +137,7 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 				// increase some values
 				int diff = nUMI - sum -1  ;
 				if ( have_less_max + have_more_max < diff )
-					::Rf_error( "cell %d: Not enough close values to fix the  sum (%d) < nUMI problem (%d) (max $d)" ,k, sum, nUMI, have_more_max);
+					::Rf_error( "cell %d: Not enough close values to fix the  sum (%f) < nUMI problem (%d) (max %d)" ,k, sum, nUMI, have_more_max);
 
 				//Rcout << k << " sum is smaller than nUMI - need to add +1 x " << diff << " values (sum=" <<  sum<<"; nUMI="<<nUMI<<")" << std::endl;
 				lostAndGained.sortDRankList(); // sort by it value
@@ -157,7 +157,7 @@ Eigen::SparseMatrix<double>  NormalizeCells (Eigen::SparseMatrix<double> X, int 
 			}else if ( sum > nUMI ) {
 				int diff =  sum -nUMI ;
 				if ( have_less_max + have_more_max < diff )
-					::Rf_error( "cell %d: Not enough close values to fix the  sum (%d) > nUMI (%d) problem (max %d)" ,k, sum, nUMI, have_less_max);
+					::Rf_error( "cell %d: Not enough close values to fix the  sum (%f) > nUMI (%d) problem (max %d)" ,k, sum, nUMI, have_less_max);
 
 				//Rcout << k <<" sum is bigger than nUMI - need to remove -1 x " << diff << " values (sum=" <<  sum<<"; nUMI="<<nUMI<<")" << std::endl;
 
