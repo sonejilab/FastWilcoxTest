@@ -1,33 +1,31 @@
 Package: FastWilcoxTest
-Title: A Wilcox Ranked Sum Test Implementation using Rcpp; Tests are Applied to a Sparse Matrix
-Version: 0.2.0
+Type: Package
+Title: Fast Wilcoxon Rank-Sum Tests on Sparse Matrices
+Version: 0.3.0
 Authors@R: c(
     person(given = "Stefan", family = "Lang", role = c("aut", "cre"), email = "Stefan.Lang@med.lu.se"),
-    person(given = "Jitao David", family = "Zhang", role = c( "ctb"), email = "jitao_david.zhang@roche.com")
+    person(given = "Jitao David", family = "Zhang", role = "ctb", email = "jitao_david.zhang@roche.com")
     )
-Description: Re-implementation the the 'Seurat::FindMarkers'( 'test.use' == "wilcox" ) function 
-	but implementing all calculation steps in c++. 
-	Thereby the function is more than 10 times faster than the 'Seurat' R implementation.
-	The c++ code was extracted from the 'BioQC' 'BioConductor' package.
-	It also contains other fast c++ functions to interact with sparse matrices.
-License: GPL-3
+Description: Fast Wilcoxon rank-sum tests for sparse single-cell expression
+    matrices. The main StatTest function operates directly on compressed sparse
+    column matrices and performs expression-frequency and fold-change filtering
+    before testing. The 0.3 series modernizes the original implementation for
+    current R and Matrix stacks while preserving the historical public Wilcoxon
+    API and fold-change convention.
+License: GPL (>= 3)
 Encoding: UTF-8
-LazyData: true
 Depends:
-    R (>= 3.5)
-biocViews:
-    multtest
-LinkingTo: 
-    Rcpp, 
-    RcppEigen, 
-    RcppProgress
-Imports: 
-    Rcpp,
+    R (>= 4.2.0)
+Imports:
     Matrix,
     methods,
-    stats,
-    metap,
-    reshape2
-Suggests: 
-    testthat
-RoxygenNote: 7.2.0
+    Rcpp,
+    stats
+LinkingTo:
+    Rcpp
+Suggests:
+    SeuratObject,
+    testthat (>= 3.0.0)
+Config/testthat/edition: 3
+SystemRequirements: C++17
+RoxygenNote: 7.3.3
