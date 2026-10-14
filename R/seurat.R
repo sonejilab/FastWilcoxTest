@@ -234,3 +234,190 @@ FindMarkersSeurat <- function(
     )
   ]
 }
+
+#' Find markers for every Seurat identity with FastWilcoxTest
+#'
+#' Runs the FastWilcoxTest sparse Wilcoxon test for every identity versus all
+#' remaining cells. The Seurat expression layer is extracted and transposed
+#' only once, then reused for every identity.
+#'
+#' @param object A Seurat object.
+#' @param group.by Optional metadata column defining identities. If `NULL`,
+#'   `SeuratObject::Idents(object)` is used.
+#' @param assay Assay containing the expression matrix. Default is `"RNA"`.
+#' @param layer Assay layer to test. Default is `"data"`.
+#' @param logfc.threshold Minimum absolute log2 fold change required before a
+#'   feature is tested. Default is `0.25`.
+#' @param min.pct Minimum fraction of cells expressing a feature in either
+#'   population. Default is `0.1`.
+#' @param only.pos If `TRUE`, return only features higher in the tested identity.
+#' @param p.adjust.method Method passed to [stats::p.adjust()].
+#'
+#' @return A data frame containing the marker table for all identities. The
+#'   `cluster` column identifies the population tested against all other cells.
+#'
+#' @examples
+#' \dontrun{
+#' markers <- FindAllMarkersSeurat(
+#'   object,
+#'   only.pos = TRUE
+#' )
+#' }
+#'
+#' @export
+FindAllMarkersSeurat <- function(
+    object,
+    group.by = NULL,
+    assay = "RNA",
+    layer = "data",
+    logfc.threshold = 0.25,
+    min.pct = 0.1,
+    only.pos = FALSE,
+    p.adjust.method = "bonferroni") {
+
+  if (!requireNamespace("SeuratObject", quietly = TRUE)) {
+    stop(
+      "Package 'SeuratObject' is required for FindAllMarkersSeurat()",
+      call. = FALSE
+    )
+  }
+
+  if (!inherits(object, "Seurat")) {
+    stop("object must be a Seurat object", call. = FALSE)
+  }
+
+  if (length(assay) != 1L || !is.character(assay) || !nzchar(assay)) {
+    stop("assay must be one non-empty character string", call. = FALSE)
+  }
+  if (length(layer) != 1L || !is.character(layer) || !nzchar(layer)) {
+    stop("layer must be one non-empty character string", call. = FALSE)
+  }
+  if (length(logfc.threshold) != 1L || !is.finite(logfc.threshold) ||
+      logfc.threshold < 0) {
+    stop("logfc.threshold must be one finite non-negative number", call. = FALSE)
+  }
+  if (length(min.pct) != 1L || !is.finite(min.pct) ||
+      min.pct < 0 || min.pct > 1) {
+    stop("min.pct must be between 0 and 1", call. = FALSE)
+  }
+
+  metadata <- object[[]]
+  if (is.null(group.by)) {
+    groups <- as.character(SeuratObject::Idents(object))
+  } else {
+    if (length(group.by) != 1L || !is.character(group.by) || !nzchar(group.by)) {
+      stop("group.by must be NULL or one metadata column name", call. = FALSE)
+    }
+    if (!group.by %in% colnames(metadata)) {
+      stop("group.by metadata column not found: ", group.by, call. = FALSE)
+    }
+    groups <- as.character(metadata[[group.by]])
+  }
+
+  identities <- unique(groups)
+  identities <- identities[!is.na(identities)]
+  if (length(identities) < 2L) {
+    stop("At least two identities are required", call. = FALSE)
+  }
+
+  expression <- tryCatch(
+    SeuratObject::LayerData(object, assay = assay, layer = layer),
+    error = function(e) {
+      stop(
+        "Unable to read assay '", assay, "' layer '", layer, "': ",
+        conditionMessage(e),
+        call. = FALSE
+      )
+    }
+  )
+
+  if (!inherits(expression, "sparseMatrix")) {
+    expression <- Matrix::Matrix(expression, sparse = TRUE)
+  }
+  if (ncol(expression) != length(groups)) {
+    stop(
+      "Expression matrix has ", ncol(expression),
+      " cells but the identity vector has ", length(groups),
+      call. = FALSE
+    )
+  }
+  if (is.null(rownames(expression))) {
+    stop("Expression layer has no feature names", call. = FALSE)
+  }
+
+  test.matrix <- methods::as(Matrix::t(expression), "dgCMatrix")
+  cpp.logfc.cut <- logfc.threshold * log(2)
+  feature.names <- rownames(expression)
+  n.features <- nrow(expression)
+
+  results <- lapply(identities, function(identity) {
+    cells.1 <- which(groups == identity)
+    cells.2 <- which(!is.na(groups) & groups != identity)
+
+    raw <- StatTest(
+      test.matrix,
+      interest = cells.1,
+      background = cells.2,
+      logFCcut = cpp.logfc.cut,
+      minPct = min.pct,
+      onlyPos = FALSE
+    )
+
+    raw <- as.data.frame(raw)
+    if (!nrow(raw)) {
+      return(NULL)
+    }
+
+    feature.id <- as.integer(raw$colID)
+    result <- data.frame(
+      gene = feature.names[feature.id],
+      p_val = raw$p.value,
+      avg_log2FC = -raw$logFC / log(2),
+      pct.1 = raw$fracExprIN,
+      pct.2 = raw$fracExprOUT,
+      rank_sum = raw$rank.sum,
+      FC = 1 / raw$FC,
+      cluster = identity,
+      stringsAsFactors = FALSE
+    )
+
+    result$p_val_adj <- stats::p.adjust(
+      result$p_val,
+      method = p.adjust.method,
+      n = n.features
+    )
+
+    if (isTRUE(only.pos)) {
+      result <- result[result$avg_log2FC > 0, , drop = FALSE]
+    }
+
+    result[
+      order(result$p_val, -abs(result$avg_log2FC)),
+      c(
+        "gene", "p_val", "p_val_adj", "avg_log2FC",
+        "pct.1", "pct.2", "rank_sum", "FC", "cluster"
+      ),
+      drop = FALSE
+    ]
+  })
+
+  results <- Filter(Negate(is.null), results)
+  if (!length(results)) {
+    return(data.frame(
+      gene = character(),
+      p_val = numeric(),
+      p_val_adj = numeric(),
+      avg_log2FC = numeric(),
+      pct.1 = numeric(),
+      pct.2 = numeric(),
+      rank_sum = numeric(),
+      FC = numeric(),
+      cluster = character(),
+      stringsAsFactors = FALSE
+    ))
+  }
+
+  result <- do.call(rbind, results)
+  rownames(result) <- NULL
+  result
+}

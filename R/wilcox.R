@@ -1,3 +1,16 @@
+
+#' FastWilcoxTest
+#'
+#' Fast sparse Wilcoxon tests for single-cell data.
+#'
+#' @useDynLib FastWilcoxTest, .registration = TRUE
+#' @importFrom Rcpp evalCpp
+#'
+#' @docType package
+#' @name FastWilcoxTest
+NULL
+
+
 #' Fast fold change
 #'
 #' Historical FastWilcoxTest fold-change convention: mean(B) / mean(A).
